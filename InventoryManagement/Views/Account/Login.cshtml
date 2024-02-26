@@ -1,0 +1,40 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    @Styles.Render("~/Content/custom_css")
+</head>
+<body>
+    <div class="login-container">
+        <form>
+            <h2>Login</h2>
+            <div class="input-container">
+                <input type="text" name="userName" id="userName" placeholder="Username">
+            </div>
+            <div class="input-container">
+                <input type="password" id="password" placeholder="Password">
+            </div>
+            <div class="input-checkbox">
+                <input type="checkbox" id="showPass" onclick="showPassword()">
+                <label for="showPass">Show Password</label>
+            </div>
+
+        </form>
+        <div class="loginFooter">
+            <button type="submit" onclick="loginValidation()">Login</button>
+            <label>Don't have an account? <a href="@Url.Action("Registration","Account")">Create an account</a></label>
+        </div>
+        @Scripts.Render("~/bundles/custom_script")
+    </div>
+
+
+    
+</body>
+</html>
