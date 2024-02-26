@@ -12,7 +12,7 @@
     @Styles.Render("~/Content/custom_css")
 </head>
 <body>
-    <div class="login-container">
+    <div class="box-container">
         <form>
             <h2>Login</h2>
             <div class="input-container">
@@ -20,14 +20,12 @@
             </div>
             <div class="input-container">
                 <input type="password" id="password" placeholder="Password">
+                <img src="~/Content/img/Eye.png" onclick="togglePasswordVisibility()">
             </div>
-            <div class="input-checkbox">
-                <input type="checkbox" id="showPass" onclick="showPassword()">
-                <label for="showPass">Show Password</label>
-            </div>
+           
 
         </form>
-        <div class="loginFooter">
+        <div class="boxFooter">
             <button type="submit" onclick="loginValidation()">Login</button>
             <label>Don't have an account? <a href="@Url.Action("Registration","Account")">Create an account</a></label>
         </div>

@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registration</title>
+    @Styles.Render("~/Content/custom_css")
+</head>
+<body>
+    <div class="box-container">
+        <form>
+            <h2>Registration</h2>
+            <div class="input-container">
+                <input type="text" name="userName" id="userName" placeholder="Username">
+            </div>
+            <div class="input-container">
+                <input type="email" name="email" id="email" placeholder="Email">
+            </div>
+            <div class="input-container">
+                <input type="password" id="password" placeholder="Password">
+                <img src="~/Content/img/Eye.png" onclick="togglePasswordVisibility()">
+            </div>
+            <div class="input-container">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                <img src="~/Content/img/Eye.png" onclick="togglePasswordVisibility()">
+            </div>
+        
+
+        </form>
+
+        <div class="boxFooter">
+            <button type="submit" onclick="loginValidation()">Register</button>
+            <label>Already have an account? <a href="@Url.Action("Login", "Account")">Click here to login</a></label>
+        </div>
+
+        @Scripts.Render("~/bundles/custom_script")
+</body>
+</html>

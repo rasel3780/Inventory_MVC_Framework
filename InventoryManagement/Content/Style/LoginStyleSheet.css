@@ -2,13 +2,13 @@
     background: linear-gradient(106.8deg, rgb(117, 255, 220) 6%, rgb(163, 216, 255) 47.6%, rgb(248, 215, 251) 87.8%);
 }
 
-
-.login-container {
+.box-container {
     
     width:auto;
     max-width: 450px;
 
-    height: 420px;
+    height: fit-content;
+    padding: 0px 20px 15px 20px;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -19,7 +19,7 @@
     border-radius: 15px;
 }
 
-    .login-container h2 {
+    .box-container h2 {
         text-align: center;
         font-size: 30px;
 
@@ -43,14 +43,21 @@
         padding: 10px;
         font-weight: bold;
     }
-.input-checkbox {
-    margin: 30px 0px 30px 20px;
+.input-container img {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px; 
+    height: auto;
 }
-.loginFooter {
+
+.boxFooter {
     text-align: center;
 }
 
-    .loginFooter button {
+    .boxFooter button {
         width: 100%;
         max-width: 200px;
         height: 40px;
@@ -63,7 +70,7 @@
         margin: 0px 120px 30px 120px;
     }
 
-    .loginFooter label a{
+    .boxFooter label a{
         font-weight: bold;
         color:black;
     }
