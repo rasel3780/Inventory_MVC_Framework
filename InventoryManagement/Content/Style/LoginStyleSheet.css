@@ -1,0 +1,69 @@
+﻿body {
+    background: linear-gradient(106.8deg, rgb(117, 255, 220) 6%, rgb(163, 216, 255) 47.6%, rgb(248, 215, 251) 87.8%);
+}
+
+
+.login-container {
+    
+    width:auto;
+    max-width: 450px;
+
+    height: 420px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    margin: auto;
+    background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%);
+    border-radius: 15px;
+}
+
+    .login-container h2 {
+        text-align: center;
+        font-size: 30px;
+
+    }
+.input-container {
+    position: relative;
+    width: auto;
+    max-width: 400px;
+    height: 40px;
+    margin: 30px 0px 30px 20px;
+}
+
+    .input-container input {
+        
+        box-sizing: border-box;
+        width:100%;
+        height: 100%;
+        border: 1px solid white;
+        border-radius: 15px;
+        font-size: 14px;
+        padding: 10px;
+        font-weight: bold;
+    }
+.input-checkbox {
+    margin: 30px 0px 30px 20px;
+}
+.loginFooter {
+    text-align: center;
+}
+
+    .loginFooter button {
+        width: 100%;
+        max-width: 200px;
+        height: 40px;
+        background-color: white;
+        font-size: 14px;
+        outline: none;
+        border: none;
+        border-radius: 50px;
+        font-weight: bold;
+        margin: 0px 120px 30px 120px;
+    }
+
+    .loginFooter label a{
+        font-weight: bold;
+        color:black;
+    }
