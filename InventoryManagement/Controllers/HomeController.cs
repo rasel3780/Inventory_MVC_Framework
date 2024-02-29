@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InventoryManagement.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,7 +16,12 @@ namespace InventoryManagement.Controllers
 
         public ActionResult Dashboard()
         {
-            return View();
+            List<Employee> empListData = Employee.GetEmpData(); 
+            List<Vendor> vendorListData = Vendor.GetVendorData();
+            List<Order> orderListData = Order.GetOrderList();
+            ViewBag.vendorListData = vendorListData;
+            ViewBag.orderListData = orderListData;
+            return View(empListData);
         }
 
         public ActionResult About()
