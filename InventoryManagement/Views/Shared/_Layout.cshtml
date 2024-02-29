@@ -6,11 +6,13 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary">
         <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Inventory Management", "Dashboard", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -24,13 +26,46 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
+    <!--Side Navbar-->
+    <div class="side-navbar">
+        <div class="user-profile">
+            <img src="~/Content/img/userProfile.png" alt="User Profile Picture">
+            <p>User name</p>
+        </div>
+        <ul>
+            <li><a href="#"><i class="bi bi-database"></i>Inventory</a></li>
+            <li><a href="#vendorTable"><i class="bi bi-airplane"></i>Vendor </a></li>
+            <li><a href="#"><i class="bi bi-people"></i>Customer </a></li>
+            <li><a href="#orderTable"><i class="bi bi-box-seam"></i>Orders</a></li>
+            <li><a href="#report"><i class="bi bi-file-earmark-spreadsheet"></i>Report</a></li>
+            <li><a href="#"><i class="bi bi-info-square"></i>Support</a></li>
+            <li><a href="#"><i class="bi bi-question-diamond"></i>FAQs</a></li>
+            <li><a href="#"><i class="bi bi-box-arrow-left"></i>Logout</a></li>
+        </ul>
+    </div>
+
+    <!--End of Side Navbar-->
+    <!--Body Content-->
+    <div class="main-content">
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+
+        </div>
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>
+                &copy; @DateTime.Now.Year - Inventory Management System Version 1.0 develop by Rasel
+                Kibria
+            </p>
         </footer>
     </div>
+
+   
+
+    <!--End of Body Content-->
+
+
+
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
