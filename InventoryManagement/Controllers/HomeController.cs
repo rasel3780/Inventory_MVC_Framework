@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace InventoryManagement.Controllers
 {
@@ -21,6 +22,27 @@ namespace InventoryManagement.Controllers
             List<Order> orderListData = Order.GetOrderList();
             ViewBag.vendorListData = vendorListData;
             ViewBag.orderListData = orderListData;
+            ViewBag.orderTxt = "";
+            return View(empListData);
+        }
+
+        [HttpPost]
+        public ActionResult Dashboard(FormCollection frm, string filterBtn)
+        {
+            List<Employee> empListData = Employee.GetEmpData();
+            List<Vendor> vendorListData = Vendor.GetVendorData();
+            List<Order> orderListData = Order.GetOrderList();
+
+            ViewBag.vendorListData = vendorListData;
+            ViewBag.orderListData = orderListData;
+            ViewBag.orderTxt = "";
+
+            
+            if (filterBtn == "search")
+            {
+                ViewBag.orderTxt = frm["orderTxt"].ToString();
+            }
+  
             return View(empListData);
         }
 

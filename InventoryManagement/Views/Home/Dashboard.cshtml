@@ -92,27 +92,17 @@
     </div>
 
 </div>
-<!--End Of Card-->
-<!--Graph & Chart-->
-@*<div class="visual-container" id="report">
-        <div class="graph-container">
-            <canvas id="line-chart"></canvas>
-        </div>
-        <div class="graph-container">
-            <canvas id="pie-chart"></canvas>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    @Scripts.Render("~/bundles/custom_script")*@
-<!--End of Graph & Chart-->
-<!--Order Table-->
+@*End of Card*@
+
+
+@*Order Table*@
 <form action="/Home/Dashboard" method="post">
     <div class="table-top">
         <span class="table-title">Order Table</span>
         <div class="search-container">
-            <input type="text" class="form-control" id="search-input" placeholder="Search...">
-            <button id="search-btn">Search</button>
-            <button id="clear-btn">Clear</button>
+            <input type="text" class="form-control" id="search-input" name="orderTxt" placeholder="Search...">
+            <button id="search-btn" value="search" name="filterBtn">Search</button>
+            <button id="clear-btn" value="clear" name="filterBtn">Clear</button>
         </div>
     </div>
 
@@ -135,11 +125,83 @@
 
                         @foreach (Order obj in orderListData)
                         {
+                            if (ViewBag.orderTxt != "")
+                            {
+                                if (obj.OrderId == ViewBag.orderTxt || obj.CustomerId == ViewBag.orderTxt
+                                    || obj.Status == ViewBag.orderTxt)
+                                {
+                                    <tr>
+                                        <td>@obj.CustomerId</td>
+                                        <td>@obj.OrderId</td>
+                                        <td>@obj.OrderDate</td>
+                                        <td>@obj.Status</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@obj.CustomerId</td>
+                                    <td>@obj.OrderId</td>
+                                    <td>@obj.OrderDate</td>
+                                    <td>@obj.Status</td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+<hr />
+@*End of Order Table*@
+
+@*Vendor Table*@
+<form action="/Home/Dashboard" method="post">
+    <div class="table-top">
+        <span class="table-title">Vendor Table</span>
+        <div class="search-container">
+            <input type="text" class="form-control" id="search-input" placeholder="Search...">
+            <button id="search-btn">Search</button>
+            <button id="clear-btn">Clear</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Supplier Name</th>
+                            <th>Product ID</th>
+                            <th>Product Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            List<Vendor> vendorListData = ViewBag.vendorListData;
+                        }
+                        @foreach (Vendor obj in vendorListData)
+                        {
                             <tr>
-                                <td>@obj.CustomerId</td>
-                                <td>@obj.OrderId</td>
-                                <td>@obj.OrderDate</td>
-                                <td>@obj.Status</td>
+                                <td>@obj.SupplierName</td>
+                                <td>@obj.ProductId</td>
+                                <td>@obj.Quantity</td>
+                                <td>@obj.UnitPrice</td>
+                                @if (@obj.Status == 0)
+                                {
+                                    <td>Reached in Warehouse</td>
+                                }
+                                else
+                                {
+                                    <td>Processing</td>
+                                }
                             </tr>
                         }
 
@@ -149,103 +211,50 @@
         </div>
     </div>
 </form>
-            <hr />
-            <!--End of Order Table-->
-            <!--Vendor Table-->
-            <form action="/Home/Dashboard" method="post">
-                <div class="table-top">
-                    <span class="table-title">Vendor Table</span>
-                    <div class="search-container">
-                        <input type="text" class="form-control" id="search-input" placeholder="Search...">
-                        <button id="search-btn">Search</button>
-                        <button id="clear-btn">Clear</button>
-                    </div>
-                </div>
+<hr />
+@*End of Vendor Table*@
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Supplier Name</th>
-                                        <th>Product ID</th>
-                                        <th>Product Quantity</th>
-                                        <th>Unit Price</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        List<Vendor> vendorListData = ViewBag.vendorListData;
-                                    }
-                                    @foreach (Vendor obj in vendorListData)
-                                    {
-                                        <tr>
-                                            <td>@obj.SupplierName</td>
-                                            <td>@obj.ProductId</td>
-                                            <td>@obj.Quantity</td>
-                                            <td>@obj.UnitPrice</td>
-                                            @if (@obj.Status == 0)
-                                            {
-                                                <td>Reached in Warehouse</td>
-                                            }
-                                            else
-                                            {
-                                                <td>Processing</td>
-                                            }
-                                        </tr>
-                                    }
+@*Employee Table*@
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <hr />
-            <!--End of Vendor Table-->
-            <!--Employee Table-->
+<form action="/Home/Dashboard" method="post">
+    <div class="table-top">
+        <span class="table-title">Employee Table</span>
+        <div class="search-container">
+            <input type="text" class="form-control" id="search-input" placeholder="Search...">
+            <button id="search-btn">Search</button>
+            <button id="clear-btn">Clear</button>
+        </div>
+    </div>
 
-            <form action="/Home/Dashboard" method="post">
-                <div class="table-top">
-                    <span class="table-title">Employee Table</span>
-                    <div class="search-container">
-                        <input type="text" class="form-control" id="search-input" placeholder="Search...">
-                        <button id="search-btn">Search</button>
-                        <button id="clear-btn">Clear</button>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Salary</th>
+                            <th>Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var obj in Model)
+                        {
+                            <tr>
+                                <td>@obj.Name</td>
+                                <td>@obj.Age</td>
+                                <td>@obj.Email</td>
+                                <td>@obj.Salary</td>
+                                <td>@obj.Designation</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Age</th>
-                                        <th>Email</th>
-                                        <th>Salary</th>
-                                        <th>Designation</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var obj in Model)
-                                    {
-                                        <tr>
-                                            <td>@obj.Name</td>
-                                            <td>@obj.Age</td>
-                                            <td>@obj.Email</td>
-                                            <td>@obj.Salary</td>
-                                            <td>@obj.Designation</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-            <!--End of Employee Table-->
+</form>
+@*End of Employee Table*@
