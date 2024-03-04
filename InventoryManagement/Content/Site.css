@@ -81,7 +81,6 @@ textarea {
 
 
 /*Body Content*/
-
 .main-content {
     background-color: rgb(241, 241, 241);
     position: fixed;
@@ -92,21 +91,13 @@ textarea {
     border-right: 1px solid #ddd;
     color: #080000;
     overflow:auto;
- 
 }
-    /*.main-content .row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }*/
 
 .card-body {
     text-align: center;
 }
     .card-body i {
         font-size: 2em;
-       
     }
 
 .card-body p {
@@ -114,7 +105,9 @@ textarea {
     font-weight:600;
 }
 
-
+.row{
+    margin-bottom:20px;
+}
 .visual-container {
     display: flex;
     justify-content: space-between;
@@ -130,24 +123,71 @@ textarea {
     width: calc(50% - 10px);
 }
 
+
+.table-top {
+    background-color: #180147;
+    
+    padding: 5px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+    .table-top .table-title {
+        color: #f0f0f0;
+        font-size: 18px; 
+    }
+
+.search-container {
+    display: flex; 
+    justify-content: center; 
+}
+
+
+
+#search-input {
+    margin-right: 5px;
+    
+}
+
+#search-btn, #clear-btn {
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius:15px;
+    margin-right:5px;
+    
+}
+    #clear-btn{
+        background-color:red;
+    }
+
+    #search-btn:hover {
+        background-color: #0056b3;
+    }
+#clear-btn:hover{
+    background-color:#a20606;
+}
 .table-container {
-    margin-top: 40px;
+    
+    margin-bottom: 40px;
     height: 300px;
-    position: relative;
     border-radius: 5px;
     background-color: white;
     overflow-y: auto;
 }
+    .table-container thead th {
+        position: sticky;
+        top: 0px;
+        background-color: #5ee0fd;
+    }
 
-.table-name {
-    position: sticky;
-    top: 0;
-    background-color: #808080;
-    padding: 8px;
-    text-align: center;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    z-index: 1;
+
+.table-name span{
+    font-size:16px;
+    border-style:dashed;
 }
 
 
@@ -164,13 +204,6 @@ textarea {
     white-space:nowrap;
 }
 
-.table-container th {
-    background-color: #75bdf0;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
 .table-container tbody tr:hover{
     background-color:#fcf567;
 }
@@ -179,14 +212,6 @@ textarea {
     background: #d0e4ebf7;
 }
 
-.table-container thead th {
-    position: sticky;
-    top: 40px; 
-    background-color: #5ee0fd;
-    z-index: 0;
-}
-
 footer {
     text-align:center;
-  
 }

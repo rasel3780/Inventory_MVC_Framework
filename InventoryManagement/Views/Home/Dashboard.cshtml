@@ -1,10 +1,11 @@
-﻿
+﻿@using InventoryManagement.Models;
+@model IEnumerable<InventoryManagement.Models.Employee>
+
 @{
     ViewBag.Title = "Dashboard";
 }
 
 
-<!--Main body content-->
 <!--Card-->
 <div class="row mt-4">
     <div class="col-md-3">
@@ -27,7 +28,6 @@
         </div>
     </div>
 
-
     <div class="col-md-3">
         <div class="card" style="background-color: #57f646">
             <div class="card-body">
@@ -37,7 +37,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="col-md-3">
         <div class="card" style="background-color: #f84848">
@@ -61,9 +60,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <div class="col-md-3">
         <div class="card" style="background-color:#f79696">
@@ -95,286 +91,162 @@
         </div>
     </div>
 
-
 </div>
-<!--End Of Card-->
-<!--Graph & Chart-->
-@*<div class="visual-container" id="report">
-    <div class="graph-container">
-        <canvas id="line-chart"></canvas>
-    </div>
-    <div class="graph-container">
-        <canvas id="pie-chart"></canvas>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@Scripts.Render("~/bundles/custom_script")*@
-<!--End of Graph & Chart-->
-<!--Order Table-->
+@*End of Card*@
 
-<div class="table-container">
-    <div class="table-name">
-        Order Table
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Customer Number</th>
-                <th>Customer Name</th>
-                <th>Order Number</th>
-                <th>Order Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>12345</td>
-                <td>Tamim</td>
-                <td>001</td>
-                <td>2024-02-15</td>
-                <td>Shipped</td>
-            </tr>
-            <tr>
-                <td>54321</td>
-                <td>Shakib</td>
-                <td>002</td>
-                <td>2024-02-16</td>
-                <td>Processing</td>
-            </tr>
 
-            <tr>
-                <td>67890</td>
-                <td>Musfiq</td>
-                <td>003</td>
-                <td>2024-02-17</td>
-                <td>Delivered</td>
-            </tr>
-            <tr>
-                <td>24680</td>
-                <td>Mahmudulla</td>
-                <td>004</td>
-                <td>2024-02-18</td>
-                <td>Processing</td>
-            </tr>
-            <tr>
-                <td>13579</td>
-                <td>Miraj</td>
-                <td>005</td>
-                <td>2024-02-19</td>
-                <td>Shipped</td>
-            </tr>
-            <tr>
-                <td>97531</td>
-                <td>Mustafiz</td>
-                <td>006</td>
-                <td>2024-02-20</td>
-                <td>Processing</td>
-            </tr>
-            <tr>
-                <td>86420</td>
-                <td>Taskin</td>
-                <td>007</td>
-                <td>2024-02-21</td>
-                <td>Delivered</td>
-            </tr>
-            <tr>
-                <td>31415</td>
-                <td>Anamul</td>
-                <td>008</td>
-                <td>2024-02-22</td>
-                <td>Shipped</td>
-            </tr>
-            <tr>
-                <td>27182</td>
-                <td>Imrul</td>
-                <td>009</td>
-                <td>2024-02-23</td>
-                <td>Processing</td>
-            </tr>
-            <tr>
-                <td>81828</td>
-                <td>Gazi</td>
-                <td>010</td>
-                <td>2024-02-24</td>
-                <td>Shipped</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@*Order Table*@
+<form action="/Home/Dashboard" method="post">
+    <div class="table-top">
+        <span class="table-title">Order Table</span>
+        <div class="search-container">
+            <input type="text" class="form-control" id="search-input" name="orderTxt" placeholder="Search...">
+            <button id="search-btn" value="search" name="filterBtn">Search</button>
+            <button id="clear-btn" value="clear" name="filterBtn">Clear</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer Id</th>
+                            <th>Order Id</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            List<Order> orderListData = ViewBag.orderListData;
+                        }
+
+                        @foreach (Order obj in orderListData)
+                        {
+                            if (ViewBag.orderTxt != "")
+                            {
+                                if (obj.OrderId == ViewBag.orderTxt || obj.Status == ViewBag.orderTxt)
+                                {
+                                    <tr>
+                                        <td>@obj.CustomerId</td>
+                                        <td>@obj.OrderId</td>
+                                        <td>@obj.OrderDate</td>
+                                        <td>@obj.Status</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@obj.CustomerId</td>
+                                    <td>@obj.OrderId</td>
+                                    <td>@obj.OrderDate</td>
+                                    <td>@obj.Status</td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
 <hr />
-<!--End of Order Table-->
-<!--Vendor Table-->
+@*End of Order Table*@
 
-<div class=table-container>
-    <div class="table-name">
-        Vendor Table 
+@*Vendor Table*@
+<form action="/Home/Dashboard" method="post">
+    <div class="table-top">
+        <span class="table-title">Vendor Table</span>
+        
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Supplier ID</th>
-                <th>Supplier Name</th>
-                <th>Product ID</th>
-                <th>Product Quantity</th>
-                <th>Unit Price</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>101</td>
-                <td>Supplier A</td>
-                <td>001</td>
-                <td>50</td>
-                <td>৳10</td>
-                <td>In Stock</td>
-            </tr>
-            <tr>
-                <td>102</td>
-                <td>Supplier B</td>
-                <td>002</td>
-                <td>30</td>
-                <td>৳15</td>
-                <td>In Stock</td>
-            </tr>
-            <tr>
-                <td>103</td>
-                <td>Supplier C</td>
-                <td>003</td>
-                <td>20</td>
-                <td>৳12</td>
-                <td>Out of Stock</td>
-            </tr>
-            <tr>
-                <td>104</td>
-                <td>Supplier D</td>
-                <td>004</td>
-                <td>40</td>
-                <td>৳18</td>
-                <td>In Stock</td>
-            </tr>
-            <tr>
-                <td>105</td>
-                <td>Supplier E</td>
-                <td>005</td>
-                <td>60</td>
-                <td>৳20</td>
-                <td>In Stock</td>
-            </tr>
-            <tr>
-                <td>106</td>
-                <td>Supplier F</td>
-                <td>006</td>
-                <td>25</td>
-                <td>৳22</td>
-                <td>Processing</td>
-            </tr>
-            <tr>
-                <td>107</td>
-                <td>Supplier G</td>
-                <td>007</td>
-                <td>55</td>
-                <td>৳16</td>
-                <td>In Stock</td>
-            </tr>
-            <tr>
-                <td>108</td>
-                <td>Supplier H</td>
-                <td>008</td>
-                <td>45</td>
-                <td>৳25</td>
-                <td>Processing</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Supplier Name</th>
+                            <th>Product ID</th>
+                            <th>Product Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            List<Vendor> vendorListData = ViewBag.vendorListData;
+                        }
+                        @foreach (Vendor obj in vendorListData)
+                        {
+
+                                    <tr>
+                                        <td>@obj.SupplierName</td>
+                                        <td>@obj.ProductId</td>
+                                        <td>@obj.Quantity</td>
+                                        <td>@obj.UnitPrice</td>
+                                        @if (@obj.Status == 0)
+                                        {
+                                            <td>Reached in Warehouse</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Processing</td>
+                                        }
+                                    </tr>
+                         }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
 <hr />
-<!--End of Vendor Table-->
-<!--Employee Table-->
+@*End of Vendor Table*@
 
+@*Employee Table*@
 
-<div class="table-container">
-    <div class="table-name">
-        Employee Table
+<form action="/Home/Dashboard" method="post">
+    <div class="table-top">
+        <span class="table-title">Employee Table</span>
+        
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Email</th>
-                <th>Salary</th>
-                <th>Designation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>001</td>
-                <td>Jaman</td>
-                <td>30</td>
-                <td>jaman@example.com</td>
-                <td>৳55000</td>
-                <td>Business Development Manager</td>
-            </tr>
-            <tr>
-                <td>002</td>
-                <td>Mohammad</td>
-                <td>25</td>
-                <td>mohammad@example.com</td>
-                <td>৳44500</td>
-                <td>Marketing Executive</td>
-            </tr>
-            <tr>
-                <td>003</td>
-                <td>Shan</td>
-                <td>40</td>
-                <td>shan@example.com</td>
-                <td>৳66000</td>
-                <td>Market Research Analyst</td>
-            </tr>
-            <tr>
-                <td>004</td>
-                <td>Tamim</td>
-                <td>35</td>
-                <td>tamim@example.com</td>
-                <td>৳55500</td>
-                <td>Business Analyst</td>
-            </tr>
-            <tr>
-                <td>005</td>
-                <td>Rumana Aktar</td>
-                <td>28</td>
-                <td>rumana@example.com</td>
-                <td>৳44800</td>
-                <td>Marketing Manager</td>
-            </tr>
-            <tr>
-                <td>006</td>
-                <td>Tahmida</td>
-                <td>32</td>
-                <td>tahmida@example.com</td>
-                <td>৳55200</td>
-                <td>Business Consultant</td>
-            </tr>
-            <tr>
-                <td>007</td>
-                <td>Rahim</td>
-                <td>45</td>
-                <td>rahim@example.com</td>
-                <td>৳66200</td>
-                <td>Marketing Director</td>
-            </tr>
-            <tr>
-                <td>008</td>
-                <td>Menhaj</td>
-                <td>29</td>
-                <td>menhaj@example.com</td>
-                <td>৳44900</td>
-                <td>Business Development Executive</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<!--End of Employee Table-->
-<!--End of Main Body Content-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Salary</th>
+                            <th>Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var obj in Model)
+                        {
+                            <tr>
+                                <td>@obj.Name</td>
+                                <td>@obj.Age</td>
+                                <td>@obj.Email</td>
+                                <td>@obj.Salary</td>
+                                <td>@obj.Designation</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</form>
+@*End of Employee Table*@
