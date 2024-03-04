@@ -127,20 +127,20 @@ textarea {
 .table-top {
     background-color: #180147;
     
-    padding: 5px; /* Add padding for better appearance */
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Align elements to start and end of container */
-    align-items: center; /* Center vertically */
+    padding: 5px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
 }
 
     .table-top .table-title {
         color: #f0f0f0;
-        font-size: 18px; /* Adjust the font size as needed */
+        font-size: 18px; 
     }
 
 .search-container {
-    display: flex; /* Use flexbox for layout */
-    justify-content: center; /* Center align the search container */
+    display: flex; 
+    justify-content: center; 
 }
 
 
