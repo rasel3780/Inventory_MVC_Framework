@@ -1,76 +1,27 @@
-﻿body {
+﻿html,body {
     background: linear-gradient(106.8deg, rgb(117, 255, 220) 6%, rgb(163, 216, 255) 47.6%, rgb(248, 215, 251) 87.8%);
+    height: 100%;
 }
 
-.box-container {
-    
-    width:auto;
-    max-width: 450px;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+   
+}
 
-    height: fit-content;
-    padding: 0px 20px 15px 20px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    bottom: 0px;
-    margin: auto;
+.login-container {
     background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%);
     border-radius: 15px;
+    padding: 20px;
 }
 
-    .box-container h2 {
-        text-align: center;
-        font-size: 30px;
 
-    }
-.input-container {
-    position: relative;
-    width: auto;
-    max-width: 400px;
-    height: 40px;
-    margin: 30px 0px 30px 20px;
+.login-container button {
+    width: calc(100%-40px);
+    margin-top:30px;
 }
 
-    .input-container input {
-        
-        box-sizing: border-box;
-        width:100%;
-        height: 100%;
-        border: 1px solid white;
-        border-radius: 15px;
-        font-size: 14px;
-        padding: 10px;
-        font-weight: bold;
-    }
-.input-container img {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    width: 20px; 
-    height: auto;
-}
 
-.boxFooter {
-    text-align: center;
-}
 
-    .boxFooter button {
-        width: 100%;
-        max-width: 200px;
-        height: 40px;
-        background-color: white;
-        font-size: 14px;
-        outline: none;
-        border: none;
-        border-radius: 50px;
-        font-weight: bold;
-        margin: 0px 120px 30px 120px;
-    }
-
-    .boxFooter label a{
-        font-weight: bold;
-        color:black;
-    }

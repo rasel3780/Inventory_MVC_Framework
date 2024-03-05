@@ -31,7 +31,8 @@ namespace InventoryManagement
                 "~/Scripts/CustomScript/myScript.js"));
             //custom css
             bundles.Add(new StyleBundle("~/Content/custom_css").Include(
-                "~/Content/Style/LoginStyleSheet.css"));
+                "~/Content/Style/LoginStyleSheet.css",
+                 "~/Content/bootstrap.css"));
         }
     }
 }
