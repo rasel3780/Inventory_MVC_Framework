@@ -26,13 +26,17 @@ namespace InventoryManagement
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            
+            //custom script 
             bundles.Add(new ScriptBundle("~/bundles/custom_script").Include(
-                "~/Scripts/CustomScript/myScript.js"));
+                "~/Scripts/CustomScript/myScript.js",
+                 "~/Scripts/jquery-3.4.1.min.js"));
+         
+
             //custom css
             bundles.Add(new StyleBundle("~/Content/custom_css").Include(
                 "~/Content/Style/LoginStyleSheet.css",
-                 "~/Content/bootstrap.css"));
+                  "~/Content/Style/bootstrap.min.css"
+             ));
         }
     }
 }
