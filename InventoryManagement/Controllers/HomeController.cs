@@ -17,33 +17,40 @@ namespace InventoryManagement.Controllers
 
         public ActionResult Dashboard()
         {
-            List<Employee> empListData = Employee.GetEmpData(); 
-            List<Vendor> vendorListData = Vendor.GetVendorData();
-            List<Order> orderListData = Order.GetOrderList();
-            ViewBag.vendorListData = vendorListData;
-            ViewBag.orderListData = orderListData;
-            ViewBag.orderTxt = "";
-            return View(empListData);
+            if (Session["User"] != null)
+            {
+                List<Employee> empListData = Employee.GetEmpData(); 
+                List<Vendor> vendorListData = Vendor.GetVendorData();
+                List<Order> orderListData = Order.GetOrderList();
+                ViewBag.vendorListData = vendorListData;
+                ViewBag.orderListData = orderListData;
+                ViewBag.orderTxt = "";
+                return View(empListData);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         [HttpPost]
         public ActionResult Dashboard(FormCollection frm, string filterBtn)
         {
-            List<Employee> empListData = Employee.GetEmpData();
-            List<Vendor> vendorListData = Vendor.GetVendorData();
-            List<Order> orderListData = Order.GetOrderList();
+           
+                List<Employee> empListData = Employee.GetEmpData();
+                List<Vendor> vendorListData = Vendor.GetVendorData();
+                List<Order> orderListData = Order.GetOrderList();
 
-            ViewBag.vendorListData = vendorListData;
-            ViewBag.orderListData = orderListData;
-            ViewBag.orderTxt = "";
+                ViewBag.vendorListData = vendorListData;
+                ViewBag.orderListData = orderListData;
+                ViewBag.orderTxt = "";
 
-            
-            if (filterBtn == "search")
-            {
-                ViewBag.orderTxt = frm["orderTxt"].ToString();
-            }
-  
-            return View(empListData);
+
+                if (filterBtn == "search")
+                {
+                    ViewBag.orderTxt = frm["orderTxt"].ToString();
+                }
+                return View(empListData);           
         }
 
         public ActionResult About()

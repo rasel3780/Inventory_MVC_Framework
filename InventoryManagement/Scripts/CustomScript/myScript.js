@@ -67,3 +67,21 @@
         });
     }
 });
+
+
+//Password toggle 
+$(document).ready(function () {
+    // Using event delegation for dynamically added elements
+    $(document).on("click", ".toggle-password", function () {
+        var passwordField = $($(this).data('target'));
+        var icon = $(this);
+
+        // Toggle password visibility
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            
+        } else {
+            passwordField.attr("type", "password");
+        }
+    });
+});
