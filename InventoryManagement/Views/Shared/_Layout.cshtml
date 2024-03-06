@@ -30,7 +30,13 @@
     <div class="side-navbar">
         <div class="user-profile">
             <img src="~/Content/img/userProfile.png" alt="User Profile Picture">
-            <p>User name</p>
+            @{
+                if (Session["User"] != null)
+                {
+                    <p>@Session["User"]</p>
+                }
+            }
+
         </div>
         <ul>
             <li><a href="#"><i class="bi bi-database"></i>Inventory</a></li>

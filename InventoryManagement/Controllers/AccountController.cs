@@ -13,6 +13,24 @@ namespace InventoryManagement.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Login(string btnSubmit, string txtUsername, string txtPassword)
+        {
+            string LoginMsg = "";
+            if(txtUsername == "Rasel" && txtPassword == "123456")
+            {
+                Session["User"] = "Rasel";
+                return RedirectToAction("Dashboard","Home");
+            }
+            else
+            {
+                LoginMsg = "Faild, Username/Password not match";
+            }
+            ViewBag.LoginMsg = LoginMsg;
+            return View();
+        }
+
         public ActionResult Registration()
         {
             return View();
