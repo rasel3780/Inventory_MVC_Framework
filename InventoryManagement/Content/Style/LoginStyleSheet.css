@@ -21,6 +21,24 @@ body {
 .login-container button {
     width: calc(100%-40px);
     margin-top:30px;
+    
+}
+
+.login-container h2{
+    color:white;
+}
+
+.form-footer label {
+    margin-top: 20px;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+
+.form-footer a{
+    color:black;
+    font-weight:bold;
+    text-decoration:underline;
 }
 
 

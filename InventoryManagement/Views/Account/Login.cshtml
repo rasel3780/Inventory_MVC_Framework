@@ -34,13 +34,16 @@
                             <div class="input-group">
                                 <input type="password" class="form-control" id="password" placeholder="Enter your password">
                                 <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-eye" id="togglePassword"></i>
+                                    <span class="input-group-text toggle-password" data-target="#password">
+                                        <i class="fas fa-eye"></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <label>Don't have an account? <a href="@Url.Action("Registration","Account")">Create new account</a> </label>
+                        </div>
                     </form>
                 </div>
             </div>
