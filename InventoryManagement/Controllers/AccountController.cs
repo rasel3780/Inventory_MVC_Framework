@@ -35,5 +35,11 @@ namespace InventoryManagement.Controllers
         {
             return View();
         }
+
+        public ActionResult Logout()
+        {
+            Session["User"] = null;
+            return RedirectToAction("Login", "Account");
+        }
     }
 }
