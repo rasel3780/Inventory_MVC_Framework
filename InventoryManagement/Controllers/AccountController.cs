@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InventoryManagement.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,12 +16,13 @@ namespace InventoryManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(string btnSubmit, string txtUsername, string txtPassword)
+        public ActionResult Login(string btnSubmit, Account account)
         {
             string LoginMsg = "";
-            if(txtUsername == "Rasel" && txtPassword == "123456")
+            bool verifyStatus = account.VerifyLogin();
+            if(verifyStatus)
             {
-                Session["User"] = "Rasel";
+                Session["User"] = account.UserName; 
                 return RedirectToAction("Dashboard","Home");
             }
             else
