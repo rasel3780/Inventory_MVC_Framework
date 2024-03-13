@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace InventoryManagement.Controllers
 {
     public class AccountController : Controller
     {
+        
         // GET: Account
         public ActionResult Login()
         {
@@ -22,6 +24,7 @@ namespace InventoryManagement.Controllers
             bool verifyStatus = account.VerifyLogin();
             if(verifyStatus)
             {
+                
                 Session["User"] = account.UserName; 
                 return RedirectToAction("Dashboard","Home");
             }
@@ -40,6 +43,7 @@ namespace InventoryManagement.Controllers
 
         public ActionResult Logout()
         {
+            Log.Information("Logout");
             Session["User"] = null;
             return RedirectToAction("Login", "Account");
         }

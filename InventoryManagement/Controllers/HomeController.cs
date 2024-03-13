@@ -19,13 +19,16 @@ namespace InventoryManagement.Controllers
         {
             if (Session["User"] != null)
             {
-                List<Employee> empListData = Employee.GetEmpData(); 
-                List<Vendor> vendorListData = Vendor.GetVendorData();
-                List<Order> orderListData = Order.GetOrderList();
-                ViewBag.vendorListData = vendorListData;
-                ViewBag.orderListData = orderListData;
-                ViewBag.orderTxt = "";
-                return View(empListData);
+                //List<Employee> empListData = Employee.GetEmpData(); 
+                //List<Vendor> vendorListData = Vendor.GetVendorData();
+                //List<Order> orderListData = Order.GetOrderList();
+                //ViewBag.vendorListData = vendorListData;
+                //ViewBag.orderListData = orderListData;
+                //ViewBag.orderTxt = "";
+                List<Equipment> equipmentDataList = new List<Equipment>();
+                ViewBag.equipmentDataList = equipmentDataList;
+                ViewBag.equipmentTxt = "";
+                return View();
             }
             else
             {
@@ -36,21 +39,24 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult Dashboard(FormCollection frm, string filterBtn)
         {
-           
-                List<Employee> empListData = Employee.GetEmpData();
-                List<Vendor> vendorListData = Vendor.GetVendorData();
-                List<Order> orderListData = Order.GetOrderList();
 
-                ViewBag.vendorListData = vendorListData;
-                ViewBag.orderListData = orderListData;
-                ViewBag.orderTxt = "";
+            //List<Employee> empListData = Employee.GetEmpData();
+            //List<Vendor> vendorListData = Vendor.GetVendorData();
+            //List<Order> orderListData = Order.GetOrderList();
 
+            //ViewBag.vendorListData = vendorListData;
+            //ViewBag.orderListData = orderListData;
+            //ViewBag.orderTxt = "";
 
-                if (filterBtn == "search")
-                {
-                    ViewBag.orderTxt = frm["orderTxt"].ToString();
-                }
-                return View(empListData);           
+            List<Equipment> equipmentDataList = new List<Equipment>();
+            ViewBag.equipmentDataList = equipmentDataList;
+            ViewBag.equipmentTxt = "";
+
+            if (filterBtn == "search")
+            {
+                ViewBag.equipmentTxt = frm["equipmentTxt"].ToString();
+            }
+            return View();
         }
 
         public ActionResult About()

@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary btn-block" name="btnSubmit" value="Login">Login</button>
-                            <label>Don't have an account? <a href="@Url.Action("Registration", "Account")">Create new account</a> </label>
+                            <label>Don't have an account? @Html.ActionLink("Create new account", "Registration", "Account")  </label>
                         </div>
                     }
                 </div>
