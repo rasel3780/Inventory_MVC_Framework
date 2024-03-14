@@ -126,7 +126,6 @@ textarea {
 
 .table-top {
     background-color: #180147;
-    
     padding: 5px; 
     display: flex; 
     justify-content: space-between; 
@@ -147,7 +146,7 @@ textarea {
 
 #search-input {
     margin-right: 5px;
-    
+    border-style:none;
 }
 
 #search-btn, #clear-btn {
@@ -155,10 +154,10 @@ textarea {
     cursor: pointer;
     background-color: #007bff;
     color: white;
-    border: none;
-    border-radius:15px;
-    margin-right:5px;
+    border-style: none;
     
+    
+    margin-right: 5px;
 }
     #clear-btn{
         background-color:red;
@@ -185,9 +184,8 @@ textarea {
     }
 
 
-.table-name span{
-    font-size:16px;
-    border-style:dashed;
+.table-top span {
+    font-size: 16px;
 }
 
 

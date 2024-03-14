@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace InventoryManagement.Controllers
 {
     public class AccountController : Controller
     {
+        
         // GET: Account
         public ActionResult Login()
         {
@@ -20,14 +22,20 @@ namespace InventoryManagement.Controllers
         {
             string LoginMsg = "";
             bool verifyStatus = account.VerifyLogin();
-            if(verifyStatus)
+
+            if (btnSubmit == "Login")
             {
-                Session["User"] = account.UserName; 
-                return RedirectToAction("Dashboard","Home");
-            }
-            else
-            {
-                LoginMsg = "Faild, Username/Password not match";
+                if (verifyStatus)
+                {
+
+                    Session["User"] = account.UserName;
+                    LoginMsg = "Login Success";
+                    //return RedirectToAction("Dashboard","Home");
+                }
+                else
+                {
+                    LoginMsg = "Faild, Username/Password not match";
+                }
             }
             ViewBag.LoginMsg = LoginMsg;
             return View();
@@ -40,6 +48,7 @@ namespace InventoryManagement.Controllers
 
         public ActionResult Logout()
         {
+            Log.Information("Logout");
             Session["User"] = null;
             return RedirectToAction("Login", "Account");
         }

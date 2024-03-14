@@ -54,7 +54,7 @@
 
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
-                            <label>Already have an account? <a href="@Url.Action("Login","Account")">Login</a> </label>
+                            <label>Already have an account? @Html.ActionLink("Login", "Login", "Account")</label>
                         </div>
                     </form>
                 </div>

@@ -1,15 +1,18 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 
 namespace InventoryManagement.Models
 {
     public class Account
     {
+        private readonly ILogger _logger;
         public string UserName { get; set; }
         public string Password { get; set; }
 
@@ -27,7 +30,7 @@ namespace InventoryManagement.Models
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
-                cmd.CommandText = "dbo.GetMembers";
+                cmd.CommandText = "dbo.spInventory_GetMembers";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("@UserName", this.UserName));
                 cmd.Parameters.Add(new SqlParameter("@Password", this.Password));
@@ -41,6 +44,7 @@ namespace InventoryManagement.Models
 
                 if(dataTable.Rows.Count>0)
                 {
+                    Log.Information("Query in database successful");
                     return true;
                 }
 
@@ -57,7 +61,7 @@ namespace InventoryManagement.Models
             }
             catch(Exception ex) 
             {
-              
+                Log.Error(ex.ToString());
             }
             return false;
         }
