@@ -25,7 +25,7 @@ namespace InventoryManagement.Controllers
                 //ViewBag.vendorListData = vendorListData;
                 //ViewBag.orderListData = orderListData;
                 //ViewBag.orderTxt = "";
-                List<Equipment> equipmentDataList = new List<Equipment>();
+                List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
                 ViewBag.equipmentDataList = equipmentDataList;
                 ViewBag.equipmentTxt = "";
                 return View();
@@ -48,7 +48,7 @@ namespace InventoryManagement.Controllers
             //ViewBag.orderListData = orderListData;
             //ViewBag.orderTxt = "";
 
-            List<Equipment> equipmentDataList = new List<Equipment>();
+            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
             ViewBag.equipmentTxt = "";
 
