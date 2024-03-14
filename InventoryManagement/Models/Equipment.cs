@@ -31,7 +31,7 @@ namespace InventoryManagement.Models
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
-            cmd.CommandText = "dbo.spInventory_GetEquipmentList";
+            cmd.CommandText = "[dbo].[spInventory_GetEquipments]";
             cmd.Parameters.Clear();
        
             cmd.CommandType = CommandType.StoredProcedure;

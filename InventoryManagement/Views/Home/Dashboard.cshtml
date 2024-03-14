@@ -116,7 +116,7 @@
             <input type="button" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
         </div>
         <div class="search-container">
-            <input type="text" class="form-control" id="search-input" name="equipmentTxtName" placeholder="Search...">
+            <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
             <button id="search-btn" value="search" name="filterBtn">Search</button>
             <button id="clear-btn" value="clear" name="filterBtn">Clear</button>
         </div>
@@ -135,7 +135,7 @@
                     </thead>
                     <tbody>
                         @{
-                            List<Equipment> equipmentListData = ViewBag.equipmentDataList;
+                            List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
                         }
 
                         @foreach (Equipment obj in equipmentListData)
