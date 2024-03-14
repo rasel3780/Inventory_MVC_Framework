@@ -5,7 +5,17 @@
     ViewBag.Title = "Dashboard";
 }
 
-
+<script>
+    function showEquipmentEntryPanel() {
+        $("#partialEntryPanel").dialog({
+            resizable: false,
+            height: 500,
+            width: 1000,
+            modal: true
+        });
+        return false;  // to prevent post-back
+    }
+</script>
 <!--Card-->
 <div class="row mt-4">
     <div class="col-md-3">
@@ -98,9 +108,13 @@
 
 
 @*Equipment Table*@
+
 <form action="/Home/Dashboard" method="post">
     <div class="table-top">
         <span class="table-title">Equipment Table</span>
+        <div class="btn-group mt-2 mt-md-0 ml-md-auto">
+            <input type="button" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
+        </div>
         <div class="search-container">
             <input type="text" class="form-control" id="search-input" name="equipmentTxtName" placeholder="Search...">
             <button id="search-btn" value="search" name="filterBtn">Search</button>
@@ -158,7 +172,7 @@
 </form>
 
 <hr />
-@*End of Order Table*@
+@*End of Equipment Table*@
 
 
 

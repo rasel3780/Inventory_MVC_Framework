@@ -22,15 +22,20 @@ namespace InventoryManagement.Controllers
         {
             string LoginMsg = "";
             bool verifyStatus = account.VerifyLogin();
-            if(verifyStatus)
+
+            if (btnSubmit == "Login")
             {
-                
-                Session["User"] = account.UserName; 
-                return RedirectToAction("Dashboard","Home");
-            }
-            else
-            {
-                LoginMsg = "Faild, Username/Password not match";
+                if (verifyStatus)
+                {
+
+                    Session["User"] = account.UserName;
+                    LoginMsg = "Login Success";
+                    //return RedirectToAction("Dashboard","Home");
+                }
+                else
+                {
+                    LoginMsg = "Faild, Username/Password not match";
+                }
             }
             ViewBag.LoginMsg = LoginMsg;
             return View();
