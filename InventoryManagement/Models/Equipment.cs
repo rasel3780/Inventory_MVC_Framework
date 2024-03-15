@@ -33,7 +33,6 @@ namespace InventoryManagement.Models
             cmd.Connection = _connection;
             cmd.CommandText = "[dbo].[spInventory_GetEquipments]";
             cmd.Parameters.Clear();
-       
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
 
@@ -53,6 +52,34 @@ namespace InventoryManagement.Models
             cmd.Dispose();
             _connection.Close();
             return equipmentList;
+        }
+
+        public int SaveEquipment()
+        {
+           
+            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+
+            SqlConnection _connection = new SqlConnection(conString);
+            _connection.Open();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = "[dbo].[spInventory_InsertEquipment]";
+            cmd.Parameters.Clear();
+
+            cmd.Parameters.Add(new SqlParameter("@Name", this.Name));
+            cmd.Parameters.Add(new SqlParameter("@EqCount", this.EqCount));
+            cmd.Parameters.Add(new SqlParameter("@EntryDate", this.EntryDate));
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 0;
+
+            int result= cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
+            _connection.Close();
+
+            return result;
         }
     }
 }
