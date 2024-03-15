@@ -19,12 +19,6 @@ namespace InventoryManagement.Controllers
         {
             if (Session["User"] != null)
             {
-                //List<Employee> empListData = Employee.GetEmpData(); 
-                //List<Vendor> vendorListData = Vendor.GetVendorData();
-                //List<Order> orderListData = Order.GetOrderList();
-                //ViewBag.vendorListData = vendorListData;
-                //ViewBag.orderListData = orderListData;
-                //ViewBag.orderTxt = "";
                 List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
                 ViewBag.equipmentDataList = equipmentDataList;
                 ViewBag.equipmentTxt = "";
@@ -37,22 +31,30 @@ namespace InventoryManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult Dashboard(FormCollection frm, string filterBtn)
+        public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
 
-            //List<Employee> empListData = Employee.GetEmpData();
-            //List<Vendor> vendorListData = Vendor.GetVendorData();
-            //List<Order> orderListData = Order.GetOrderList();
+            if (btnSubmit == "Save Equipment")
+            {
+                Equipment equipment = new Equipment();
+                equipment.Name = frm["ddlEquipmentName"].ToString();
+                equipment.EqCount = Convert.ToInt32(frm["txtQuantity"].ToString());
+                equipment.EntryDate = Convert.ToDateTime(frm["txtEntryDate"].ToString());
 
-            //ViewBag.vendorListData = vendorListData;
-            //ViewBag.orderListData = orderListData;
-            //ViewBag.orderTxt = "";
+                int returnResult = equipment.SaveEquipment();
+                if(returnResult>0)
+                {
+                    ViewBag.OperationResult = "Saved Successfully";
+                }
+
+            }
+
 
             List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
             ViewBag.equipmentTxt = "";
 
-            if (filterBtn == "search")
+            if (btnSubmit == "search")
             {
                 ViewBag.equipmentTxt = frm["equipmentTxt"].ToString();
             }

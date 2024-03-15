@@ -44,8 +44,15 @@ namespace InventoryManagement.Models
 
                 if(dataTable.Rows.Count>0)
                 {
-                    Log.Information("Query in database successful");
-                    return true;
+                    //if(dataTable.Rows[0].ToString() == UserName)
+                    //{
+                        Log.Information("Query in database successful");
+                        return true;
+                   // }
+                    //else
+                    //{
+                       // return false;
+                   // }
                 }
 
                 //var pdata = (from p in dataTable.AsEnumerable()
