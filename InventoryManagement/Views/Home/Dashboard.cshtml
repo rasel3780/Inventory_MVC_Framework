@@ -1,5 +1,5 @@
 ﻿@using InventoryManagement.Models;
-
+@using System.Data;
 
 @{
     ViewBag.Title = "Dashboard";
@@ -110,7 +110,7 @@
 @*Equipment Table*@
 
 <form action="/Home/Dashboard" method="post">
-   
+
     @{
         List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
 
@@ -174,3 +174,39 @@
 </form>
 @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
 @*End of Equipment Table*@
+
+<div>
+    <h4>Equipment list</h4>
+    <table>
+        <tr>
+            <th>CustomerID</th>
+            <th>CustomerName</th>
+            <th>CustomerMobile</th>
+            <th>EqCount</th>
+        </tr>
+        @{
+            System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+            var pdata = (from p in dataTable.AsEnumerable()
+                         select new
+                         {
+
+                             CustomerID = p.Field<Int32>("CustomerID"),
+                             CustomerName = p.Field<string>(" CustomerName"),
+                             CustomerMobile = p.Field<string>("CustomerMobile"),
+                             EqCount = p.Field<Int32>("EqCount")
+                         }).ToList();
+
+            foreach (var obj in pdata)
+            {
+                <tr>
+                    <td>@obj.CustomerID</td>
+                    <td>@obj.CustomerName</td>
+                    <td>@obj.CustomerMobile</td>
+                    <td>@obj.EqCount</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+

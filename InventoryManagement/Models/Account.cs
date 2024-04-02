@@ -42,29 +42,15 @@ namespace InventoryManagement.Models
                 cmd.Dispose();
                 _connection.Close();
 
-                if(dataTable.Rows.Count>0)
+                if (dataTable.Rows.Count > 0)
                 {
-                    //if(dataTable.Rows[0].ToString() == UserName)
-                    //{
-                        Log.Information("Query in database successful");
+                    if (dataTable.Rows[0]["UserName"].ToString()==this.UserName) 
+                    {
                         return true;
-                   // }
-                    //else
-                    //{
-                       // return false;
-                   // }
-                }
+                    }
 
-                //var pdata = (from p in dataTable.AsEnumerable()
-                //             where p.Field<string>("UserName") == this.UserName && p.Field<string>("Password") == this.Password
-                //             select new
-                //             {
-                //                 UserName = p.Field<string>("UserName")
-                //             }).SingleOrDefault();
-                //if (this.UserName == "Rasel" && this.Password == "123456")
-                //{
-                //    return true;
-                //}   
+                    Log.Information("Query in database successful");
+                }
             }
             catch(Exception ex) 
             {

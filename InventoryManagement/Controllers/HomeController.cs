@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,6 +21,8 @@ namespace InventoryManagement.Controllers
             if (Session["User"] != null)
             {
                 List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+                DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+                ViewBag.dtCusTEquip = dtCusTEquip;
                 ViewBag.equipmentDataList = equipmentDataList;
                 ViewBag.equipmentTxt = "";
                 return View();
@@ -52,6 +55,8 @@ namespace InventoryManagement.Controllers
 
             List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
+            DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+            ViewBag.dtCusTEquip = dtCusTEquip;
             ViewBag.equipmentTxt = "";
 
             if (btnSubmit == "search")
@@ -73,6 +78,28 @@ namespace InventoryManagement.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult LstEquipment()
+        {
+            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+            var eqpList = (from  equipment in equipmentDataList select
+                           new {
+                               EquipmentId = equipment.EquipmentId,
+                               Name = equipment.Name,
+                               EqCount = equipment.EqCount.ToString(),
+                               EntryDate = equipment.EntryDate.ToString("dd/MM/yyyy")
+                           }).ToList();
+            return Json(eqpList, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult LstCustomer()
+        {
+            List<Customer> customerDataList = Customer.GetCustomerData();
+            
+            return Json(customerDataList, JsonRequestBehavior.AllowGet);
         }
     }
 }

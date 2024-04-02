@@ -8,8 +8,10 @@ using System.Web;
 
 namespace InventoryManagement.Models
 {
+    [Serializable]
     public class Equipment
     {
+        public int EquipmentId { get; set; }
         public string Name { get; set; }
         public int EqCount { get; set; }
         public DateTime EntryDate { get; set; }
@@ -43,6 +45,7 @@ namespace InventoryManagement.Models
                 while(reader.Read()) 
                 {
                     Equipment obj = new Equipment();
+                    obj.EquipmentId = Convert.ToInt32(reader["EquipmentId"].ToString());
                     obj.Name = reader["EquipmentName"].ToString();
                     obj.EqCount = Convert.ToInt32(reader["Quantity"].ToString());
                     obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());
