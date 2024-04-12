@@ -107,106 +107,131 @@
 
 
 
-@*Equipment Table*@
 
-<form action="/Home/Dashboard" method="post">
+<div class="row">
+    <div class="col col-sm-6">
 
-    @{
-        List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
+        @*Equipment Table*@
+        <form action="/Home/Dashboard" method="post">
 
-        <div class="table-top">
-            <span class="table-title">Equipment Table</span>
-            <div class="btn-group mt-2 mt-md-0 ml-md-auto">
-                <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
-            </div>
-            <div class="search-container">
-                <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
-                <button id="search-btn" value="search" name="btnSubmit">Search</button>
-                <button id="clear-btn" value="clear" name="btnSubmit">Clear</button>
-            </div>
-        </div>
+            @{
+                List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Entry Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="table-top">
+                    <span class="table-title">Equipment Table</span>
+                    <div class="btn-group mt-2 mt-md-0 ml-md-auto">
+                        <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
+                    </div>
+                    <div class="search-container">
+                        <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
+                        <button id="search-btn" value="search" name="btnSubmit">Search</button>
+                        <button id="clear-btn" value="clear" name="btnSubmit">Clear</button>
+                    </div>
+                </div>
 
-                            @foreach (Equipment obj in equipmentListData)
-                            {
-                                if (ViewBag.equipmentTxt != "")
-                                {
-                                    if (obj.Name == ViewBag.equipmentTxt)
-                                    {
-                                        <tr>
-                                            <td>@obj.Name</td>
-                                            <td>@obj.EqCount</td>
-                                            <td>@obj.EntryDate</td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-container">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>@obj.Name</td>
-                                        <td>@obj.EqCount</td>
-                                        <td>@obj.EntryDate</td>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Entry Date</th>
                                     </tr>
-                                }
+                                </thead>
+                                <tbody>
 
-                            }
+                                    @foreach (Equipment obj in equipmentListData)
+                                    {
+                                        if (ViewBag.equipmentTxt != "")
+                                        {
+                                            if (obj.Name == ViewBag.equipmentTxt)
+                                            {
+                                                <tr>
+                                                    <td>@obj.Name</td>
+                                                    <td>@obj.EqCount</td>
+                                                    <td>@obj.EntryDate</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>@obj.Name</td>
+                                                <td>@obj.EqCount</td>
+                                                <td>@obj.EntryDate</td>
+                                            </tr>
+                                        }
 
-                        </tbody>
-                    </table>
+                                    }
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
 
                 </div>
+            }
+        </form>
+        @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
+        @*End of Equipment Table*@
+    </div>
+
+    <div class="col col-sm-6">
+        <div class="row">
+            <h3>Add New Customer</h3>
+            
+        </div>
+
+        
+        <div class="table-top">
+            <span class="table-title">Assign</span>
+        </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CustomerID</th>
+                            <th>CustomerName</th>
+                            <th>CustomerMobile</th>
+                            <th>EqCount</th>
+                        </tr>
+                    </thead>
+
+                    @{
+                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     select new
+                                     {
+
+                                         CustomerID = p.Field<Int32>("CustomerID"),
+                                         CustomerName = p.Field<string>("CustomerName"),
+                                         CustomerMobile = p.Field<string>("CustomerMobile"),
+                                         EqCount = p.Field<Int32>("EqCount")
+                                     }).ToList();
+
+                        foreach (var obj in pdata)
+                        {
+                            <tr>
+                                <td>@obj.CustomerID</td>
+                                <td>@obj.CustomerName</td>
+                                <td>@obj.CustomerMobile</td>
+                                <td>@obj.EqCount</td>
+                            </tr>
+                        }
+
+                    }
+                </table>
             </div>
 
         </div>
-    }
-</form>
-@Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
-@*End of Equipment Table*@
+</div>
+
 
 <div>
-    <h4>Equipment list</h4>
-    <table>
-        <tr>
-            <th>CustomerID</th>
-            <th>CustomerName</th>
-            <th>CustomerMobile</th>
-            <th>EqCount</th>
-        </tr>
-        @{
-            System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
-            var pdata = (from p in dataTable.AsEnumerable()
-                         select new
-                         {
-
-                             CustomerID = p.Field<Int32>("CustomerID"),
-                             CustomerName = p.Field<string>(" CustomerName"),
-                             CustomerMobile = p.Field<string>("CustomerMobile"),
-                             EqCount = p.Field<Int32>("EqCount")
-                         }).ToList();
-
-            foreach (var obj in pdata)
-            {
-                <tr>
-                    <td>@obj.CustomerID</td>
-                    <td>@obj.CustomerName</td>
-                    <td>@obj.CustomerMobile</td>
-                    <td>@obj.EqCount</td>
-                </tr>
-            }
-        }
-    </table>
+    
 </div>
 
 

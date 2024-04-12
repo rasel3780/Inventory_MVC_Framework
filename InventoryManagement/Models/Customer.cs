@@ -15,6 +15,26 @@ namespace InventoryManagement.Models
         public string CustomerMobile { get; set; }
 
 
+        public int AddCustomer()
+        {
+            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+            SqlConnection _connection = new SqlConnection(conString);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = "[dbo].[spInventory_InsertCustomer]";
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
+            cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 0;
+
+            int result = cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            _connection.Close();
+
+            return result;
+        }
+
         public static List<Customer> GetCustomerData()
         {
             List<Customer> customerList = new List<Customer>();
@@ -50,8 +70,7 @@ namespace InventoryManagement.Models
 
         public static DataTable GetCustomerEquipmentAssignmentData()
         {
-            //List<Customer> customerList = new List<Customer>();
-           
+ 
             string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
 
             SqlConnection _connection = new SqlConnection(conString);
@@ -69,19 +88,7 @@ namespace InventoryManagement.Models
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             adapter.Fill(dataTable);
 
-            //SqlDataReader reader = cmd.ExecuteReader();
-
-            //if (reader.HasRows)
-            //{
-            //    while (reader.Read())
-            //    {
-            //        Customer obj = new Customer();
-            //        obj.CustomerID = Convert.ToInt32(reader["CustomerID"].ToString());
-            //        obj.CustomerName = reader["CustomerName"].ToString();
-            //        obj.CustomerMobile = reader["CustomerMobile"].ToString();
-            //        customerList.Add(obj);
-            //    }
-            //}
+          
             cmd.Dispose();
             _connection.Close();
             return dataTable;

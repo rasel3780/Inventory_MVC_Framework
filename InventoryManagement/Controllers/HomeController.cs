@@ -37,6 +37,7 @@ namespace InventoryManagement.Controllers
         public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
 
+            // Add New Equipment 
             if (btnSubmit == "Save Equipment")
             {
                 Equipment equipment = new Equipment();
@@ -52,13 +53,16 @@ namespace InventoryManagement.Controllers
 
             }
 
-
+            //Equipment list table
             List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
-            DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
-            ViewBag.dtCusTEquip = dtCusTEquip;
             ViewBag.equipmentTxt = "";
 
+            //Customer Equipment Assign List table
+            DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+            ViewBag.dtCusTEquip = dtCusTEquip;
+            
+            //Search box
             if (btnSubmit == "search")
             {
                 ViewBag.equipmentTxt = frm["equipmentTxt"].ToString();
