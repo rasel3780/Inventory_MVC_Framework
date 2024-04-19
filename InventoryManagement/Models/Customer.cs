@@ -78,7 +78,7 @@ namespace InventoryManagement.Models
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_LstCustomerEquipmentAssignment]";
+            cmd.CommandText = "[dbo].[spInventory_LstCustomerEquiAssignment]";
             cmd.Parameters.Clear();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
@@ -88,7 +88,7 @@ namespace InventoryManagement.Models
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             adapter.Fill(dataTable);
 
-          
+
             cmd.Dispose();
             _connection.Close();
             return dataTable;
