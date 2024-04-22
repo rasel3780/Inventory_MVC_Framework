@@ -16,91 +16,95 @@
         return false;  // to prevent post-back
     }
 </script>
+
+
 <!--Card-->
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #5592ed">
-            <div class="card-body">
-                <i class="bi bi-person-vcard-fill"></i>
-                <p>Total Employee</p>
-                <h3>10</h3>
+<div class="card-section">
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card" style="background-color: #5592ed">
+                <div class="card-body">
+                    <i class="bi bi-person-vcard-fill"></i>
+                    <p>Total Employee</p>
+                    <h3>10</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#3ece9c">
-            <div class="card-body">
-                <i class="bi bi-diagram-3"></i>
-                <p>Categories</p>
-                <h3>30</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color:#3ece9c">
+                <div class="card-body">
+                    <i class="bi bi-diagram-3"></i>
+                    <p>Categories</p>
+                    <h3>30</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #57f646">
-            <div class="card-body">
-                <i class="bi bi-box-seam"></i>
-                <p>Total Product</p>
-                <h3>1350</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #57f646">
+                <div class="card-body">
+                    <i class="bi bi-box-seam"></i>
+                    <p>Total Product</p>
+                    <h3>1350</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #f84848">
-            <div class="card-body">
-                <i class="bi bi-cart-x"></i>
-                <p>Out of Stock</p>
-                <h3>30</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #f84848">
+                <div class="card-body">
+                    <i class="bi bi-cart-x"></i>
+                    <p>Out of Stock</p>
+                    <h3>30</h3>
+                </div>
             </div>
         </div>
+
     </div>
 
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #cb8bf8">
-            <div class="card-body">
-                <i class="bi bi-person-video2"></i>
-                <p>Total Customer</p>
-                <h3>378</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card" style="background-color: #cb8bf8">
+                <div class="card-body">
+                    <i class="bi bi-person-video2"></i>
+                    <p>Total Customer</p>
+                    <h3>378</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#f79696">
-            <div class="card-body">
-                <i class="bi bi-calendar3-event"></i>
-                <p>Today's Sale</p>
-                <h3>৳5500</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color:#f79696">
+                <div class="card-body">
+                    <i class="bi bi-calendar3-event"></i>
+                    <p>Today's Sale</p>
+                    <h3>৳5500</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #e944f5">
-            <div class="card-body">
-                <i class="bi bi-calendar3"></i>
-                <p>Monthly Sales</p>
-                <h3>৳155000</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #e944f5">
+                <div class="card-body">
+                    <i class="bi bi-calendar3"></i>
+                    <p>Monthly Sales</p>
+                    <h3>৳155000</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #90c3f3">
-            <div class="card-body">
-                <i class="bi bi-receipt"></i>
-                <p>Yearly Sales</p>
-                <h3>৳125000</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #90c3f3">
+                <div class="card-body">
+                    <i class="bi bi-receipt"></i>
+                    <p>Yearly Sales</p>
+                    <h3>৳125000</h3>
+                </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 @*End of Card*@
 
@@ -185,53 +189,50 @@
             
         </div>
 
-        
-        <div class="table-top">
-            <span class="table-title">Assign</span>
-        </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CustomerID</th>
-                            <th>CustomerName</th>
-                            <th>CustomerMobile</th>
-                            <th>EqCount</th>
-                        </tr>
-                    </thead>
-
-                    @{
-                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
-                        var pdata = (from p in dataTable.AsEnumerable()
-                                     select new
-                                     {
-
-                                         CustomerID = p.Field<Int32>("CustomerID"),
-                                         CustomerName = p.Field<string>("CustomerName"),
-                                         CustomerMobile = p.Field<string>("CustomerMobile"),
-                                         EqCount = p.Field<Int32>("EqCount")
-                                     }).ToList();
-
-                        foreach (var obj in pdata)
-                        {
-                            <tr>
-                                <td>@obj.CustomerID</td>
-                                <td>@obj.CustomerName</td>
-                                <td>@obj.CustomerMobile</td>
-                                <td>@obj.EqCount</td>
-                            </tr>
-                        }
-
-                    }
-                </table>
+        <form action="/Home/Dashboard" method="post">
+            <div class="table-top">
+                <span class="table-title">Assign</span>
+                <input type="submit" class="btn btn-warning" name="btnEquipmentAssignment" id="btnEquipmentAssignment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
             </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CustomerID</th>
+                                <th>CustomerName</th>
+                                <th>CustomerMobile</th>
+                                <th>EqCount</th>
+                            </tr>
+                        </thead>
 
-        </div>
-</div>
+                        @{
+                            System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+                            var pdata = (from p in dataTable.AsEnumerable()
+                                         select new
+                                         {
 
+                                             CustomerID = p.Field<Int32>("CustomerID"),
+                                             CustomerName = p.Field<string>("CustomerName"),
+                                             CustomerMobile = p.Field<string>("CustomerMobile"),
+                                             EqCount = p.Field<Int32>("EqCount")
+                                         }).ToList();
 
-<div>
-    
+                            foreach (var obj in pdata)
+                            {
+                                <tr>
+                                    <td>@obj.CustomerID</td>
+                                    <td>@obj.CustomerName</td>
+                                    <td>@obj.CustomerMobile</td>
+                                    <td>@obj.EqCount</td>
+                                </tr>
+                            }
+
+                        }
+                    </table>
+                </div>
+        </form>
+
+    </div>
 </div>
 
 

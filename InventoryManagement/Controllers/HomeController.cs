@@ -52,9 +52,13 @@ namespace InventoryManagement.Controllers
                 }
 
             }
+            if (btnSubmit == "Save Assignment")
+            {
 
-            //Equipment list table
-            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+            }
+
+                //Equipment list table
+                List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
             ViewBag.equipmentTxt = "";
 
