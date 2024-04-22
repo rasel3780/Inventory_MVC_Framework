@@ -54,7 +54,11 @@ namespace InventoryManagement.Controllers
             }
             if (btnSubmit == "Save Assignment")
             {
-
+                int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
+                int EquipmentID = Convert.ToInt32(frm["ddlPartialEquipment"].ToString());
+                int EqQuantity= Convert.ToInt32(frm["txtPartialEquipmentQuantity"].ToString());
+                Customer.SaveAssignment(CustomerID, EquipmentID, EqQuantity);
+                ViewBag.OperationResult = "Saved Successfully";
             }
 
                 //Equipment list table

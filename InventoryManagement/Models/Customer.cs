@@ -93,5 +93,28 @@ namespace InventoryManagement.Models
             _connection.Close();
             return dataTable;
         }
+
+        public static int SaveAssignment(int CustomerID, int EquipmentID, int EqQuantity)
+        {
+            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+
+            SqlConnection _connection = new SqlConnection(conString);
+            _connection.Open();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = "[dbo].[spInventory_InsEquipmentAssignment]";
+            cmd.Parameters.Clear();
+            cmd.Parameters.Add(new SqlParameter("@CustomerID", CustomerID));
+            cmd.Parameters.Add(new SqlParameter("@EquipmentID", EquipmentID));
+            cmd.Parameters.Add(new SqlParameter("@EqCount", EqQuantity));
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 0;
+
+            int result = cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            _connection.Close();
+
+            return result;
+        }
     }
 }

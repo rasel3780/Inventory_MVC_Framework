@@ -6,6 +6,20 @@
 }
 
 <script>
+
+    //Assignment Entry Panel
+    function showAssignmentEntryPanel() {
+        $("#dvPartialCustomerEntryPanel").dialog({
+            resizable: false,
+            height: 500,
+            width: 1000,
+            modal: true
+        });
+        return false;  // to prevent post-back
+    }
+
+
+    //Equipment Entry Panel
     function showEquipmentEntryPanel() {
         $("#dvPartialEntryPanel").dialog({
             resizable: false,
@@ -180,57 +194,60 @@
             }
         </form>
         @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
+        
         @*End of Equipment Table*@
+
     </div>
 
     <div class="col col-sm-6">
         <div class="row">
             <h3>Add New Customer</h3>
-            
+
         </div>
 
         <form action="/Home/Dashboard" method="post">
             <div class="table-top">
                 <span class="table-title">Assign</span>
-                <input type="submit" class="btn btn-warning" name="btnEquipmentAssignment" id="btnEquipmentAssignment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
+                <input type="submit" class="btn btn-warning" name="btnEquipmentAssignment" id="btnEquipmentAssignment" onclick="return showAssignmentEntryPanel()" value="Assignment" />
             </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CustomerID</th>
+                            <th>CustomerName</th>
+                            <th>CustomerMobile</th>
+                            <th>EqCount</th>
+                        </tr>
+                    </thead>
+
+                    @{
+                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     select new
+                                     {
+
+                                         CustomerID = p.Field<Int32>("CustomerID"),
+                                         CustomerName = p.Field<string>("CustomerName"),
+                                         CustomerMobile = p.Field<string>("CustomerMobile"),
+                                         EqCount = p.Field<Int32>("EqCount")
+                                     }).ToList();
+
+                        foreach (var obj in pdata)
+                        {
                             <tr>
-                                <th>CustomerID</th>
-                                <th>CustomerName</th>
-                                <th>CustomerMobile</th>
-                                <th>EqCount</th>
+                                <td>@obj.CustomerID</td>
+                                <td>@obj.CustomerName</td>
+                                <td>@obj.CustomerMobile</td>
+                                <td>@obj.EqCount</td>
                             </tr>
-                        </thead>
-
-                        @{
-                            System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
-                            var pdata = (from p in dataTable.AsEnumerable()
-                                         select new
-                                         {
-
-                                             CustomerID = p.Field<Int32>("CustomerID"),
-                                             CustomerName = p.Field<string>("CustomerName"),
-                                             CustomerMobile = p.Field<string>("CustomerMobile"),
-                                             EqCount = p.Field<Int32>("EqCount")
-                                         }).ToList();
-
-                            foreach (var obj in pdata)
-                            {
-                                <tr>
-                                    <td>@obj.CustomerID</td>
-                                    <td>@obj.CustomerName</td>
-                                    <td>@obj.CustomerMobile</td>
-                                    <td>@obj.EqCount</td>
-                                </tr>
-                            }
-
                         }
-                    </table>
-                </div>
+
+                    }
+                </table>
+            </div>
         </form>
+        @Html.Partial("~/Views/Home/_PartiaEquipmentAssignment.cshtml")
 
     </div>
 </div>
