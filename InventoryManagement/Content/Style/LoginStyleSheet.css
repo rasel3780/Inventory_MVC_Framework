@@ -1,0 +1,45 @@
+﻿html,body {
+    background: linear-gradient(106.8deg, rgb(117, 255, 220) 6%, rgb(163, 216, 255) 47.6%, rgb(248, 215, 251) 87.8%);
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+   
+}
+
+.login-container {
+    background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+
+.login-container button {
+    width: calc(100%-40px);
+    margin-top:30px;
+    
+}
+
+.login-container h2{
+    color:white;
+}
+
+.form-footer label {
+    margin-top: 20px;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+
+.form-footer a{
+    color:black;
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+
+

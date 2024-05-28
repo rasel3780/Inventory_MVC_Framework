@@ -1,0 +1,45 @@
+﻿﻿
+<script>
+    $(document).ready(function () {
+        $('#txtEntryDate').datepicker();
+    })
+</script>
+
+
+<div id="dvPartialEntryPanel" style="display:none">
+
+    @using (Html.BeginForm("Dashboard", "Home"))
+    {
+        <div class="row">
+            <div class="col col-sm-2">
+                Select Equipment
+            </div>
+            <div class="col col-sm-4">
+                <select name="ddlEquipmentName">
+                    <option value="0">--Select--</option>
+                    <option value="Laptop 5">Laptop 4</option>
+                    <option value="Laptop 6">Laptop 5</option>
+                    <option value="Laptop 7">Laptop 6</option>
+                </select>
+            </div>
+            <div class="col col-sm-2">
+                Quantity
+            </div>
+            <div class="col col-sm-4">
+                <input type="text" name="txtQuantity" id="txtQuantity" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-sm-2">
+                Entry Date
+            </div>
+            <div class="col col-sm-4">
+                <input type="text" name="txtEntryDate" id="txtEntryDate" />
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" name="btnSubmit" id="btnPartialSave" value="Save Equipment" />
+        </div>
+    }
+
+</div> 

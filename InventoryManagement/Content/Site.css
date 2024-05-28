@@ -1,0 +1,215 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.navbar-dark {
+    --bs-navbar-color: rgb(255, 255, 255);
+}
+.container {
+    margin-left: 15px;
+}
+/* Side Navbar */
+.side-navbar {
+    background-color: #03418e;
+    width: 200px;
+    position: fixed;
+    left: 0px;
+    top: 56px;
+    bottom: 0px;
+    border-right: 1px solid #ddd;
+    color: rgb(241, 241, 241);
+}
+
+
+    .side-navbar ul {
+        list-style-type: none;
+        padding:0;
+    }
+
+    .side-navbar li {
+        display: flex;
+        align-items: center;
+        padding: 10px 30px;
+        border-bottom: 2px solid #080000;
+        
+    }
+
+    .side-navbar li:last-child {
+        border-bottom: none;
+    }
+
+        .side-navbar li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            
+        }
+
+    .side-navbar li i {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+
+.user-profile {
+    text-align: center;
+    padding: 20px;
+}
+
+    .user-profile img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+    }
+
+
+/*Body Content*/
+.main-content {
+    background-color: rgb(241, 241, 241);
+    position: fixed;
+    left: 200px;
+    top: 56px;
+    right: 0px;
+    bottom: 0px;
+    border-right: 1px solid #ddd;
+    color: #080000;
+    overflow:auto;
+}
+
+.card-body {
+    text-align: center;
+}
+    .card-body i {
+        font-size: 2em;
+    }
+
+.card-body p {
+    margin:10px 0px 10px 0px;
+    font-weight:600;
+}
+
+.row{
+    margin-bottom:20px;
+}
+.visual-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.graph-container {
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    height: 300px;
+    width: calc(50% - 10px);
+}
+
+
+.table-top {
+    background-color: #180147;
+    padding: 5px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+    .table-top .table-title {
+        color: #f0f0f0;
+        font-size: 18px; 
+    }
+
+.search-container {
+    display: flex; 
+    justify-content: center; 
+}
+
+
+
+#search-input {
+    margin-right: 5px;
+    border-style:none;
+}
+
+#search-btn, #clear-btn {
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-style: none;
+    
+    
+    margin-right: 5px;
+}
+    #clear-btn{
+        background-color:red;
+    }
+
+    #search-btn:hover {
+        background-color: #0056b3;
+    }
+#clear-btn:hover{
+    background-color:#a20606;
+}
+.table-container {
+    
+    margin-bottom: 40px;
+    height: 300px;
+    border-radius: 5px;
+    background-color: white;
+    overflow-y: auto;
+}
+    .table-container thead th {
+        position: sticky;
+        top: 0px;
+        background-color: #5ee0fd;
+    }
+
+
+.table-top span {
+    font-size: 16px;
+}
+
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ffffff;
+    white-space:nowrap;
+}
+
+.table-container tbody tr:hover{
+    background-color:#fcf567;
+}
+
+.table-container tr:nth-child(even) {
+    background: #d0e4ebf7;
+}
+
+footer {
+    text-align:center;
+}
