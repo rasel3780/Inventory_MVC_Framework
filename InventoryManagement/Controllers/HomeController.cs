@@ -22,9 +22,16 @@ namespace InventoryManagement.Controllers
             {
                 List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
                 DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+                
+
                 ViewBag.dtCusTEquip = dtCusTEquip;
                 ViewBag.equipmentDataList = equipmentDataList;
                 ViewBag.equipmentTxt = "";
+
+                //Customer List 
+                List<Customer> customers = Customer.GetCustomerData();
+                ViewBag.customers = customers;
+
                 return View();
             }
             else
@@ -36,7 +43,7 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
-
+       
             // Add New Equipment 
             if (btnSubmit == "Save Equipment")
             {
@@ -65,6 +72,8 @@ namespace InventoryManagement.Controllers
                 List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
             ViewBag.equipmentTxt = "";
+
+      
 
             //Customer Equipment Assign List table
             DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();

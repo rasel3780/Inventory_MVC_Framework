@@ -137,7 +137,7 @@
 
                 <div class="table-top">
                     <span class="table-title">Equipment Table</span>
-                    <div class="btn-group mt-2 mt-md-0 ml-md-auto">
+                    <div class="btn-group mt-2 mt-md-0 ml-md-auto" id="tblbtn">
                         <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
                     </div>
                     <div class="search-container">
@@ -217,7 +217,9 @@
                             <th>CustomerID</th>
                             <th>CustomerName</th>
                             <th>CustomerMobile</th>
-                            <th>EqCount</th>
+                            <th>Equipment Name</th>
+                            <th>Quantity</th>
+
                         </tr>
                     </thead>
 
@@ -230,17 +232,22 @@
                                          CustomerID = p.Field<Int32>("CustomerID"),
                                          CustomerName = p.Field<string>("CustomerName"),
                                          CustomerMobile = p.Field<string>("CustomerMobile"),
-                                         EqCount = p.Field<Int32>("EqCount")
+                                         EqCount = p.Field<Int32>("EqCount"),
+                                         EquipmentName = p.Field<string>("EquipmentName")
+
+
                                      }).ToList();
 
                         foreach (var obj in pdata)
                         {
-                            <tr>
-                                <td>@obj.CustomerID</td>
-                                <td>@obj.CustomerName</td>
-                                <td>@obj.CustomerMobile</td>
-                                <td>@obj.EqCount</td>
-                            </tr>
+                                        <tr>
+                                            <td>@obj.CustomerID</td>
+                                            <td>@obj.CustomerName</td>
+                                            <td>@obj.CustomerMobile</td>
+                                            <td>@obj.EquipmentName</td>
+                                            <td>@obj.EqCount</td>
+
+                                        </tr>
                         }
 
                     }

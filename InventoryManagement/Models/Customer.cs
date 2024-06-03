@@ -18,7 +18,10 @@ namespace InventoryManagement.Models
         public int AddCustomer()
         {
             string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+
             SqlConnection _connection = new SqlConnection(conString);
+            _connection.Open();
+
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
             cmd.CommandText = "[dbo].[spInventory_InsertCustomer]";

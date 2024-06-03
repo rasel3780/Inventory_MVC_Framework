@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
-
 namespace InventoryManagement.Models
 {
     public class Account
@@ -15,8 +14,9 @@ namespace InventoryManagement.Models
         private readonly ILogger _logger;
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
 
-     
+
         public bool VerifyLogin()
         {
             DataTable dataTable = new DataTable();
@@ -46,6 +46,21 @@ namespace InventoryManagement.Models
                 {
                     if (dataTable.Rows[0]["UserName"].ToString()==this.UserName) 
                     {
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     where p.Field<string>("UserName") == this.UserName 
+                                     && p.Field<string>("Password") == this.Password
+                                     select new
+                                     {
+                                         UserName = p.Field<string>("UserName"),
+                                         Role = p.Field<string>("Role")
+                                     }
+                                     ).ToList();
+                        foreach(var obj in pdata)
+                        {
+                            this.UserName = obj.UserName;
+                            this.Role = obj.Role;
+                        }
+
                         return true;
                     }
 
