@@ -5,13 +5,20 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Runtime.Serialization;
 
 namespace InventoryManagement.Models
 {
+    [Serializable]
     public class Equipment
     {
+        [DataMember]
+        public int EquipmentId { get; set; }
+        [DataMember]
         public string Name { get; set; }
+        [DataMember]
         public int EqCount { get; set; }
+        [DataMember]
         public DateTime EntryDate { get; set; }
 
         public List<Equipment> ListEquipment { get; set; }
@@ -43,6 +50,7 @@ namespace InventoryManagement.Models
                 while(reader.Read()) 
                 {
                     Equipment obj = new Equipment();
+                    obj.EquipmentId = Convert.ToInt32(reader["EquipmentId"].ToString());
                     obj.Name = reader["EquipmentName"].ToString();
                     obj.EqCount = Convert.ToInt32(reader["Quantity"].ToString());
                     obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());

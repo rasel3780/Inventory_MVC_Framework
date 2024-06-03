@@ -137,10 +137,12 @@ textarea {
         font-size: 18px; 
     }
 
-.search-container {
-    display: flex; 
-    justify-content: center; 
-}
+
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+    }
 
 
 

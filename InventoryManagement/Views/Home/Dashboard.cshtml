@@ -1,11 +1,25 @@
 ﻿@using InventoryManagement.Models;
-
+@using System.Data;
 
 @{
     ViewBag.Title = "Dashboard";
 }
 
 <script>
+
+    //Assignment Entry Panel
+    function showAssignmentEntryPanel() {
+        $("#dvPartialCustomerEntryPanel").dialog({
+            resizable: false,
+            height: 500,
+            width: 1000,
+            modal: true
+        });
+        return false;  // to prevent post-back
+    }
+
+
+    //Equipment Entry Panel
     function showEquipmentEntryPanel() {
         $("#dvPartialEntryPanel").dialog({
             resizable: false,
@@ -16,161 +30,233 @@
         return false;  // to prevent post-back
     }
 </script>
+
+
 <!--Card-->
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #5592ed">
-            <div class="card-body">
-                <i class="bi bi-person-vcard-fill"></i>
-                <p>Total Employee</p>
-                <h3>10</h3>
+<div class="card-section">
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card" style="background-color: #5592ed">
+                <div class="card-body">
+                    <i class="bi bi-person-vcard-fill"></i>
+                    <p>Total Employee</p>
+                    <h3>10</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#3ece9c">
-            <div class="card-body">
-                <i class="bi bi-diagram-3"></i>
-                <p>Categories</p>
-                <h3>30</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color:#3ece9c">
+                <div class="card-body">
+                    <i class="bi bi-diagram-3"></i>
+                    <p>Categories</p>
+                    <h3>30</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #57f646">
-            <div class="card-body">
-                <i class="bi bi-box-seam"></i>
-                <p>Total Product</p>
-                <h3>1350</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #57f646">
+                <div class="card-body">
+                    <i class="bi bi-box-seam"></i>
+                    <p>Total Product</p>
+                    <h3>1350</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #f84848">
-            <div class="card-body">
-                <i class="bi bi-cart-x"></i>
-                <p>Out of Stock</p>
-                <h3>30</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #f84848">
+                <div class="card-body">
+                    <i class="bi bi-cart-x"></i>
+                    <p>Out of Stock</p>
+                    <h3>30</h3>
+                </div>
             </div>
         </div>
+
     </div>
 
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #cb8bf8">
-            <div class="card-body">
-                <i class="bi bi-person-video2"></i>
-                <p>Total Customer</p>
-                <h3>378</h3>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card" style="background-color: #cb8bf8">
+                <div class="card-body">
+                    <i class="bi bi-person-video2"></i>
+                    <p>Total Customer</p>
+                    <h3>378</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#f79696">
-            <div class="card-body">
-                <i class="bi bi-calendar3-event"></i>
-                <p>Today's Sale</p>
-                <h3>৳5500</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color:#f79696">
+                <div class="card-body">
+                    <i class="bi bi-calendar3-event"></i>
+                    <p>Today's Sale</p>
+                    <h3>৳5500</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #e944f5">
-            <div class="card-body">
-                <i class="bi bi-calendar3"></i>
-                <p>Monthly Sales</p>
-                <h3>৳155000</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #e944f5">
+                <div class="card-body">
+                    <i class="bi bi-calendar3"></i>
+                    <p>Monthly Sales</p>
+                    <h3>৳155000</h3>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #90c3f3">
-            <div class="card-body">
-                <i class="bi bi-receipt"></i>
-                <p>Yearly Sales</p>
-                <h3>৳125000</h3>
+        <div class="col-md-3">
+            <div class="card" style="background-color: #90c3f3">
+                <div class="card-body">
+                    <i class="bi bi-receipt"></i>
+                    <p>Yearly Sales</p>
+                    <h3>৳125000</h3>
+                </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 @*End of Card*@
 
 
 
 
-@*Equipment Table*@
 
-<form action="/Home/Dashboard" method="post">
-   
-    @{
-        List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
+<div class="row">
+    <div class="col col-sm-6">
 
-        <div class="table-top">
-            <span class="table-title">Equipment Table</span>
-            <div class="btn-group mt-2 mt-md-0 ml-md-auto">
-                <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
-            </div>
-            <div class="search-container">
-                <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
-                <button id="search-btn" value="search" name="btnSubmit">Search</button>
-                <button id="clear-btn" value="clear" name="btnSubmit">Clear</button>
-            </div>
-        </div>
+        @*Equipment Table*@
+        <form action="/Home/Dashboard" method="post">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Entry Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            @{
+                List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
 
-                            @foreach (Equipment obj in equipmentListData)
-                            {
-                                if (ViewBag.equipmentTxt != "")
-                                {
-                                    if (obj.Name == ViewBag.equipmentTxt)
-                                    {
-                                        <tr>
-                                            <td>@obj.Name</td>
-                                            <td>@obj.EqCount</td>
-                                            <td>@obj.EntryDate</td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
+                <div class="table-top">
+                    <span class="table-title">Equipment Table</span>
+                    <div class="btn-group mt-2 mt-md-0 ml-md-auto" id="tblbtn">
+                        <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
+                    </div>
+                    <div class="search-container">
+                        <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
+                        <button id="search-btn" value="search" name="btnSubmit">Search</button>
+                        <button id="clear-btn" value="clear" name="btnSubmit">Clear</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-container">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>@obj.Name</td>
-                                        <td>@obj.EqCount</td>
-                                        <td>@obj.EntryDate</td>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Entry Date</th>
                                     </tr>
-                                }
+                                </thead>
+                                <tbody>
 
-                            }
+                                    @foreach (Equipment obj in equipmentListData)
+                                    {
+                                        if (ViewBag.equipmentTxt != "")
+                                        {
+                                            if (obj.Name == ViewBag.equipmentTxt)
+                                            {
+                                                <tr>
+                                                    <td>@obj.Name</td>
+                                                    <td>@obj.EqCount</td>
+                                                    <td>@obj.EntryDate</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>@obj.Name</td>
+                                                <td>@obj.EqCount</td>
+                                                <td>@obj.EntryDate</td>
+                                            </tr>
+                                        }
 
-                        </tbody>
-                    </table>
+                                    }
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
 
                 </div>
-            </div>
+            }
+        </form>
+        @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
+        
+        @*End of Equipment Table*@
+
+    </div>
+
+    <div class="col col-sm-6">
+        <div class="row">
+            <h3>Add New Customer</h3>
 
         </div>
-    }
-</form>
-@Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
-@*End of Equipment Table*@
+
+        <form action="/Home/Dashboard" method="post">
+            <div class="table-top">
+                <span class="table-title">Assign</span>
+                <input type="submit" class="btn btn-warning" name="btnEquipmentAssignment" id="btnEquipmentAssignment" onclick="return showAssignmentEntryPanel()" value="Assignment" />
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CustomerID</th>
+                            <th>CustomerName</th>
+                            <th>CustomerMobile</th>
+                            <th>Equipment Name</th>
+                            <th>Quantity</th>
+
+                        </tr>
+                    </thead>
+
+                    @{
+                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+                        var pdata = (from p in dataTable.AsEnumerable()
+                                     select new
+                                     {
+
+                                         CustomerID = p.Field<Int32>("CustomerID"),
+                                         CustomerName = p.Field<string>("CustomerName"),
+                                         CustomerMobile = p.Field<string>("CustomerMobile"),
+                                         EqCount = p.Field<Int32>("EqCount"),
+                                         EquipmentName = p.Field<string>("EquipmentName")
+
+
+                                     }).ToList();
+
+                        foreach (var obj in pdata)
+                        {
+                                        <tr>
+                                            <td>@obj.CustomerID</td>
+                                            <td>@obj.CustomerName</td>
+                                            <td>@obj.CustomerMobile</td>
+                                            <td>@obj.EquipmentName</td>
+                                            <td>@obj.EqCount</td>
+
+                                        </tr>
+                        }
+
+                    }
+                </table>
+            </div>
+        </form>
+        @Html.Partial("~/Views/Home/_PartiaEquipmentAssignment.cshtml")
+
+    </div>
+</div>
+
+

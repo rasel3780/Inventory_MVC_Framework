@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,8 +21,17 @@ namespace InventoryManagement.Controllers
             if (Session["User"] != null)
             {
                 List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+                DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+                
+
+                ViewBag.dtCusTEquip = dtCusTEquip;
                 ViewBag.equipmentDataList = equipmentDataList;
                 ViewBag.equipmentTxt = "";
+
+                //Customer List 
+                List<Customer> customers = Customer.GetCustomerData();
+                ViewBag.customers = customers;
+
                 return View();
             }
             else
@@ -33,7 +43,8 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
-
+       
+            // Add New Equipment 
             if (btnSubmit == "Save Equipment")
             {
                 Equipment equipment = new Equipment();
@@ -48,12 +59,27 @@ namespace InventoryManagement.Controllers
                 }
 
             }
+            if (btnSubmit == "Save Assignment")
+            {
+                int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
+                int EquipmentID = Convert.ToInt32(frm["ddlPartialEquipment"].ToString());
+                int EqQuantity= Convert.ToInt32(frm["txtPartialEquipmentQuantity"].ToString());
+                Customer.SaveAssignment(CustomerID, EquipmentID, EqQuantity);
+                ViewBag.OperationResult = "Saved Successfully";
+            }
 
-
-            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+                //Equipment list table
+                List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
             ViewBag.equipmentDataList = equipmentDataList;
             ViewBag.equipmentTxt = "";
 
+      
+
+            //Customer Equipment Assign List table
+            DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+            ViewBag.dtCusTEquip = dtCusTEquip;
+            
+            //Search box
             if (btnSubmit == "search")
             {
                 ViewBag.equipmentTxt = frm["equipmentTxt"].ToString();
@@ -73,6 +99,28 @@ namespace InventoryManagement.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult LstEquipment()
+        {
+            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
+            var eqpList = (from  equipment in equipmentDataList select
+                           new {
+                               EquipmentId = equipment.EquipmentId,
+                               Name = equipment.Name,
+                               EqCount = equipment.EqCount.ToString(),
+                               EntryDate = equipment.EntryDate.ToString("dd/MM/yyyy")
+                           }).ToList();
+            return Json(eqpList, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult LstCustomer()
+        {
+            List<Customer> customerDataList = Customer.GetCustomerData();
+            
+            return Json(customerDataList, JsonRequestBehavior.AllowGet);
         }
     }
 }
