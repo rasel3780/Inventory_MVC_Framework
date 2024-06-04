@@ -11,8 +11,8 @@ namespace InventoryManagement.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ILogger _logger;
-        // GET: Account
+
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
@@ -23,18 +23,18 @@ namespace InventoryManagement.Controllers
         {
             string LoginMsg = "";
             bool verifyStatus = account.VerifyLogin();
-            Log.Information("Query in database successful");
-            Log.Error(verifyStatus.ToString());
+            
             if (btnSubmit == "Login")
             {
-                if (1==1)
+                if (verifyStatus)
                 {
 
                     Session["User"] = account.UserName;
                     Session["Role"] = account.Role;
                     LoginMsg = "Login Success";
-                    FormsAuthentication.Authenticate(account.UserName,account.Password);
-                    //return RedirectToAction("Dashboard","Home");
+                    //FormsAuthentication.Authenticate(account.UserName,account.Password);
+                    Log.Information("Login success, redirecting to dashbord");
+                    return RedirectToAction("Dashboard","Home");
                 }
                 else
                 {

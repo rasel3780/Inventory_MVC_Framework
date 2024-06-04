@@ -278,6 +278,7 @@
     </Compile>
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\DbConnection.cs" />
     <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Employee.cs" />
