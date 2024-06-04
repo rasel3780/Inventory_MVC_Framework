@@ -20,17 +20,17 @@ namespace InventoryManagement.Controllers
         {
             if (Session["User"] != null)
             {
-                List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
-                DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+                List<Product> productList = Product.GetProductList();
+                //DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
                 
 
-                ViewBag.dtCusTEquip = dtCusTEquip;
-                ViewBag.equipmentDataList = equipmentDataList;
-                ViewBag.equipmentTxt = "";
+                //ViewBag.dtCusTEquip = dtCusTEquip;
+                //ViewBag.equipmentDataList = equipmentDataList;
+                //ViewBag.equipmentTxt = "";
 
-                //Customer List 
-                List<Customer> customers = Customer.GetCustomerData();
-                ViewBag.customers = customers;
+                ////Customer List 
+                //List<Customer> customers = Customer.GetCustomerData();
+                //ViewBag.customers = customers;
 
                 return View();
             }
@@ -44,45 +44,45 @@ namespace InventoryManagement.Controllers
         public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
        
-            // Add New Equipment 
-            if (btnSubmit == "Save Equipment")
-            {
-                Equipment equipment = new Equipment();
-                equipment.Name = frm["ddlEquipmentName"].ToString();
-                equipment.EqCount = Convert.ToInt32(frm["txtQuantity"].ToString());
-                equipment.EntryDate = Convert.ToDateTime(frm["txtEntryDate"].ToString());
+            // Add New Product 
+            //if (btnSubmit == "Save Product")
+            //{
+            //    Product product = new Product();
+            //    product.Name = frm["ddlPorductName"].ToString();
+            //    product.EqCount = Convert.ToInt32(frm["txtQuantity"].ToString());
+            //    product.EntryDate = Convert.ToDateTime(frm["txtEntryDate"].ToString());
 
-                int returnResult = equipment.SaveEquipment();
-                if(returnResult>0)
-                {
-                    ViewBag.OperationResult = "Saved Successfully";
-                }
+            //    int returnResult = product.SaveProduct();
+            //    if(returnResult>0)
+            //    {
+            //        ViewBag.OperationResult = "Saved Successfully";
+            //    }
 
-            }
-            if (btnSubmit == "Save Assignment")
-            {
-                int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
-                int EquipmentID = Convert.ToInt32(frm["ddlPartialEquipment"].ToString());
-                int EqQuantity= Convert.ToInt32(frm["txtPartialEquipmentQuantity"].ToString());
-                Customer.SaveAssignment(CustomerID, EquipmentID, EqQuantity);
-                ViewBag.OperationResult = "Saved Successfully";
-            }
+            //}
+            //if (btnSubmit == "Save Assignment")
+            //{
+            //    int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
+            //    int ProductID = Convert.ToInt32(frm["ddlPartialProduct"].ToString());
+            //    int ProductQuantity= Convert.ToInt32(frm["txtPartialProductQuantity"].ToString());
+            //    Customer.SaveAssignment(CustomerID, ProductID, ProductQuantity);
+            //    ViewBag.OperationResult = "Saved Successfully";
+            //}
 
-                //Equipment list table
-                List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
-            ViewBag.equipmentDataList = equipmentDataList;
-            ViewBag.equipmentTxt = "";
+            //Product list table
+            List<Product> productDataList = Product.GetProductList();
+            ViewBag.productDataList = productDataList;
+            ViewBag.productTxt = "";
 
       
 
-            //Customer Equipment Assign List table
-            DataTable dtCusTEquip = Customer.GetCustomerEquipmentAssignmentData();
+            //Customer Product Assign List table
+            DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
             ViewBag.dtCusTEquip = dtCusTEquip;
             
             //Search box
             if (btnSubmit == "search")
             {
-                ViewBag.equipmentTxt = frm["equipmentTxt"].ToString();
+                ViewBag.productTxt = frm["productTxt"].ToString();
             }
             return View();
         }
@@ -102,17 +102,22 @@ namespace InventoryManagement.Controllers
         }
 
         [HttpGet]
-        public ActionResult LstEquipment()
+        public ActionResult LstProduct()
         {
-            List<Equipment> equipmentDataList = Equipment.GetEquipmentData();
-            var eqpList = (from  equipment in equipmentDataList select
+            List<Product> productList = Product.GetProductList();
+            var pdtList = (from  product in productList
+                           select
                            new {
-                               EquipmentId = equipment.EquipmentId,
-                               Name = equipment.Name,
-                               EqCount = equipment.EqCount.ToString(),
-                               EntryDate = equipment.EntryDate.ToString("dd/MM/yyyy")
+                               ProductID = product.ProductID,
+                               SerialNumber = product.SerialNumber,
+                               Name = product.Name,
+                               Quantity = product.Quantity,
+                               EntryDate = product.EntryDate.ToString("dd/MM/yyyy"),
+                               Price = product.Price,
+                               WarrantyDays = product.WarrantyDays,
+                               Category = product.Category
                            }).ToList();
-            return Json(eqpList, JsonRequestBehavior.AllowGet);
+            return Json(pdtList, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -122,5 +127,11 @@ namespace InventoryManagement.Controllers
             
             return Json(customerDataList, JsonRequestBehavior.AllowGet);
         }
+
+        //[HttpGet]
+        //public ActionResult GetAll()
+        //{
+
+        //}
     }
 }

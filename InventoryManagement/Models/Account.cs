@@ -19,9 +19,7 @@ namespace InventoryManagement.Models
        
         public bool VerifyLogin()
         {
-           // DataTable dataTable = new DataTable();
            bool status = false;
-
             try
             {
                 string conString = DbConnection.GetConnectionString();

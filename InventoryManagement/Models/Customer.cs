@@ -71,7 +71,7 @@ namespace InventoryManagement.Models
             return customerList;
         }
 
-        public static DataTable GetCustomerEquipmentAssignmentData()
+        public static DataTable GetCustomerProductAssignmentData()
         {
  
             string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
@@ -97,7 +97,7 @@ namespace InventoryManagement.Models
             return dataTable;
         }
 
-        public static int SaveAssignment(int CustomerID, int EquipmentID, int EqQuantity)
+        public static int SaveAssignment(int CustomerID, int PorductID, int EqQuantity)
         {
             string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
 
@@ -108,7 +108,7 @@ namespace InventoryManagement.Models
             cmd.CommandText = "[dbo].[spInventory_InsEquipmentAssignment]";
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("@CustomerID", CustomerID));
-            cmd.Parameters.Add(new SqlParameter("@EquipmentID", EquipmentID));
+            cmd.Parameters.Add(new SqlParameter("@EquipmentID", PorductID));
             cmd.Parameters.Add(new SqlParameter("@EqCount", EqQuantity));
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
