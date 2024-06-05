@@ -1,0 +1,48 @@
+﻿<script>
+    $(document).ready(function () {
+        $("#datepicker").datepicker();
+    });
+</script>
+<div id="showProductEntryPanel" style="display:none;">
+    @using (Html.BeginForm("Dashboard", "Home"))
+    {
+        <div class="form-group">
+            <label for="serialNumber">Serial Number:</label>
+            <input type="text" class="form-control" id="serialNumber" name="SerialNumber" required>
+        </div>
+        <div class="form-group">
+            <label for="productName">Product Name:</label>
+            <input type="text" class="form-control" id="productName" name="Name" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" class="form-control" id="quantity" name="Quantity" required>
+        </div>
+        <div class="form-group">
+            <label for="entryDate">Entry Date:</label>
+            <input type="text" class="form-control" id="datepicker" name="EntryDate" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" class="form-control" id="price" name="Price" required>
+        </div>
+        <div class="form-group">
+            <label for="warrantyDays">Warranty Days:</label>
+            <input type="number" class="form-control" id="warrantyDays" name="WarrantyDays" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <input type="text" class="form-control" id="category" name="Category" required>
+        </div>
+        <div class="form-group">
+            <label for="vendorID">Vendor:</label>
+            <input type="text" class="form-control" id="vendorID" name="VendorID" required>
+        </div>
+
+        <div class="row">
+            <input type="submit" name="btnSubmit" id="btnPartialSave" value="Save Product" />
+        </div>
+
+    }
+</div>
+

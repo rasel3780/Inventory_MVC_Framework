@@ -4,12 +4,19 @@
 @{
     ViewBag.Title = "Dashboard";
 }
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<script src="~/Scripts/CustomScript/product.js"></script>
 
 <script>
 
-    //Assignment Entry Panel
-    function showAssignmentEntryPanel() {
-        $("#dvPartialCustomerEntryPanel").dialog({
+    //Product Entry Panel
+    function showProductEntryPanel() {
+        $("#showProductEntryPanel").dialog({
             resizable: false,
             height: 500,
             width: 1000,
@@ -18,17 +25,6 @@
         return false;  // to prevent post-back
     }
 
-
-    //Equipment Entry Panel
-    function showEquipmentEntryPanel() {
-        $("#dvPartialEntryPanel").dialog({
-            resizable: false,
-            height: 500,
-            width: 1000,
-            modal: true
-        });
-        return false;  // to prevent post-back
-    }
 </script>
 
 
@@ -121,36 +117,16 @@
     </div>
 </div>
 @*End of Card*@
+<input type="submit" name="btnAddNew" id="btnAddNew" onclick="return showProductEntryPanel()" value="Add New" />
 
 
+@Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")
+
+        <div class="row">
+            <div class="col col-sm-12">
 
 
-
-<div class="row">
-    <div class="col col-sm-6">
-        <table id="productTable" class="display">
-            <thead>
-                <tr>
-                    <th>ProductID</th>
-                    <th>SerialNumber</th>
-                    <th>Name</th>
-                    <th>Quantity</th>
-                    <th>Entry Date</th>
-                    <th>Price</th>
-                    <th>Warranty Days</th>
-                    <th>Category</th>
-                </tr>
-            </thead>
-        </table>
-
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-        <script src="~/Scripts/CustomScript/product.js"></script>
-        @*Equipment Table*@
-        <!--<div class="row">
-        <div class="col-md-12">
-            <div class="table-container">
-                <table id="productTable">
+                <table id="productTable" class="">
                     <thead>
                         <tr>
                             <th>ProductID</th>
@@ -159,85 +135,110 @@
                             <th>Quantity</th>
                             <th>Entry Date</th>
                             <th>Price</th>
-                            <th>WarrantyDays</th>
+                            <th>Warranty Days</th>
                             <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-
                 </table>
+
 
             </div>
         </div>
 
-    </div>-->
+@*@Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")*@
+<!-- Add Product Modal -->
+@*Equipment Table*@
+<!--<div class="row">
+    <div class="col-md-12">
+        <div class="table-container">
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>ProductID</th>
+                        <th>SerialNumber</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Entry Date</th>
+                        <th>Price</th>
+                        <th>WarrantyDays</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
 
+            </table>
 
-        @*<script src="~/Scripts/CustomScript/product.js"></script>
-        @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")*@
+        </div>
+    </div>
 
-        @*End of Equipment Table*@
+</div>-->
+@*<script src="~/Scripts/CustomScript/product.js"></script>
+    @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")*@
+
+@*End of Equipment Table*@
+
+@*</div>*@
+
+@*<div class="col col-sm-6">
+    <div class="row">
+        <h3>Add New Customer</h3>
 
     </div>
 
-    @*<div class="col col-sm-6">
-        <div class="row">
-            <h3>Add New Customer</h3>
+    <form action="/Home/Dashboard" method="post">
+        <div class="table-top">
+            <span class="table-title">Assign</span>
+            <input type="submit" class="btn btn-warning" name="btn
 
+                   Assignment" id="btnEquipmentAssignment" onclick="return showAssignmentEntryPanel()" value="Assignment" />
         </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>CustomerID</th>
+                        <th>CustomerName</th>
+                        <th>CustomerMobile</th>
+                        <th>Equipment Name</th>
+                        <th>Quantity</th>
 
-        <form action="/Home/Dashboard" method="post">
-            <div class="table-top">
-                <span class="table-title">Assign</span>
-                <input type="submit" class="btn btn-warning" name="btn
-                       
-                       Assignment" id="btnEquipmentAssignment" onclick="return showAssignmentEntryPanel()" value="Assignment" />
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CustomerID</th>
-                            <th>CustomerName</th>
-                            <th>CustomerMobile</th>
-                            <th>Equipment Name</th>
-                            <th>Quantity</th>
+                    </tr>
+                </thead>*@
 
-                        </tr>
-                    </thead>*@
+@*@{
+                    System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
+                    var pdata = (from p in dataTable.AsEnumerable()
+                                 select new
+                                 {
 
-                    @*@{
-                        System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
-                        var pdata = (from p in dataTable.AsEnumerable()
-                                     select new
-                                     {
-
-                                         CustomerID = p.Field<Int32>("CustomerID"),
-                                         CustomerName = p.Field<string>("CustomerName"),
-                                         CustomerMobile = p.Field<string>("CustomerMobile"),
-                                         EqCount = p.Field<Int32>("EqCount"),
-                                         EquipmentName = p.Field<string>("EquipmentName")
+                                     CustomerID = p.Field<Int32>("CustomerID"),
+                                     CustomerName = p.Field<string>("CustomerName"),
+                                     CustomerMobile = p.Field<string>("CustomerMobile"),
+                                     EqCount = p.Field<Int32>("EqCount"),
+                                     EquipmentName = p.Field<string>("EquipmentName")
 
 
-                                     }).ToList();
+                                 }).ToList();
 
-                        foreach (var obj in pdata)
-                        {
-                                        <tr>
-                                            <td>@obj.CustomerID</td>
-                                            <td>@obj.CustomerName</td>
-                                            <td>@obj.CustomerMobile</td>
-                                            <td>@obj.EquipmentName</td>
-                                            <td>@obj.EqCount</td>
+                    foreach (var obj in pdata)
+                    {
+                                    <tr>
+                                        <td>@obj.CustomerID</td>
+                                        <td>@obj.CustomerName</td>
+                                        <td>@obj.CustomerMobile</td>
+                                        <td>@obj.EquipmentName</td>
+                                        <td>@obj.EqCount</td>
 
-                                        </tr>
-                        }
-
+                                    </tr>
                     }
-                </table>
-            </div>
-        </form>
-        @Html.Partial("~/Views/Home/_PartiaEquipmentAssignment.cshtml")*@
 
-</div>
+                }
+            </table>
+        </div>
+    </form>
+    @Html.Partial("~/Views/Home/_PartiaEquipmentAssignment.cshtml")*@
+
+@*</div>*@
 
 

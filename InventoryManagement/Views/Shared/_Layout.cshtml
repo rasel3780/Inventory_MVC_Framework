@@ -13,7 +13,8 @@
     @*@Scripts.Render("~/bundles/bootstrap")*@
 
     <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
@@ -45,16 +46,16 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     @{
-                        if (Session["Role"].ToString() == "Admin")
-                        {
+                        //if (Session["Role"].ToString() == "Admin")
+                        //{
                             <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        }
-                        else
-                        {
+                        //}
+                        //else
+                       // {
                             <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        }
+                        //}
                     }
                 </ul>
             </div>
@@ -100,7 +101,7 @@
             </p>
         </footer>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+   
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
     <!--End of Body Content-->

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations.Schema;
+using Serilog;
 
 namespace InventoryManagement.Models
 {
@@ -30,13 +31,9 @@ namespace InventoryManagement.Models
         [DataMember]
         public string Category { get; set; }
         [DataMember]
-        public virtual Vendor Vendor { get; set; }
-        //public List<Product> ListProduct { get; set; }
-
-        //public Product()
-        //{
-        //    ListProduct = new List<Product>();
-        //}
+        public string VendorName { get; set; }
+        [DataMember]
+        public int VendorID { get; set; } 
 
         public static List<Product> GetProductList()
         {
@@ -64,12 +61,13 @@ namespace InventoryManagement.Models
                     obj.SerialNumber = reader["SerialNumber"].ToString();
                     obj.Name = reader["Name"].ToString();
                     obj.Quantity = Convert.ToInt32(reader["Quantity"].ToString());
-                    //obj.Vendor.VendorID = Convert.ToInt32(reader["VendorID"].ToString());
                     obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());
                     obj.Price = Convert.ToDouble(reader["Price"].ToString());
                     obj.WarrantyDays = Convert.ToInt32(reader["WarrantyDays"].ToString());
                     obj.Category = reader["Category"].ToString();
-                   
+                    obj.VendorName = reader["VendorName"].ToString() ;
+
+
                     productList.Add(obj);
                 }
             }
@@ -78,32 +76,43 @@ namespace InventoryManagement.Models
             return productList;
         }
 
-        //public int SaveProduct()
-        //{
-           
-        //    string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+        public int AddProduct()
+        {
+            int result=0;
+            try
+            {
+                string conString = DbConnection.GetConnectionString();
 
-        //    SqlConnection _connection = new SqlConnection(conString);
-        //    _connection.Open();
+                SqlConnection _connection = new SqlConnection(conString);
+                _connection.Open();
 
-        //    SqlCommand cmd = new SqlCommand();
-        //    cmd.Connection = _connection;
-        //    cmd.CommandText = "[dbo].[spInventory_InsertEquipment]";
-        //    cmd.Parameters.Clear();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+                cmd.CommandText = "[dbo].[AddProduct]";
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
 
-        //    cmd.Parameters.Add(new SqlParameter("@Name", this.Name));
-        //    cmd.Parameters.Add(new SqlParameter("@EqCount", this.ProductCount));
-        //    cmd.Parameters.Add(new SqlParameter("@EntryDate", this.EntryDate));
 
-        //    cmd.CommandType = CommandType.StoredProcedure;
-        //    cmd.CommandTimeout = 0;
+                cmd.Parameters.Add(new SqlParameter("@SerialNumber", this.SerialNumber));
+                cmd.Parameters.Add(new SqlParameter("@Name", this.Name));
+                cmd.Parameters.Add(new SqlParameter("@Quantity", this.Quantity));
+                cmd.Parameters.Add(new SqlParameter("@VendorID", this.VendorID));
+                cmd.Parameters.Add(new SqlParameter("@EntryDate", this.EntryDate));
+                cmd.Parameters.Add(new SqlParameter("@Price", this.Price));
+                cmd.Parameters.Add(new SqlParameter("@WarrantyDays", this.WarrantyDays));
+                cmd.Parameters.Add(new SqlParameter("@Category", this.Category));
 
-        //    int result= cmd.ExecuteNonQuery();
-
-        //    cmd.Dispose();
-        //    _connection.Close();
-
-        //    return result;
-        //}
+                result = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.Information("There was a problem while inserting product"+ex.Message);
+            }
+            
+            return result;
+        }
     }
 }

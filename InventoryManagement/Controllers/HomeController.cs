@@ -45,20 +45,24 @@ namespace InventoryManagement.Controllers
         {
        
             // Add New Product 
-            //if (btnSubmit == "Save Product")
-            //{
-            //    Product product = new Product();
-            //    product.Name = frm["ddlPorductName"].ToString();
-            //    product.EqCount = Convert.ToInt32(frm["txtQuantity"].ToString());
-            //    product.EntryDate = Convert.ToDateTime(frm["txtEntryDate"].ToString());
-
-            //    int returnResult = product.SaveProduct();
-            //    if(returnResult>0)
-            //    {
-            //        ViewBag.OperationResult = "Saved Successfully";
-            //    }
-
-            //}
+            if (btnSubmit == "Save Product")
+            {
+                Product product = new Product();
+                product.SerialNumber = frm["SerialNumber"].ToString(); ;
+                product.Name = frm["Name"].ToString();
+                product.Quantity = Convert.ToInt32(frm["Quantity"].ToString());
+                product.VendorID = Convert.ToInt32(frm["VendorID"].ToString()); ;
+                product.EntryDate = Convert.ToDateTime(frm["EntryDate"].ToString()); 
+                product.Price= Convert.ToInt32(frm["Price"].ToString());
+                product.WarrantyDays = Convert.ToInt32(frm["WarrantyDays"].ToString());
+                product.Category = frm["Category"].ToString();
+         
+                int result = product.AddProduct();
+                if(result > 0)
+                {
+                    ViewBag.OperationResult = "Saved Successfully";
+                }
+            }
             //if (btnSubmit == "Save Assignment")
             //{
             //    int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
@@ -69,21 +73,21 @@ namespace InventoryManagement.Controllers
             //}
 
             //Product list table
-            List<Product> productDataList = Product.GetProductList();
-            ViewBag.productDataList = productDataList;
-            ViewBag.productTxt = "";
+            //List<Product> productDataList = Product.GetProductList();
+            //ViewBag.productDataList = productDataList;
+            //ViewBag.productTxt = "";
 
       
 
-            //Customer Product Assign List table
-            DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
-            ViewBag.dtCusTEquip = dtCusTEquip;
+            ////Customer Product Assign List table
+            //DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
+            //ViewBag.dtCusTEquip = dtCusTEquip;
             
-            //Search box
-            if (btnSubmit == "search")
-            {
-                ViewBag.productTxt = frm["productTxt"].ToString();
-            }
+            ////Search box
+            //if (btnSubmit == "search")
+            //{
+            //    ViewBag.productTxt = frm["productTxt"].ToString();
+            //}
             return View();
         }
 
@@ -115,7 +119,8 @@ namespace InventoryManagement.Controllers
                                EntryDate = product.EntryDate.ToString("dd/MM/yyyy"),
                                Price = product.Price,
                                WarrantyDays = product.WarrantyDays,
-                               Category = product.Category
+                               Category = product.Category,
+                               VendorName = product.VendorName
                            }).ToList();
             return Json(pdtList, JsonRequestBehavior.AllowGet);
         }
