@@ -35,46 +35,7 @@ namespace InventoryManagement.Models
         [DataMember]
         public int VendorID { get; set; } 
 
-        public static List<Product> GetProductList()
-        {
-            List<Product> productList = new List<Product>();
-            string conString = DbConnection.GetConnectionString();
-
-            SqlConnection _connection = new SqlConnection(conString);
-            _connection.Open();
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = "dbo.GetProductList";
-            cmd.Parameters.Clear();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 0;
-
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if(reader.HasRows)
-            {
-                while(reader.Read()) 
-                {
-                    Product obj = new Product();
-                    obj.ProductID = Convert.ToInt32(reader["ProductID"].ToString());
-                    obj.SerialNumber = reader["SerialNumber"].ToString();
-                    obj.Name = reader["Name"].ToString();
-                    obj.Quantity = Convert.ToInt32(reader["Quantity"].ToString());
-                    obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());
-                    obj.Price = Convert.ToDouble(reader["Price"].ToString());
-                    obj.WarrantyDays = Convert.ToInt32(reader["WarrantyDays"].ToString());
-                    obj.Category = reader["Category"].ToString();
-                    obj.VendorName = reader["VendorName"].ToString() ;
-
-
-                    productList.Add(obj);
-                }
-            }
-            cmd.Dispose();
-            _connection.Close();
-            return productList;
-        }
+      
 
         public int AddProduct()
         {
@@ -109,10 +70,102 @@ namespace InventoryManagement.Models
             }
             catch (Exception ex)
             {
-                Log.Information("There was a problem while inserting product"+ex.Message);
+                Log.Error("There was a problem while inserting product"+ex.Message);
             }
             
             return result;
         }
+
+        public static Product GetProductById(int productId)
+        {
+            Product product = new Product();
+            try
+            {
+                string conString = DbConnection.GetConnectionString();
+
+                SqlConnection _connection = new SqlConnection(conString);
+                _connection.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+                cmd.CommandText = "dbo.GetProductById";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("@ProductID", productId));
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+
+                adapter.Fill(dataTable);
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    product.ProductID = Convert.ToInt32(dataTable.Rows[0]["ProductID"]);
+                    product.SerialNumber = dataTable.Rows[0]["SerialNumber"].ToString();
+                    product.Name = dataTable.Rows[0]["Name"].ToString();
+                    product.Quantity = Convert.ToInt32(dataTable.Rows[0]["Quantity"]);
+                    product.EntryDate = Convert.ToDateTime(dataTable.Rows[0]["EntryDate"]);
+                    product.Price = Convert.ToDouble(dataTable.Rows[0]["Price"]);
+                    product.WarrantyDays = Convert.ToInt32(dataTable.Rows[0]["WarrantyDays"]);
+                    product.Category = dataTable.Rows[0]["Category"].ToString();
+                    product.VendorName = dataTable.Rows[0]["VendorName"].ToString();
+                    product.VendorID = Convert.ToInt32(dataTable.Rows[0]["VendorID"]);
+                }
+                else
+                {
+                    Log.Warning("Product not found");
+                }
+                cmd.Dispose();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while tried to get the product.");
+            }
+            return product;
+        }
+
+        public static List<Product> GetProductList()
+        {
+            List<Product> productList = new List<Product>();
+            string conString = DbConnection.GetConnectionString();
+
+            SqlConnection _connection = new SqlConnection(conString);
+            _connection.Open();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _connection;
+            cmd.CommandText = "dbo.GetProductList";
+            cmd.Parameters.Clear();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 0;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Product obj = new Product();
+                    obj.ProductID = Convert.ToInt32(reader["ProductID"].ToString());
+                    obj.SerialNumber = reader["SerialNumber"].ToString();
+                    obj.Name = reader["Name"].ToString();
+                    obj.Quantity = Convert.ToInt32(reader["Quantity"].ToString());
+                    obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());
+                    obj.Price = Convert.ToDouble(reader["Price"].ToString());
+                    obj.WarrantyDays = Convert.ToInt32(reader["WarrantyDays"].ToString());
+                    obj.Category = reader["Category"].ToString();
+                    obj.VendorName = reader["VendorName"].ToString();
+
+
+                    productList.Add(obj);
+                }
+            }
+            cmd.Dispose();
+            _connection.Close();
+            return productList;
+        }
+
     }
 }

@@ -277,6 +277,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DbConnection.cs" />
     <Compile Include="Models\Product.cs" />
@@ -379,6 +380,7 @@
     <Content Include="Views\Home\_PartiaEquipmentAssignment.cshtml" />
     <Content Include="Views\Home\_PartialProductEntryPanel.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Home\_PartialCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

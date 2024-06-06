@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,17 +22,6 @@ namespace InventoryManagement.Controllers
             if (Session["User"] != null)
             {
                 List<Product> productList = Product.GetProductList();
-                //DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
-                
-
-                //ViewBag.dtCusTEquip = dtCusTEquip;
-                //ViewBag.equipmentDataList = equipmentDataList;
-                //ViewBag.equipmentTxt = "";
-
-                ////Customer List 
-                //List<Customer> customers = Customer.GetCustomerData();
-                //ViewBag.customers = customers;
-
                 return View();
             }
             else
@@ -48,7 +38,7 @@ namespace InventoryManagement.Controllers
             if (btnSubmit == "Save Product")
             {
                 Product product = new Product();
-                product.SerialNumber = frm["SerialNumber"].ToString(); ;
+                product.SerialNumber = frm["SerialNumber"].ToString(); 
                 product.Name = frm["Name"].ToString();
                 product.Quantity = Convert.ToInt32(frm["Quantity"].ToString());
                 product.VendorID = Convert.ToInt32(frm["VendorID"].ToString()); ;
@@ -63,32 +53,37 @@ namespace InventoryManagement.Controllers
                     ViewBag.OperationResult = "Saved Successfully";
                 }
             }
-            //if (btnSubmit == "Save Assignment")
-            //{
-            //    int CustomerID = Convert.ToInt32(frm["ddlPartialCustomerName"].ToString());
-            //    int ProductID = Convert.ToInt32(frm["ddlPartialProduct"].ToString());
-            //    int ProductQuantity= Convert.ToInt32(frm["txtPartialProductQuantity"].ToString());
-            //    Customer.SaveAssignment(CustomerID, ProductID, ProductQuantity);
-            //    ViewBag.OperationResult = "Saved Successfully";
-            //}
+            if (btnSubmit == "AddToCart")
+            {
+                var productIdValue = frm["productId"];
+                if (!string.IsNullOrEmpty(productIdValue))
+                {
+                    int productId;
+                    if (int.TryParse(productIdValue, out productId))
+                    {
+                        // Add logic to handle adding the product to the cart
+                        // You can store the product ID in the session or database to maintain the cart state
+                        ViewBag.OperationResult = "Added to cart";
+                    }
+                    else
+                    {
+                        ViewBag.OperationResult = "Invalid product ID.";
+                    }
+                }
+                else
+                {
+                    ViewBag.OperationResult = "No product selected.";
+                }
+            }
 
-            //Product list table
-            //List<Product> productDataList = Product.GetProductList();
-            //ViewBag.productDataList = productDataList;
-            //ViewBag.productTxt = "";
 
-      
 
-            ////Customer Product Assign List table
-            //DataTable dtCusTEquip = Customer.GetCustomerProductAssignmentData();
-            //ViewBag.dtCusTEquip = dtCusTEquip;
-            
-            ////Search box
-            //if (btnSubmit == "search")
-            //{
-            //    ViewBag.productTxt = frm["productTxt"].ToString();
-            //}
             return View();
+        }
+
+        private void AddToCart(int productId)
+        {
+            Product product = Product.GetProductList
         }
 
         public ActionResult About()
@@ -132,11 +127,5 @@ namespace InventoryManagement.Controllers
             
             return Json(customerDataList, JsonRequestBehavior.AllowGet);
         }
-
-        //[HttpGet]
-        //public ActionResult GetAll()
-        //{
-
-        //}
     }
 }

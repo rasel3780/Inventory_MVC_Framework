@@ -28,132 +28,18 @@
 </script>
 
 
-<!--Card-->
-<div class="card-section">
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card" style="background-color: #5592ed">
-                <div class="card-body">
-                    <i class="bi bi-person-vcard-fill"></i>
-                    <p>Total Employee</p>
-                    <h3>10</h3>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="card" style="background-color:#3ece9c">
-                <div class="card-body">
-                    <i class="bi bi-diagram-3"></i>
-                    <p>Categories</p>
-                    <h3>30</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card" style="background-color: #57f646">
-                <div class="card-body">
-                    <i class="bi bi-box-seam"></i>
-                    <p>Total Product</p>
-                    <h3>1350</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card" style="background-color: #f84848">
-                <div class="card-body">
-                    <i class="bi bi-cart-x"></i>
-                    <p>Out of Stock</p>
-                    <h3>30</h3>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card" style="background-color: #cb8bf8">
-                <div class="card-body">
-                    <i class="bi bi-person-video2"></i>
-                    <p>Total Customer</p>
-                    <h3>378</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card" style="background-color:#f79696">
-                <div class="card-body">
-                    <i class="bi bi-calendar3-event"></i>
-                    <p>Today's Sale</p>
-                    <h3>৳5500</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card" style="background-color: #e944f5">
-                <div class="card-body">
-                    <i class="bi bi-calendar3"></i>
-                    <p>Monthly Sales</p>
-                    <h3>৳155000</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card" style="background-color: #90c3f3">
-                <div class="card-body">
-                    <i class="bi bi-receipt"></i>
-                    <p>Yearly Sales</p>
-                    <h3>৳125000</h3>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-@*End of Card*@
 <input type="submit" name="btnAddNew" id="btnAddNew" onclick="return showProductEntryPanel()" value="Add New" />
-
-
 @Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")
 
-        <div class="row">
-            <div class="col col-sm-12">
 
+<form id="productForm" action="/Home/Dashboard" method="post">
+    <input type="hidden" id="productId" name="productId" value="" />
+    <input type="hidden" id="btnSubmit" name="btnSubmit" value="" />
 
-                <table id="productTable" class="">
-                    <thead>
-                        <tr>
-                            <th>ProductID</th>
-                            <th>SerialNumber</th>
-                            <th>Name</th>
-                            <th>Quantity</th>
-                            <th>Entry Date</th>
-                            <th>Price</th>
-                            <th>Warranty Days</th>
-                            <th>Category</th>
-                            <th>Vendor</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-
-
-            </div>
-        </div>
-
-@*@Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")*@
-<!-- Add Product Modal -->
-@*Equipment Table*@
-<!--<div class="row">
-    <div class="col-md-12">
-        <div class="table-container">
-            <table id="productTable">
+    <div class="row">
+        <div class="col col-sm-12">
+            <table id="productTable" class="">
                 <thead>
                     <tr>
                         <th>ProductID</th>
@@ -162,83 +48,15 @@
                         <th>Quantity</th>
                         <th>Entry Date</th>
                         <th>Price</th>
-                        <th>WarrantyDays</th>
+                        <th>Warranty Days</th>
                         <th>Category</th>
+                        <th>Vendor</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-
-            </table>
-
-        </div>
-    </div>
-
-</div>-->
-@*<script src="~/Scripts/CustomScript/product.js"></script>
-    @Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")*@
-
-@*End of Equipment Table*@
-
-@*</div>*@
-
-@*<div class="col col-sm-6">
-    <div class="row">
-        <h3>Add New Customer</h3>
-
-    </div>
-
-    <form action="/Home/Dashboard" method="post">
-        <div class="table-top">
-            <span class="table-title">Assign</span>
-            <input type="submit" class="btn btn-warning" name="btn
-
-                   Assignment" id="btnEquipmentAssignment" onclick="return showAssignmentEntryPanel()" value="Assignment" />
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>CustomerID</th>
-                        <th>CustomerName</th>
-                        <th>CustomerMobile</th>
-                        <th>Equipment Name</th>
-                        <th>Quantity</th>
-
-                    </tr>
-                </thead>*@
-
-@*@{
-                    System.Data.DataTable dataTable = (System.Data.DataTable)ViewBag.dtCusTEquip;
-                    var pdata = (from p in dataTable.AsEnumerable()
-                                 select new
-                                 {
-
-                                     CustomerID = p.Field<Int32>("CustomerID"),
-                                     CustomerName = p.Field<string>("CustomerName"),
-                                     CustomerMobile = p.Field<string>("CustomerMobile"),
-                                     EqCount = p.Field<Int32>("EqCount"),
-                                     EquipmentName = p.Field<string>("EquipmentName")
-
-
-                                 }).ToList();
-
-                    foreach (var obj in pdata)
-                    {
-                                    <tr>
-                                        <td>@obj.CustomerID</td>
-                                        <td>@obj.CustomerName</td>
-                                        <td>@obj.CustomerMobile</td>
-                                        <td>@obj.EquipmentName</td>
-                                        <td>@obj.EqCount</td>
-
-                                    </tr>
-                    }
-
-                }
             </table>
         </div>
-    </form>
-    @Html.Partial("~/Views/Home/_PartiaEquipmentAssignment.cshtml")*@
-
-@*</div>*@
+    </div>
+</form>
 
 
