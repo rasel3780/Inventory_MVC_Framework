@@ -280,6 +280,7 @@
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DbConnection.cs" />
+    <Compile Include="Models\InvoiceModel.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Employee.cs" />
@@ -347,6 +348,8 @@
     <Content Include="Scripts\CustomScript\myScript.js" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CustomScript\product.js" />
+    <Content Include="Scripts\CustomScript\productController.js" />
+    <Content Include="Scripts\CustomScript\productService.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -381,6 +384,7 @@
     <Content Include="Views\Home\_PartialProductEntryPanel.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Home\_PartialCard.cshtml" />
+    <Content Include="Views\Home\Invoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

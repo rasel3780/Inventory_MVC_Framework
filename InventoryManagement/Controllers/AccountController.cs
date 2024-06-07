@@ -34,10 +34,12 @@ namespace InventoryManagement.Controllers
                     LoginMsg = "Login Success";
                     //FormsAuthentication.Authenticate(account.UserName,account.Password);
                     Log.Information("Login success, redirecting to dashbord");
+                   
                     return RedirectToAction("Dashboard","Home");
                 }
                 else
                 {
+                    TempData["msg"] = "failed";
                     LoginMsg = "Faild, Username/Password not match";
                 }
             }

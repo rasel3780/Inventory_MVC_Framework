@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using InventoryManagement.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -13,11 +14,11 @@
     @*@Scripts.Render("~/bundles/bootstrap")*@
 
     <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.all.min.js"></script>
 
 
     <script>
@@ -30,8 +31,12 @@
                     modal: true
                 });
             }
+
         })
     </script>
+
+
+    
 
 
 </head>
@@ -48,48 +53,38 @@
                     @{
                         //if (Session["Role"].ToString() == "Admin")
                         //{
-                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                         //}
                         //else
-                       // {
-                            <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        // {
+                        <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                         //}
                     }
                 </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="cart-icon">
+                            <i class="bi bi-cart"></i> Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
             </div>
+           
+
         </div>
     </nav>
-    <!--Side Navbar-->
-    <div class="side-navbar">
-        <div class="user-profile">
-            <img src="~/Content/img/userProfile.png" alt="User Profile Picture">
-            @{
-                if (Session["User"] != null)
-                {
-                    <p>@Session["User"]</p>
-                }
-            }
 
-        </div>
-        <ul>
-            <li><a href="#"><i class="bi bi-database"></i>Inventory</a></li>
-            <li><a href="#vendorTable"><i class="bi bi-airplane"></i>Vendor </a></li>
-            <li><a href="#"><i class="bi bi-people"></i>Customer </a></li>
-            <li><a href="#orderTable"><i class="bi bi-box-seam"></i>Orders</a></li>
-            <li><a href="#report"><i class="bi bi-file-earmark-spreadsheet"></i>Report</a></li>
-            <li><a href="#"><i class="bi bi-info-square"></i>Support</a></li>
-            <li><a href="#"><i class="bi bi-question-diamond"></i>FAQs</a></li>
-            <li><a href="@Url.Action("Logout", "Account")"><i class="bi bi-box-arrow-left"></i>Logout</a></li>
 
-        </ul>
-    </div>
 
-    <!--End of Side Navbar-->
+
     <!--Body Content-->
+
     <div class="main-content">
         <div class="container body-content">
+
+
             @RenderBody()
             <hr />
 
@@ -101,8 +96,9 @@
             </p>
         </footer>
     </div>
-   
+
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
 
     <!--End of Body Content-->
 

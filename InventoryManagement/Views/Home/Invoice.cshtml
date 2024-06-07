@@ -1,0 +1,86 @@
+﻿@using InventoryManagement.Models
+
+<h2>Invoice</h2>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+<div>
+    <h3>Cart Items</h3>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Warranty in days</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+
+            </tr>
+            
+        </thead>
+        <tbody>
+            @{
+                int grandTotal = 0;
+                foreach (var item in Model.CartItems)
+                {
+                        <tr>
+                            <td>@item.SerialNumber</td>
+                            <td>@item.Name</td>
+                            <td>@item.WarrantyDays</td>
+                            <td>@item.Price</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Price * item.Quantity)</td>
+                        </tr>
+
+                    grandTotal += @item.Price * @item.Quantity;
+                }
+        <tr style="background-color:#c9c9c9">
+            <th colspan="5">Payable Amount</th>
+            <td style="font-weight:600">@grandTotal</td>
+        </tr>
+
+
+            }
+        </tbody>
+
+    </table>
+    @{  
+        var soldBy = Session["User"].ToString();
+        var billingDate = DateTime.Now;
+        <strong style="color:darkblue">Sold by: @soldBy on @billingDate</strong>
+    }
+
+    <h3>Select Customer</h3>
+    <form asp-action="ConfirmPurchase" method="post">
+        <div>
+            <label for="SelectedCustomerId">Existing Customer:</label>
+            <select id="SelectedCustomerId" name="SelectedCustomerId">
+                <option value="">Select a customer</option>
+                @foreach (var customer in Model.Customers)
+                {
+                    <option value="@customer.CustomerID">@customer.CustomerName</option>
+                }
+            </select>
+        </div>
+
+        <h4>Or Add New Customer</h4>
+        <div>
+            <label for="NewCustomer.Name">Name:</label>
+            <input type="text" id="NewCustomer_Name" name="NewCustomer.Name" />
+        </div>
+        <div>
+            <label for="NewCustomer.Email">Email:</label>
+            <input type="email" id="NewCustomer_Email" name="NewCustomer.Email" />
+        </div>
+        <div>
+            <label for="NewCustomer.Phone">Phone:</label>
+            <input type="text" id="NewCustomer_Phone" name="NewCustomer.Phone" />
+        </div>
+
+        <button type="submit">Confirm Purchase</button>
+    </form>
+</div>

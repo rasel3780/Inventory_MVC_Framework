@@ -4,13 +4,50 @@
 @{
     ViewBag.Title = "Dashboard";
 }
+<style>
+    .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        max-height: calc(100vh - 60px);
+        background-color: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+        transition: right 0.3s;
+        z-index: 1000;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+    .cart-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('#cart-icon').click(function () {
+            $('#cart-sidebar').addClass('open');
+        });
+
+        $('#close-cart-sidebar').click(function () {
+            $('#cart-sidebar').removeClass('open');
+        });
+    });
+</script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
-<script src="~/Scripts/CustomScript/product.js"></script>
+<script src="~/Scripts/CustomScript/productService.js"></script>
+<script src="~/Scripts/CustomScript/productController.js"></script>
 
 <script>
 
@@ -28,9 +65,21 @@
 </script>
 
 
+<!-- Cart Sidebar -->
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-sidebar-header">
+        <h5>Shopping Cart</h5>
+        <button type="button" id="close-cart-sidebar" class="btn btn-secondary">Close</button>
+    </div>
+    <div id="cart-items">
+        <p>Your cart is empty.</p>
+    </div>
+</div>
+
 
 <input type="submit" name="btnAddNew" id="btnAddNew" onclick="return showProductEntryPanel()" value="Add New" />
 @Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")
+
 
 
 <form id="productForm" action="/Home/Dashboard" method="post">
@@ -39,7 +88,7 @@
 
     <div class="row">
         <div class="col col-sm-12">
-            <table id="productTable" class="">
+            <table id="productTable" class="display">
                 <thead>
                     <tr>
                         <th>ProductID</th>
@@ -58,5 +107,3 @@
         </div>
     </div>
 </form>
-
-

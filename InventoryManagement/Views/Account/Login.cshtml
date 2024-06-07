@@ -26,22 +26,23 @@
     <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
 
     <script>
-        var GlobalMsg = '@ViewBag.LoginMsg';
-          $(document).ready(function () {
-              if (GlobalMsg != "") {
-                  $('#spnGlobalPartialMsg').html(GlobalMsg);
-                  $("#dvGlobalPartialMsg").dialog({
-                      resizable: false,
-                      modal: true
-                  });
-              }
-              if (GlobalMsg == "Login Success") {
-                  setTimeout(function () {
-                      window.location.href = '@Url.Action("Dashboard","Home")';
-                  }, 2000);
-              }
-          })
-    </script>
+            var GlobalMsg = '@ViewBag.LoginMsg';
+              $(document).ready(function () {
+                  if (GlobalMsg != "") {
+                      $('#spnGlobalPartialMsg').html(GlobalMsg);
+                      $("#dvGlobalPartialMsg").dialog({
+                          resizable: false,
+                          modal: true
+                      });
+                  }
+                  if (GlobalMsg == "Login Success") {
+                      setTimeout(function () {
+                          window.location.href = '@Url.Action("Dashboard","Home")';
+                      }, 2000);
+                  }
+              })
+        </script>
+
 
 </head>
 <body>

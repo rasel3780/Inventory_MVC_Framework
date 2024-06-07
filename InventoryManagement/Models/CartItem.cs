@@ -10,6 +10,7 @@ namespace InventoryManagement.Models
         public int ProductID { get; set; }
         public string SerialNumber { get; set; }
         public string Name { get; set; }
+        public int WarrantyDays { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
         public string VendorName { get; set; }
