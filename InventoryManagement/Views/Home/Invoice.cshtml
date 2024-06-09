@@ -1,5 +1,7 @@
 ﻿@using InventoryManagement.Models
 
+
+
 <h2>Invoice</h2>
 <style>
     table, th, td {
@@ -20,67 +22,207 @@
                 <th>Total</th>
 
             </tr>
-            
+
         </thead>
         <tbody>
             @{
                 int grandTotal = 0;
                 foreach (var item in Model.CartItems)
                 {
-                        <tr>
-                            <td>@item.SerialNumber</td>
-                            <td>@item.Name</td>
-                            <td>@item.WarrantyDays</td>
-                            <td>@item.Price</td>
-                            <td>@item.Quantity</td>
-                            <td>@(item.Price * item.Quantity)</td>
-                        </tr>
+                    <tr>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.Name</td>
+                        <td>@item.WarrantyDays</td>
+                        <td>@item.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Price * item.Quantity)</td>
+                    </tr>
 
                     grandTotal += @item.Price * @item.Quantity;
                 }
-        <tr style="background-color:#c9c9c9">
-            <th colspan="5">Payable Amount</th>
-            <td style="font-weight:600">@grandTotal</td>
-        </tr>
+                <tr style="background-color:#c9c9c9">
+                    <th colspan="5">Payable Amount</th>
+                    <td style="font-weight:600">@grandTotal</td>
+                </tr>
 
 
             }
         </tbody>
 
     </table>
-    @{  
+
+    @{
         var soldBy = Session["User"].ToString();
         var billingDate = DateTime.Now;
         <strong style="color:darkblue">Sold by: @soldBy on @billingDate</strong>
     }
 
-    <h3>Select Customer</h3>
-    <form asp-action="ConfirmPurchase" method="post">
-        <div>
-            <label for="SelectedCustomerId">Existing Customer:</label>
-            <select id="SelectedCustomerId" name="SelectedCustomerId">
-                <option value="">Select a customer</option>
-                @foreach (var customer in Model.Customers)
-                {
-                    <option value="@customer.CustomerID">@customer.CustomerName</option>
-                }
-            </select>
-        </div>
-
-        <h4>Or Add New Customer</h4>
-        <div>
-            <label for="NewCustomer.Name">Name:</label>
-            <input type="text" id="NewCustomer_Name" name="NewCustomer.Name" />
-        </div>
-        <div>
-            <label for="NewCustomer.Email">Email:</label>
-            <input type="email" id="NewCustomer_Email" name="NewCustomer.Email" />
-        </div>
-        <div>
-            <label for="NewCustomer.Phone">Phone:</label>
-            <input type="text" id="NewCustomer_Phone" name="NewCustomer.Phone" />
-        </div>
-
-        <button type="submit">Confirm Purchase</button>
-    </form>
 </div>
+<table id="customerTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Customer ID</th>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h2>Add New Customer</h2>
+<form id="addCustomerForm">
+    <label for="CustomerName">Name:</label>
+    <input type="text" id="CustomerName" name="CustomerName" required><br>
+    <label for="CustomerMobile">Mobile:</label>
+    <input type="text" id="CustomerMobile" name="CustomerMobile" required><br>
+    <button type="submit">Add Customer</button>
+</form>
+
+<button id="confirmOrderButton">Confirm Order</button>
+
+<div id="confirmationDialog" title="Order Confirmation" style="display: none;">
+    <p>Customer: <span id="dialogCustomerName"></span></p>
+    <p>Total Amount: <span id="dialogTotalAmount"></span></p>
+</div>
+<h2>Selected Customer</h2>
+<p id="selectedCustomer"></p>
+
+<input type="submit" name="btnAddNew" id="btnAddNew" onclick="return showOrderConfirmPanel()" value="Confirm Order" />
+
+<script>
+    var selectedCustomer;
+
+    $(document).ready(function () {
+        // Initialize the DataTable
+        var table = $('#customerTable').DataTable({
+            ajax: {
+                url: '@Url.Action("LstCustomer", "Home")',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'CustomerID' },
+                { data: 'CustomerName' },
+                { data: 'CustomerMobile' },
+                {
+                    data: null,
+                    className: "center",
+                    defaultContent: '<button class="assignCustomer">Assign</button>'
+                }
+            ]
+        });
+
+        // Handle the assign customer button click
+        $('#customerTable tbody').on('click', '.assignCustomer', function () {
+            var data = table.row($(this).parents('tr')).data();
+            selectedCustomer = data;
+            $('#selectedCustomer').text('Selected Customer: ' + data.CustomerName + ' (' + data.CustomerMobile + ')');
+        });
+
+        // Initialize the confirmation dialog
+        $("#confirmationDialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "Confirm": function () {
+                    confirmOrder();
+                    $(this).dialog("close");
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // Handle the add customer form submission
+        $('#addCustomerForm').submit(function (e) {
+            e.preventDefault();
+
+            var formData = {
+                CustomerName: $('#CustomerName').val(),
+                CustomerMobile: $('#CustomerMobile').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddCustomer", "Home")',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        // Reload the DataTable
+                        table.ajax.reload();
+                        $('#CustomerName').val('');
+                        $('#CustomerMobile').val('');
+                        alert('Customer added successfully!');
+                    } else {
+                        alert('Error adding customer.');
+                    }
+                },
+                error: function () {
+                    alert('Error adding customer.');
+                }
+            });
+        });
+    });
+
+    function showOrderConfirmPanel() {
+        if (!selectedCustomer) {
+            alert('Please select a customer first.');
+            return false; // Prevent post-back
+        }
+
+        var grandTotal = 0;
+        var cartItems = @Html.Raw(Json.Encode(Model.CartItems));
+        cartItems.forEach(function (item) {
+            grandTotal += item.Price * item.Quantity;
+        });
+
+        // Set dialog text
+        $('#dialogCustomerName').text(selectedCustomer.CustomerName);
+        $('#dialogTotalAmount').text(grandTotal);
+
+        // Open the dialog
+        $("#confirmationDialog").dialog("open");
+
+        return false; // Prevent post-back
+    }
+
+    function confirmOrder() {
+        var cartItems = @Html.Raw(Json.Encode(Model.CartItems));
+
+        $.post('@Url.Action("ConfirmOrder", "Home")', {
+            customerId: selectedCustomer.CustomerID,
+            cartItems: cartItems
+        },  function(response) {
+            if (response.success) {
+                Swal.fire({
+                    title: 'Order Confirmed',
+                    text: 'Your order has been confirmed successfully!',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+                setTimeout(function () {
+                    clearCart();
+                    window.location.href = '@Url.Action("Dashboard", "Home")';
+                }, 2000);
+            } else {
+                Swal.fire('Error', 'Error confirming order: ' + response.message, 'error');
+            }
+        }).fail(function() {
+            Swal.fire('Error', 'Error confirming order.', 'error');
+        });
+    }
+       function clearCart() {
+    
+        $.post('@Url.Action("ClearCart", "Home")', function() {
+            $('#cartTable tbody').empty();
+        });
+    }
+</script>
+
+

@@ -41,28 +41,12 @@
         });
     });
 </script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
-<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
 <script src="~/Scripts/CustomScript/productService.js"></script>
 <script src="~/Scripts/CustomScript/productController.js"></script>
 
-<script>
 
-    //Product Entry Panel
-    function showProductEntryPanel() {
-        $("#showProductEntryPanel").dialog({
-            resizable: false,
-            height: 500,
-            width: 1000,
-            modal: true
-        });
-        return false;  // to prevent post-back
-    }
-
-</script>
 
 
 <!-- Cart Sidebar -->
@@ -106,4 +90,26 @@
             </table>
         </div>
     </div>
+
 </form>
+
+<div class="row">
+    <div class="col col-12">
+        <table id="orderHistoryTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Customer Mobile</th>
+                    <th>Product S/N</th>
+                    <th>Product Name</th>
+                    <th>Vendor Name</th>
+                    <th>Order Date</th>
+                    <th>Amount</th>
+                    <th>Sold by</th>
+                </tr>
+            </thead>
+            
+        </table>
+    </div>
+</div>

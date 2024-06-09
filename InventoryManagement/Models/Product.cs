@@ -49,7 +49,7 @@ namespace InventoryManagement.Models
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
-                cmd.CommandText = "[dbo].[AddProduct]";
+                cmd.CommandText = "[dbo].[InsertProduct]";
                 cmd.Parameters.Clear();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandTimeout = 0;

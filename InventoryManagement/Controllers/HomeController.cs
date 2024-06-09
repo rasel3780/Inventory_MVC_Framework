@@ -233,9 +233,9 @@ namespace InventoryManagement.Controllers
         [HttpGet]
         public ActionResult LstCustomer()
         {
-            List<Customer> customerDataList = Customer.GetCustomerData();
+            List<Customer> customerList = Customer.GetCustomerList();
             
-            return Json(customerDataList, JsonRequestBehavior.AllowGet);
+            return Json(customerList, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -248,16 +248,70 @@ namespace InventoryManagement.Controllers
                 cartItems = new List<CartItem>();
             }
 
-            var customers = Customer.GetCustomerData().ToList();
+            List<Customer> customerList = Customer.GetCustomerList().ToList();
+            
             var model = new InvoiceModel
             {
                 CartItems = cartItems,
-                Customers = customers
+                Customers = customerList
             };
 
             return View(model);
         }
+        [HttpPost]
+        public ActionResult AddCustomer(string CustomerName, string CustomerMobile)
+        {
+            try
+            {
+                Customer newCustomer = new Customer
+                {
+                    CustomerName = CustomerName,
+                    CustomerMobile = CustomerMobile,
+                    RegistrationDate = DateTime.Now
+                };
 
+                int result = newCustomer.AddCustomer();
 
+                if (result > 0)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Log.Error(ex, "An error occurred while adding a new customer.");
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmOrder(int customerId, List<CartItem> cartItems)
+        {
+            Employee employee = new Employee();
+            string user = Session["User"].ToString();
+            int userId = employee.GetEmployeeByUserName(user);
+
+            var success = Order.ConfirmOrder(customerId, cartItems, userId);
+            if (success)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Failed to confirm order." });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ClearCart()
+        {
+            Session["Cart"] = null;
+            return Json(new { success = true });
+        }
     }
 }

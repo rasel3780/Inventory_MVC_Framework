@@ -6,30 +6,35 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Serilog;
+using System.Runtime.Serialization;
 
 namespace InventoryManagement.Models
 {
+    [Serializable]
     public class Customer
     {
+        [DataMember]
         public int CustomerID { get; set; }
+        [DataMember]
         public string CustomerName { get; set; }
+        [DataMember]
         public string CustomerMobile { get; set; }
+        [DataMember]
         public DateTime RegistrationDate { get; set; }
 
         public int AddCustomer()
         {
-            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
-
+            string conString = DbConnection.GetConnectionString();
             SqlConnection _connection = new SqlConnection(conString);
             _connection.Open();
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_InsertCustomer]";
+            cmd.CommandText = "dbo.InsertCustomer";
             cmd.Parameters.Clear();
             cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
             cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
-           
+            cmd.Parameters.Add(new SqlParameter("@RegistrationDate", this.RegistrationDate));
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
 
@@ -40,7 +45,7 @@ namespace InventoryManagement.Models
             return result;
         }
 
-        public static List<Customer> GetCustomerData()
+        public static List<Customer> GetCustomerList()
         {
             List<Customer> customerList = new List<Customer>();
             string conString = DbConnection.GetConnectionString();
@@ -50,7 +55,7 @@ namespace InventoryManagement.Models
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_GetCustomerList]";
+            cmd.CommandText = "[dbo].[GetCustomerList]";
             cmd.Parameters.Clear();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
