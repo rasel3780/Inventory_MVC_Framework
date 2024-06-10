@@ -95,7 +95,7 @@
 
 <div class="row">
     <div class="col col-12">
-        <table id="orderHistoryTable">
+        <table id="orderHistoryTable" class="display">
             <thead>
                 <tr>
                     <th>Order ID</th>
@@ -109,7 +109,32 @@
                     <th>Sold by</th>
                 </tr>
             </thead>
+            <tbody>
+
+            </tbody>
             
         </table>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#orderHistoryTable').DataTable({
+            "ajax": {
+                "url": '/Home/GetOrderHistory',
+                "dataSrc": ''
+            },
+            "columns": [
+                { "data": 'OrderID' },
+                { "data": 'CustomerName' },
+                { "data": 'CustomerMobile' },
+                { "data": 'SerialNumber' },
+                { "data": 'ProductName' },
+                { "data": 'VendorName' },
+                { "data": 'OrderDate'},
+                { "data": 'Amount', "render": $.fn.dataTable.render.number(',', '.', 2, 'BDT:')},
+                { "data": 'SoldBy' }
+            ]
+        });
+    });
+</script>

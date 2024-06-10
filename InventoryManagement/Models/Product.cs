@@ -25,7 +25,7 @@ namespace InventoryManagement.Models
         [DataMember]
         public DateTime EntryDate { get; set; }
         [DataMember]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         [DataMember]
         public int WarrantyDays { get; set; }
         [DataMember]
@@ -106,7 +106,7 @@ namespace InventoryManagement.Models
                     product.Name = dataTable.Rows[0]["Name"].ToString();
                     product.Quantity = Convert.ToInt32(dataTable.Rows[0]["Quantity"]);
                     product.EntryDate = Convert.ToDateTime(dataTable.Rows[0]["EntryDate"]);
-                    product.Price = Convert.ToDouble(dataTable.Rows[0]["Price"]);
+                    product.Price = Convert.ToDecimal(dataTable.Rows[0]["Price"].ToString());
                     product.WarrantyDays = Convert.ToInt32(dataTable.Rows[0]["WarrantyDays"]);
                     product.Category = dataTable.Rows[0]["Category"].ToString();
                     product.VendorName = dataTable.Rows[0]["VendorName"].ToString();
@@ -153,7 +153,7 @@ namespace InventoryManagement.Models
                     obj.Name = reader["Name"].ToString();
                     obj.Quantity = Convert.ToInt32(reader["Quantity"].ToString());
                     obj.EntryDate = Convert.ToDateTime(reader["EntryDate"].ToString());
-                    obj.Price = Convert.ToDouble(reader["Price"].ToString());
+                    obj.Price = Convert.ToDecimal(reader["Price"].ToString());
                     obj.WarrantyDays = Convert.ToInt32(reader["WarrantyDays"].ToString());
                     obj.Category = reader["Category"].ToString();
                     obj.VendorName = reader["VendorName"].ToString();

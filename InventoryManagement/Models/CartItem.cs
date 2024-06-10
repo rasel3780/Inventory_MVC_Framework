@@ -12,10 +12,10 @@ namespace InventoryManagement.Models
         public string Name { get; set; }
         public int WarrantyDays { get; set; }
         public int Quantity { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string VendorName { get; set; }
 
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get { return Quantity * Price; }
         }

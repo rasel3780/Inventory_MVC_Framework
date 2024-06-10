@@ -313,5 +313,25 @@ namespace InventoryManagement.Controllers
             Session["Cart"] = null;
             return Json(new { success = true });
         }
+
+        [HttpGet]
+        public ActionResult GetOrderHistory()
+        {
+            List<Order> orderList = Order.GetOrderHistory();
+            var orderDataList = (from order in orderList
+                             select new
+                             {
+                                 OrderID = order.OrderID,
+                                 CustomerName = order.CustomerName,
+                                 CustomerMobile = order.CustomerMobile,
+                                 SerialNumber = order.SerialNumber,
+                                 ProductName = order.ProductName,
+                                 VendorName = order.VendorName,
+                                 OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
+                                 Amount = order.Amount,
+                                 SoldBy = order.SoldBy
+                             }).ToList();
+            return Json(orderDataList, JsonRequestBehavior.AllowGet);
+        }
     }
 }
