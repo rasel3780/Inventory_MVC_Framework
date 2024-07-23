@@ -2,13 +2,9 @@
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
-using System.Xml.Linq;
-using static Azure.Core.HttpHeader;
 
 namespace InventoryManagement.Controllers
 {
@@ -35,42 +31,24 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult Dashboard(FormCollection frm, string btnSubmit)
         {
-       
-            // Add New Product 
             if (btnSubmit == "Save Product")
             {
                 Product product = new Product();
-                product.SerialNumber = frm["SerialNumber"].ToString(); 
+                product.SerialNumber = frm["SerialNumber"].ToString();
                 product.Name = frm["Name"].ToString();
                 product.Quantity = Convert.ToInt32(frm["Quantity"].ToString());
-                product.VendorID = Convert.ToInt32(frm["VendorID"].ToString()); ;
-                product.EntryDate = Convert.ToDateTime(frm["EntryDate"].ToString()); 
-                product.Price= Convert.ToInt32(frm["Price"].ToString());
+                product.VendorID = Convert.ToInt32(frm["VendorID"].ToString());
+                product.EntryDate = Convert.ToDateTime(frm["EntryDate"].ToString());
+                product.Price = Convert.ToInt32(frm["Price"].ToString());
                 product.WarrantyDays = Convert.ToInt32(frm["WarrantyDays"].ToString());
                 product.Category = frm["Category"].ToString();
-         
+
                 int result = product.AddProduct();
-                if(result > 0)
+                if (result > 0)
                 {
                     ViewBag.OperationResult = "Saved Successfully";
                 }
             }
-            if (btnSubmit == "AddToCart")
-            {
-                var productIdValue = frm["productId"];
-                if (productIdValue!=null && productIdValue!="")
-                {
-                    int productId = Convert.ToInt32(productIdValue);
-                    AddToCart(productId);
-                }
-                else
-                {
-                    ViewBag.OperationResult = "No product selected.";
-                }
-            }
-
-
-
             return View();
         }
 
@@ -83,130 +61,58 @@ namespace InventoryManagement.Controllers
             {
                 return Json(new { success = false, message = "Product not found." });
             }
-            List<CartItem> cart;
 
-            if (Session["Cart"] == null)
+            return Json(new
             {
-                cart = new List<CartItem>();
-            }
-            else
-            {
-                cart = Session["Cart"] as List<CartItem>;
-            }
-
-
-            CartItem existingItem = null;
-            foreach (var item in cart)
-            {
-                if (item.ProductID == productId)
-                {
-                    existingItem = item;
-                    break;
-                }
-            }
-
-            if (existingItem != null)
-            {
-                existingItem.Quantity++;
-            }
-            else
-            {
-                CartItem newItem = new CartItem();
-
-                newItem.ProductID = productId;
-                newItem.SerialNumber = product.SerialNumber;
-                newItem.Name = product.Name;
-                newItem.WarrantyDays = product.WarrantyDays;
-                newItem.Quantity = 1;
-                newItem.Price = product.Price;
-                newItem.VendorName = product.VendorName;
-                
-                cart.Add(newItem);
-            }
-
-            Session["Cart"] = cart;
-            return Json(new { success = true, cart = cart });
+                success = true,
+                message = $"{product.Name} has been added to your cart.",
+                product = product
+            });
         }
+
         [HttpPost]
         public ActionResult UpdateCartQuantity(int productId, int change)
         {
-            List<CartItem> cart;
-            if (Session["Cart"] == null)
+            Product product = Product.GetProductById(productId);
+
+            if (product == null)
             {
-                cart = new List<CartItem>();
-            }
-            else
-            {
-                cart = Session["Cart"] as List<CartItem>;
-            }
-            CartItem itemToUpdate = null;
-            foreach (var item in cart)
-            {
-                if (item.ProductID == productId)
-                {
-                    itemToUpdate = item;
-                    break;
-                }
+                return Json(new { success = false, message = "Product not found." });
             }
 
-            if (itemToUpdate != null)
-            {
-                itemToUpdate.Quantity += change;
-                if (itemToUpdate.Quantity<=0)
-                {
-                    cart.Remove(itemToUpdate);
-                }
-                
-
-                Session["Cart"] = cart;
-                return Json(new { success = true, cart = cart });
-            }
-
-            return Json(new { success = false, message = "Product not found in cart." });
+            return Json(new { success = true });
         }
 
         [HttpPost]
         public ActionResult RemoveFromCart(int productId)
         {
-            List<CartItem> cart;
-            if (Session["Cart"] == null)
+            Product product = Product.GetProductById(productId);
+
+            if (product == null)
             {
-                cart = new List<CartItem>();
-            }
-            else
-            {
-                cart = Session["Cart"] as List<CartItem>;
-            }
-            CartItem itemToRemove = null;
-            foreach (var item in cart)
-            {
-                if (item.ProductID == productId)
-                {
-                    itemToRemove = item;
-                    break;
-                }
-            }
-            if (itemToRemove != null)
-            {
-                cart.Remove(itemToRemove);
-                Session["Cart"] = cart;
-                return Json(new { success = true, cart = cart });
+                return Json(new { success = false, message = "Product not found." });
             }
 
-            return Json(new { success = false, message = "Product not found in cart." });
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult ProceedToCheckout(List<CartItem> cart)
+        {
+            // Process the cart and create an invoice
+            // For simplicity, just return a success response
+            return Json(new { success = true, message = "Checkout successful!" });
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
@@ -214,9 +120,9 @@ namespace InventoryManagement.Controllers
         public ActionResult LstProduct()
         {
             List<Product> productList = Product.GetProductList();
-            var pdtList = (from  product in productList
-                           select
-                           new {
+            var pdtList = (from product in productList
+                           select new
+                           {
                                ProductID = product.ProductID,
                                SerialNumber = product.SerialNumber,
                                Name = product.Name,
@@ -234,9 +140,7 @@ namespace InventoryManagement.Controllers
         public ActionResult LstCustomer()
         {
             List<Customer> customerList = Customer.GetCustomerList();
-            
             return Json(customerList, JsonRequestBehavior.AllowGet);
-
         }
 
         [HttpGet]
@@ -249,7 +153,7 @@ namespace InventoryManagement.Controllers
             }
 
             List<Customer> customerList = Customer.GetCustomerList().ToList();
-            
+
             var model = new InvoiceModel
             {
                 CartItems = cartItems,
@@ -258,6 +162,7 @@ namespace InventoryManagement.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult AddCustomer(string CustomerName, string CustomerMobile)
         {
@@ -283,7 +188,6 @@ namespace InventoryManagement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Log.Error(ex, "An error occurred while adding a new customer.");
                 return Json(new { success = false, message = ex.Message });
             }
@@ -299,6 +203,7 @@ namespace InventoryManagement.Controllers
             var success = Order.ConfirmOrder(customerId, cartItems, userId);
             if (success)
             {
+                Session["Cart"] = null;
                 return Json(new { success = true });
             }
             else
@@ -319,19 +224,33 @@ namespace InventoryManagement.Controllers
         {
             List<Order> orderList = Order.GetOrderHistory();
             var orderDataList = (from order in orderList
-                             select new
-                             {
-                                 OrderID = order.OrderID,
-                                 CustomerName = order.CustomerName,
-                                 CustomerMobile = order.CustomerMobile,
-                                 SerialNumber = order.SerialNumber,
-                                 ProductName = order.ProductName,
-                                 VendorName = order.VendorName,
-                                 OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
-                                 Amount = order.Amount,
-                                 SoldBy = order.SoldBy
-                             }).ToList();
+                                 select new
+                                 {
+                                     OrderID = order.OrderID,
+                                     CustomerName = order.CustomerName,
+                                     CustomerMobile = order.CustomerMobile,
+                                     SerialNumber = order.SerialNumber,
+                                     ProductName = order.ProductName,
+                                     VendorName = order.VendorName,
+                                     OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
+                                     Amount = order.Amount,
+                                     SoldBy = order.SoldBy
+                                 }).ToList();
             return Json(orderDataList, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetProductById(int productId)
+        {
+            Product product = Product.GetProductById(productId);
+            if (product != null)
+            {
+                return Json(product, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
     }
 }

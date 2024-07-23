@@ -41,43 +41,108 @@
                       }, 2000);
                   }
               })
-        </script>
+    </script>
 
+    <style>
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-outline {
+            text-align: left;
+        }
+        .from-card {
+            border-radius: 2rem;
+            border-width: 5px;
+            width: 400px;
+            margin: auto;
+            background-color: white;
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-style:none;
+            border-radius: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .custom-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .from-container {
+            max-width: 100%;
+        }
+    </style>
 
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login-container">
-                    <h2 class="text-center mb-4">Login</h2>
-                    @using (Html.BeginForm("Login", "Account"))
-                    {
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                           
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", name = "txtUsername", placeholder = "Enter your username" })
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <div class="input-group">
-                                @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control", name = "txtPassword", placeholder = "Enter your password" })
-                                <div class="input-group-append">
-                                    <span class="input-group-text toggle-password" data-target="#password">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-primary btn-block" name="btnSubmit" value="Login">Login</button>
-                            <label>Don't have an account? @Html.ActionLink("Create new account", "Registration", "Account")  </label>
-                        </div>
-                    }
+        <div class="card from-card" style="background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%); border:none;">
+
+            @using (Html.BeginForm("Login", "Account"))
+            {
+                <div class="card-body p-5 text-center">
+                    <h3 class="mb-3" style="color:#e9e9ed; font-weight:bold">Login</h3>
+                    <hr style="color:white" />
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label for="username" class="form-label">Username</label>
+
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-control-lg", name = "txtUsername", placeholder = "Enter your username" })
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label for="password" class="form-label">Password</label>
+
+                        @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control form-control-lg", name = "txtPassword", placeholder = "Enter your password" })
+
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-4">
+                        <input class="form-check-input custom-checkbox" type="checkbox" id="showPass" />
+                        <label class="form-check-label custom-label ms-2" for="showPass">Show password</label>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="form-btn btn-primary" name="btnSubmit" value="Login">Login</button>
+
+                    </div>
+
+
+
+
                 </div>
-            </div>
+            }
         </div>
     </div>
+
     @Html.Partial("~/Views/Common/_PartialGlobalMsg.cshtml")
+
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+        <script>
+            < script >
+            $(document).ready(function () {
+                $('#showPass').on('change', function () {
+                    console.log("checkbox");
+                    var passwordInput = $('#password');
+                    passwordInput.attr('type', this.checked ? 'text' : 'password');
+                });
+            });
+
+        </script>
+
+    }
 </body>
 </html>

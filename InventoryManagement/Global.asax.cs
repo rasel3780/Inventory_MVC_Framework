@@ -29,11 +29,11 @@ namespace InventoryManagement
             Log.Logger = new LoggerConfiguration()
                  .MinimumLevel.Debug()
                  .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
-                 .WriteTo.MSSqlServer(
-                    connectionString: conString,
-                    sinkOptions: new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true },
-                    restrictedToMinimumLevel: LogEventLevel.Information
-                  )
+                 //.WriteTo.MSSqlServer(
+                 //   connectionString: conString,
+                 //   sinkOptions: new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true },
+                 //   restrictedToMinimumLevel: LogEventLevel.Information
+                 // )
                  .CreateLogger();
 
             Log.Information("Application Starting");

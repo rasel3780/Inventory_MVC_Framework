@@ -30,21 +30,24 @@
     }
 </style>
 
+
+<script src="~/Scripts/CustomScript/productService.js"></script>
+<script src="~/Scripts/CustomScript/productController.js"></script>
+
 <script>
     $(document).ready(function () {
         $('#cart-icon').click(function () {
             $('#cart-sidebar').addClass('open');
-        });
+            var currentCart = getCart();
+            console.log("Current cart when opening sidebar: ", currentCart);
 
+            updateCartView(currentCart); 
+        });
         $('#close-cart-sidebar').click(function () {
             $('#cart-sidebar').removeClass('open');
         });
     });
 </script>
-
-
-<script src="~/Scripts/CustomScript/productService.js"></script>
-<script src="~/Scripts/CustomScript/productController.js"></script>
 
 
 
@@ -60,11 +63,8 @@
     </div>
 </div>
 
-
 <input type="submit" name="btnAddNew" id="btnAddNew" onclick="return showProductEntryPanel()" value="Add New" />
 @Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")
-
-
 
 <form id="productForm" action="/Home/Dashboard" method="post">
     <input type="hidden" id="productId" name="productId" value="" />
@@ -110,9 +110,8 @@
                 </tr>
             </thead>
             <tbody>
-
             </tbody>
-            
+
         </table>
     </div>
 </div>
@@ -131,8 +130,8 @@
                 { "data": 'SerialNumber' },
                 { "data": 'ProductName' },
                 { "data": 'VendorName' },
-                { "data": 'OrderDate'},
-                { "data": 'Amount', "render": $.fn.dataTable.render.number(',', '.', 2, 'BDT:')},
+                { "data": 'OrderDate' },
+                { "data": 'Amount', "render": $.fn.dataTable.render.number(',', '.', 2, 'BDT:') },
                 { "data": 'SoldBy' }
             ]
         });
