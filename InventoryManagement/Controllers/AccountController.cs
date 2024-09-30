@@ -24,8 +24,7 @@ namespace InventoryManagement.Controllers
             string LoginMsg = "";
             bool verifyStatus = account.VerifyLogin();
             
-            if (btnSubmit == "Login")
-            {
+            
                 if (verifyStatus)
                 {
 
@@ -42,7 +41,7 @@ namespace InventoryManagement.Controllers
                     TempData["msg"] = "failed";
                     LoginMsg = "Faild, Username/Password not match";
                 }
-            }
+            
             ViewBag.LoginMsg = LoginMsg;
             return View();
         }
