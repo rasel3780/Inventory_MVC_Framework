@@ -1,45 +1,51 @@
 ﻿html,body {
     background: linear-gradient(106.8deg, rgb(117, 255, 220) 6%, rgb(163, 216, 255) 47.6%, rgb(248, 215, 251) 87.8%);
     height: 100%;
+    margin:0;
 }
 
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
-   
 }
 
 .login-container {
-    background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%);
-    border-radius: 15px;
-    padding: 20px;
-}
-
-
-.login-container button {
-    width: calc(100%-40px);
-    margin-top:30px;
-    
-}
-
-.login-container h2{
-    color:white;
-}
-
-.form-footer label {
-    margin-top: 20px;
-    color: white;
     width: 100%;
-    text-align: center;
+    max-width: 400px;
+    padding: 15px;
 }
 
-.form-footer a{
+.form-card {
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
     color:black;
+    text-align:center;
     font-weight:bold;
-    text-decoration:underline;
+}
+
+.form-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-style: none;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.custom-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
 

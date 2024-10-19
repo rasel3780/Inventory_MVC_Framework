@@ -4,145 +4,53 @@
 }
 
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
-    <!--CSS-->
-    <link href="~/Content/Style/ajax_libs_font_awesome_all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="~/Content/Style/LoginStyleSheet.css" rel="stylesheet">
+    <link href="~/Content/Style/LoginStyleSheet.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    @*@Styles.Render("~/Content/custom_css")*@
-    <link href="~/Content/JqueryUI/jquery-ui.min.css" rel="stylesheet" />
-    <!--Script -->
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @*@Scripts.Render("~/bundles/custom_script")*@
-    <script src="~/Scripts/CustomScript/myScript.js"></script>
-    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
-
-    <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
-
-    <script>
-            var GlobalMsg = '@ViewBag.LoginMsg';
-              $(document).ready(function () {
-                  if (GlobalMsg != "") {
-                      $('#spnGlobalPartialMsg').html(GlobalMsg);
-                      $("#dvGlobalPartialMsg").dialog({
-                          resizable: false,
-                          modal: true
-                      });
-                  }
-                  if (GlobalMsg == "Login Success") {
-                      setTimeout(function () {
-                          window.location.href = '@Url.Action("Dashboard","Home")';
-                      }, 2000);
-                  }
-              })
-    </script>
-
-    <style>
-        .form-label {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-outline {
-            text-align: left;
-        }
-        .from-card {
-            border-radius: 2rem;
-            border-width: 5px;
-            width: 400px;
-            margin: auto;
-            background-color: white;
-        }
-
-        .form-btn {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            border-style:none;
-            border-radius: 15px;
-        }
-
-        .form-label {
-            font-weight: bold;
-        }
-
-        .custom-checkbox {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-
-        .form-control {
-            padding: 0.75rem;
-            font-size: 1rem;
-        }
-
-        .from-container {
-            max-width: 100%;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
 <body>
-    <div class="container">
-        <div class="card from-card" style="background: linear-gradient(0.2deg, rgb(51, 204, 255) 4.8%, rgb(51, 102, 255) 85.5%); border:none;">
 
-            @using (Html.BeginForm("Login", "Account"))
+    <div class="login-container">
+        <div class="card form-card">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
             {
-                <div class="card-body p-5 text-center">
-                    <h3 class="mb-3" style="color:#e9e9ed; font-weight:bold">Login</h3>
-                    <hr style="color:white" />
-
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <label for="username" class="form-label">Username</label>
-
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control form-control-lg", name = "txtUsername", placeholder = "Enter your username" })
+                <div class="card-body p-5">
+                    <h3 class="mb-4 form-title">Login</h3>
+                    <div class="form-outline mb-4">
+                        <label for="userName" class="form-label">Username</label>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "userName", placeholder = "Enter your username", data_val = "true" })
+                        <span class="error-message" id="usernameError"></span>
                     </div>
-
-                    <div data-mdb-input-init class="form-outline mb-4">
+                    <div class="form-outline mb-4">
                         <label for="password" class="form-label">Password</label>
-
-                        @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control form-control-lg", name = "txtPassword", placeholder = "Enter your password" })
-
+                        @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control", id = "password", placeholder = "Enter your password", data_val = "true" })
+                        <span class="error-message" id="passwordError"></span>
                     </div>
                     <div class="form-check d-flex align-items-center mb-4">
-                        <input class="form-check-input custom-checkbox" type="checkbox" id="showPass" />
-                        <label class="form-check-label custom-label ms-2" for="showPass">Show password</label>
+                        <input class="form-check-input custom-checkbox" style="border: 1px solid #212529" type="checkbox" id="showPass" />
+                        <label class="form-check-label ms-2" for="showPass">Show password</label>
                     </div>
                     <div class="form-footer">
                         <button type="submit" class="form-btn btn-primary" name="btnSubmit" value="Login">Login</button>
-
                     </div>
-
-
-
-
                 </div>
             }
         </div>
     </div>
 
-    @Html.Partial("~/Views/Common/_PartialGlobalMsg.cshtml")
 
-    @section Scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-        <script>
-            < script >
-            $(document).ready(function () {
-                $('#showPass').on('change', function () {
-                    console.log("checkbox");
-                    var passwordInput = $('#password');
-                    passwordInput.attr('type', this.checked ? 'text' : 'password');
-                });
-            });
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-        </script>
+    <script src="~/Scripts/CustomScript/loginValidation.js"></script>
 
-    }
+
 </body>
 </html>
