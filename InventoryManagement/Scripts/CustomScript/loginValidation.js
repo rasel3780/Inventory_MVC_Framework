@@ -38,6 +38,16 @@
             return;
         }
 
+        Swal.fire({
+            title: 'Logging in...',
+            text: 'Please wait',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         // form submission
         $.ajax({
             url: this.action,

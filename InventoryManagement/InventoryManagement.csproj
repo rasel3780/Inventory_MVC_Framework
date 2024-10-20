@@ -456,17 +456,16 @@
     <Content Include="Views\Account\Registration.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\Home\_PartiaEquipmentEntry.cshtml" />
-    <Content Include="Views\Common\_PartialGlobalMsg.cshtml" />
     <Content Include="Views\Home\_PartiaEquipmentAssignment.cshtml" />
     <Content Include="Views\Home\_PartialProductEntryPanel.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Home\_PartialCard.cshtml" />
     <Content Include="Views\Home\Invoice.cshtml" />
-    <Content Include="Views\Home\_PartialGlobalMsg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\img\" />
+    <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
