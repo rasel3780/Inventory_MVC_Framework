@@ -36,6 +36,10 @@ body {
     border-radius: 15px;
     font-weight: bold;
 }
+.form-btn:hover{
+    background-color:#000f75;
+    color:white;
+}
 
 .custom-checkbox {
     width: 1.25rem;

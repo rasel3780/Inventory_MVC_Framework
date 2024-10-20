@@ -80,7 +80,9 @@ textarea {
     }
 
         .sidebar .nav-link:hover{
-            color:red;
+            color:white;
+            background-color:blue;
+
         }
 
         .sidebar .nav-link i {
