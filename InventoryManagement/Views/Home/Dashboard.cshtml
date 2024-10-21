@@ -6,7 +6,7 @@
 }
 
 <script>
-    
+
     $(window).on('beforeunload', function () {
         Swal.fire({
             title: 'Loading Dashboard...',
@@ -19,7 +19,7 @@
         });
     });
 
-    
+
     $(window).on('load', function () {
         Swal.close();
     });
@@ -161,7 +161,7 @@
 
 
 
-
+<!--Product Table-->
 <div class="card mb-4">
     <div class="card-header">
         <h3 class="card-title">Products table</h3>
@@ -194,8 +194,8 @@
         </form>
     </div>
 </div>
-
-
+<!--End of Product table-->
+<!--Order History Table-->
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Sells History Table</h3>
@@ -223,6 +223,7 @@
         </table>
     </div>
 </div>
+<!--End of Order History Table-->
 
 <script>
     $(document).ready(function () {
