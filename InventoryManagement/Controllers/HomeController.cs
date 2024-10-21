@@ -15,6 +15,38 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult AddProduct()
+        {
+            return PartialView("_PartialProductEntryPanel");
+        }
+
+        [HttpPost]
+        public ActionResult AddProduct(Product product)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    int result = product.AddProduct();
+                    if (result > 0)
+                    {
+                        return Json(new { success = true, message = "Product added successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to add product." });
+                    }
+                }
+                return Json(new { success = false, message = "Please fill all required fields." });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
+        }
+
         public ActionResult Dashboard()
         {
             if (Session["User"] != null)
@@ -28,29 +60,11 @@ namespace InventoryManagement.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult Dashboard(FormCollection frm, string btnSubmit)
-        {
-            if (btnSubmit == "Save Product")
-            {
-                Product product = new Product();
-                product.SerialNumber = frm["SerialNumber"].ToString();
-                product.Name = frm["Name"].ToString();
-                product.Quantity = Convert.ToInt32(frm["Quantity"].ToString());
-                product.VendorID = Convert.ToInt32(frm["VendorID"].ToString());
-                product.EntryDate = Convert.ToDateTime(frm["EntryDate"].ToString());
-                product.Price = Convert.ToInt32(frm["Price"].ToString());
-                product.WarrantyDays = Convert.ToInt32(frm["WarrantyDays"].ToString());
-                product.Category = frm["Category"].ToString();
-
-                int result = product.AddProduct();
-                if (result > 0)
-                {
-                    ViewBag.OperationResult = "Saved Successfully";
-                }
-            }
-            return View();
-        }
+        //[HttpPost]
+        //public ActionResult Dashboard(Product product)
+        //{
+         
+        //}
 
         [HttpPost]
         public ActionResult AddToCart(int productId)

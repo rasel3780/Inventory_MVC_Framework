@@ -4,6 +4,27 @@
 @{
     ViewBag.Title = "Dashboard";
 }
+
+<script>
+    
+    $(window).on('beforeunload', function () {
+        Swal.fire({
+            title: 'Loading Dashboard...',
+            text: 'Please wait while the dashboard loads',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    });
+
+    
+    $(window).on('load', function () {
+        Swal.close();
+    });
+</script>
+
 <style>
     .cart-sidebar {
         position: fixed;
@@ -51,7 +72,6 @@
 
 
 
-
 <!-- Cart Sidebar -->
 <div id="cart-sidebar" class="cart-sidebar">
     <div class="cart-sidebar-header">
@@ -63,12 +83,85 @@
     </div>
 </div>
 
-
+<!--Report Card for dashboard-->
 @Html.Partial("~/Views/Home/_PartialCard.cshtml")
 
-<input type="submit" name="btnAddNew" id="btnAddNew"
-       class="btn btn-primary btn-block mb-3" onclick="return showProductEntryPanel()" value="Add New Product" />
-@Html.Partial("~/Views/Home/_PartialProductEntryPanel.cshtml")
+
+<button id="addNewProductButton" class="btn btn-primary">Add New Product</button>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+
+
+
+        $('#addNewProductButton').on('click', function () {
+            Swal.fire({
+                title: 'Loading......',
+                text: 'Please wait while the form loads',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/Home/AddProduct',
+                type: 'GET',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Add New Product',
+                        html: response,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        width: '600px'
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('submit', '#productEntryForm', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Home/AddProduct',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Added',
+                            text: 'Product added successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.'
+                        });
+                    }
+                }
+            });
+        });
+
+
+        $(document).on('click', '#cancelProductEntry', function () {
+            Swal.close();
+        });
+    });
+
+</script>
+
+
+
+
 <div class="card mb-4">
     <div class="card-header">
         <h3 class="card-title">Products table</h3>

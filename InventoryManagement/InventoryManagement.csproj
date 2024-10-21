@@ -461,6 +461,8 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Home\_PartialCard.cshtml" />
     <Content Include="Views\Home\Invoice.cshtml" />
+    <Content Include="Views\Home\_PartialSideNav.cshtml" />
+    <Content Include="Views\Home\_PartialTopNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

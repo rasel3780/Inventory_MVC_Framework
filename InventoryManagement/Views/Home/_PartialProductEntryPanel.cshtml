@@ -1,48 +1,65 @@
-﻿<script>
-    $(document).ready(function () {
-        $("#datepicker").datepicker();
-    });
-</script>
-<div id="showProductEntryPanel" style="display:none;">
-    @using (Html.BeginForm("Dashboard", "Home"))
-    {
-        <div class="form-group">
-            <label for="serialNumber">Serial Number:</label>
-            <input type="text" class="form-control" id="serialNumber" name="SerialNumber" required>
-        </div>
-        <div class="form-group">
-            <label for="productName">Product Name:</label>
-            <input type="text" class="form-control" id="productName" name="Name" required>
-        </div>
-        <div class="form-group">
-            <label for="quantity">Quantity:</label>
-            <input type="number" class="form-control" id="quantity" name="Quantity" required>
-        </div>
-        <div class="form-group">
-            <label for="entryDate">Entry Date:</label>
-            <input type="text" class="form-control" id="datepicker" name="EntryDate" required>
-        </div>
-        <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" step="0.01" class="form-control" id="price" name="Price" required>
-        </div>
-        <div class="form-group">
-            <label for="warrantyDays">Warranty Days:</label>
-            <input type="number" class="form-control" id="warrantyDays" name="WarrantyDays" required>
-        </div>
-        <div class="form-group">
-            <label for="category">Category:</label>
-            <input type="text" class="form-control" id="category" name="Category" required>
-        </div>
-        <div class="form-group">
-            <label for="vendorID">Vendor:</label>
-            <input type="text" class="form-control" id="vendorID" name="VendorID" required>
+﻿<div class="modal-body">
+    <form id="productEntryForm">
+        <div class="row mb-3">
+            <label for="serialNumber" class="col-sm-4 col-form-label">Serial Number</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="serialNumber" name="SerialNumber" required>
+            </div>
         </div>
 
-        <div class="row">
-            <input type="submit" name="btnSubmit" id="btnPartialSave" value="Save Product" />
+        <div class="row mb-3">
+            <label for="name" class="col-sm-4 col-form-label">Product Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" name="Name" required>
+            </div>
         </div>
 
-    }
+        <div class="row mb-3">
+            <label for="quantity" class="col-sm-4 col-form-label">Quantity</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="quantity" name="Quantity" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="entryDate" class="col-sm-4 col-form-label">Entry Date</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" id="entryDate" name="EntryDate" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="price" class="col-sm-4 col-form-label">Price</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="price" name="Price" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="warrantyDays" class="col-sm-4 col-form-label">Warranty (Days)</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="warrantyDays" name="WarrantyDays" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="category" class="col-sm-4 col-form-label">Category</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="category" name="Category" required>
+            </div>
+        </div>
+
+
+        <div class="row mb-3">
+            <label for="vendorID" class="col-sm-4 col-form-label">Vendor ID</label>
+            <div class="col-sm-8">
+                <input type="number" class="form-control" id="vendorID" name="VendorID" required>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success m-1">Ok</button>
+            <button type="button" class="btn btn-secondary m-1" id="cancelProductEntry">Cancel</button>
+        </div>
+    </form>
 </div>
-

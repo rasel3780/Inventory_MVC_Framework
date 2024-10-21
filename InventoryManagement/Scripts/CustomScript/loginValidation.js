@@ -30,6 +30,13 @@
         }
         return isValid;
     }
+    $('#userName').on('input', function () {
+        $('#usernameError').html(''); 
+    });
+
+    $('#password').on('input', function () {
+        $('#passwordError').html(''); 
+    });
 
     $('#loginForm').on('submit', function (e) {
         e.preventDefault();
@@ -58,12 +65,13 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Login Successful',
-                        text: 'Redirecting to dashboard...',
+                        text: 'Please wait, Redirecting to dashboard...',
                         showConfirmButton: false,
-                        timer: 2500
-                    }).then(function () {
-                        window.location.href = response.redirectUrl;
-                    });
+                        allowOutsideClick: false
+                    })
+
+                    window.location.href = response.redirectUrl;
+                    
                 } else {
                     Swal.fire({
                         icon: 'error',
