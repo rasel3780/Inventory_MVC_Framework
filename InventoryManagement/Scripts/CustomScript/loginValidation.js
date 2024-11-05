@@ -65,9 +65,14 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Login Successful',
-                        text: 'Please wait, Redirecting to dashboard...',
+                        text: 'Please wait, redirecting to dashboard...',
+                        
                         showConfirmButton: false,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                     
                     })
 
                     window.location.href = response.redirectUrl;

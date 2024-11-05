@@ -51,6 +51,7 @@ namespace InventoryManagement.Controllers
         {
             Log.Information("Logout");
             Session["User"] = null;
+
             return RedirectToAction("Login", "Account");
         }
     }

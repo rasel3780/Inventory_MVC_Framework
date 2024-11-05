@@ -25,75 +25,21 @@
     });
 </script>
 
-<style>
-    .cart-sidebar {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 300px;
-        max-height: calc(100vh - 60px);
-        background-color: white;
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-        transition: right 0.3s;
-        z-index: 1000;
-        padding: 15px;
-        overflow-y: auto;
-    }
-
-        .cart-sidebar.open {
-            right: 0;
-        }
-
-    .cart-sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-</style>
 
 
+<link href="~/Content/Style/cartStyle.css" rel="stylesheet"/>
 <script src="~/Scripts/CustomScript/productService.js"></script>
 <script src="~/Scripts/CustomScript/productController.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $('#cart-icon').click(function () {
-            $('#cart-sidebar').addClass('open');
-            var currentCart = getCart();
-            console.log("Current cart when opening sidebar: ", currentCart);
-
-            updateCartView(currentCart);
-        });
-        $('#close-cart-sidebar').click(function () {
-            $('#cart-sidebar').removeClass('open');
-        });
-    });
-</script>
-
-
-
-<!-- Cart Sidebar -->
-<div id="cart-sidebar" class="cart-sidebar">
-    <div class="cart-sidebar-header">
-        <h5>Shopping Cart</h5>
-        <button type="button" id="close-cart-sidebar" class="btn btn-secondary">Close</button>
-    </div>
-    <div id="cart-items">
-        <p>Your cart is empty.</p>
-    </div>
-</div>
 
 <!--Report Card for dashboard-->
 @Html.Partial("~/Views/Home/_PartialCard.cshtml")
 
 
-<button id="addNewProductButton" class="btn btn-primary">Add New Product</button>
+<button id="addNewProductButton" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"></i>&nbsp;Add New Product</button>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
-
-
-
         $('#addNewProductButton').on('click', function () {
             Swal.fire({
                 title: 'Loading......',
@@ -155,6 +101,8 @@
         $(document).on('click', '#cancelProductEntry', function () {
             Swal.close();
         });
+
+        
     });
 
 </script>
@@ -162,7 +110,7 @@
 
 
 <!--Product Table-->
-<div class="card mb-4">
+<div class="card mb-4" id="productCard">
     <div class="card-header">
         <h3 class="card-title">Products table</h3>
     </div>
@@ -172,24 +120,25 @@
             <input type="hidden" id="productId" name="productId" value="" />
             <input type="hidden" id="btnSubmit" name="btnSubmit" value="" />
 
+            <div class="table-responsive">
 
-            <table id="productTable" class="table table-bordered table-striped border">
-                <thead>
-                    <tr>
-                        <th>ProductID</th>
-                        <th>SerialNumber</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Entry Date</th>
-                        <th>Price</th>
-                        <th>Warranty Days</th>
-                        <th>Category</th>
-                        <th>Vendor</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-            </table>
-
+                <table id="productTable" class="table table-bordered table-striped border">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">ID</th> 
+                            <th style="width: 10%;">S/N</th> 
+                            <th style="width: 25%;">Name</th> 
+                            <th style="width: 7%;">Quantity</th> 
+                            <th style="width: 15%;">Entry Date</th> 
+                            <th style="width: 10%;">Price</th> 
+                            <th style="width: 8%;">Warranty</th> 
+                            <th style="width: 10%;">Category</th> 
+                            <th style="width: 10%;">Vendor</th> 
+                            <th style="width: 10%;">Add to Cart</th> 
+                        </tr>
+                    </thead>
+                </table>
+            </div>
 
         </form>
     </div>

@@ -1,73 +1,45 @@
-﻿function updateCartView(cart) {
-    console.log("updateCartView: ", cart);
-    var $cartItems = $('#cart-items');
-    $cartItems.empty();
+﻿$(document).ready(function () {
+   
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let adjustedQuantities = JSON.parse(localStorage.getItem('adjustedQuantities')) || {};
 
-    if (cart.length === 0) {
-        $cartItems.append('<p>Your cart is empty.</p>');
-        $('#cart-count').text(0);
-        return;
-    }
+    const saveAdjustedQuantitiesToLocalStorage = () => {
+        localStorage.setItem('adjustedQuantities', JSON.stringify(adjustedQuantities));
+    };
 
-    var cartItems = '';
-    var totalQuantity = 0;
-    $.each(cart, function (index, item) {
-        totalQuantity += item.Quantity;
-        cartItems += `
-        <div class="cart-item" data-id="${item.ProductID}">
-            <p>Name: ${item.Name}</p>
-            <p>Price: ${item.Price}</p>
-            <p>Quantity: ${item.Quantity}</p>
-            <button class="btn btn-danger removeFromCartBtn" data-id="${item.ProductID}">Remove</button>
-            <button class="btn btn-secondary incrementQtyBtn" data-id="${item.ProductID}">+</button>
-            <button class="btn btn-secondary decrementQtyBtn" data-id="${item.ProductID}">-</button>
-        </div>
-    `;
-    });
-
-    $cartItems.html(cartItems);
-    $('#cart-count').text(totalQuantity);
-}
-
-function getCart() {
-    var cartString = localStorage.getItem('cart');
-    console.log("getCart raw: ", cartString);
-    var cart = cartString ? JSON.parse(cartString) : [];
-    console.log("getCart parsed: ", cart);
-    return cart;
-}
+    const showNotification = (message, type = 'success') => {
+        Swal.fire({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 1500,
+            icon: type,
+            title: message
+        });
+    };
 
 
+    const restoreQuantitiesInDataTable = () => {
+        $('#productTable').DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+            const row = this.data();
+            const productId = row.ProductID;
 
-$(document).ready(function () {
-    loadDataTable();
-    updateCartView(getCart());
-    updateProductTableQuantitiesFromLocalStorage();
+            if (adjustedQuantities[productId] !== undefined) {
+                row.Quantity = adjustedQuantities[productId];
+            }
+        }).invalidate().draw(false);
+    };
 
-    $('#productTable').on('click', '.addToCartBtn', function () {
-        var productId = $(this).data('id');
-        console.log("Add to cart clicked for product ID:", productId);
-        addToCart(productId);
-    });
+    const updateCartBadge = () => {
+        const totalItemCount = cart.reduce((total, item) => total + item.Quantity, 0);
+        $("#cartBadge").text(totalItemCount);
+    };
 
-    $('#cart-items').on('click', '.removeFromCartBtn', function () {
-        var productId = $(this).data('id');
-        console.log("Remove from cart clicked for product ID:", productId);
-        removeFromCart(productId);
-    });
+    const saveCartToLocalStorage = () => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    };
 
-    $('#cart-items').on('click', '.incrementQtyBtn', function () {
-        var productId = $(this).data('id');
-        addToCart(productId);
-    });
-
-    $('#cart-items').on('click', '.decrementQtyBtn', function () {
-        var productId = $(this).data('id');
-        console.log("Decrement quantity clicked for product ID:", productId);
-        updateCartQuantity(productId, -1);
-    });
-
-    function loadDataTable() {
+    const loadDataTable = () => {
         $('#productTable').DataTable({
             "ajax": {
                 "url": '/Home/LstProduct',
@@ -86,205 +58,259 @@ $(document).ready(function () {
                 {
                     "data": 'ProductID',
                     "orderable": false,
-                    "render": function (data) {
+                    "render": function (data, type, row) {
+                        const isOutOfStock = row.Quantity <= 0;
                         return `
                             <div class="w-75 btn-group" role="group">
-                                <button type="button" class="btn btn-primary mx-2 addToCartBtn" data-id="${data}">Add to Cart</button>
+                                <button type="button" class="btn ${isOutOfStock ? 'btn-danger' : 'btn-primary'} mx-2 addToCartBtn" data-id="${data}" ${isOutOfStock ? 'disabled' : ''}>
+                                    ${isOutOfStock ? 'Out of Stock' : 'add to cart'}
+                                </button>
                             </div>
                         `;
                     }
                 }
             ],
-            "initComplete": function (settings, json) {
-                // Update product table quantities after table initialization
-                updateProductTableQuantitiesFromLocalStorage();
-            }
+            
+        }).on('xhr.dt', function () {
+            restoreQuantitiesInDataTable();
         });
-    }
+    };
 
-    function updateProductTableQuantity(productId, change) {
-        var table = $('#productTable').DataTable();
-        var row = table.row(function (idx, data, node) {
-            return data.ProductID === productId;
-        });
+    loadDataTable();
 
-        if (row.length) {
-            var data = row.data();
-            var newQuantity = data.Quantity - change;
+    const updateCartSidebar = () => {
 
-            if (newQuantity < 0) {
-                newQuantity = 0;
-            }
+        let totalAmount = cart.reduce((sum, item) => sum + (item.Quantity * item.Price), 0).toFixed(2);
+        let cartHtml = cart.map(item => `
+        <div class="cart-item row mb-3 border-bottom pb-2" style="background-color:#ffffff">
+            <div class="col-8">
+                <!-- First Column -->
+                <div class="row">
+                    <div class="col-12">
+                        <strong>${item.Name}</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        ${item.Quantity} x $${item.Price.toFixed(2)}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        Total: ${(item.Quantity * item.Price).toFixed(2)} BDT
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center align-items-center">
+                <!-- Second Column -->
+                <div class="d-flex mb-2 align-items-center">
+                    <button class="btn btn-sm btn-secondary increaseQty" data-id="${item.ProductID}">+</button>
+                    <input type="number" min="1" class="quantityInput mx-1" data-id="${item.ProductID}" value="${item.Quantity}" style="width: 50px; text-align: center;">
+                    <button class="btn btn-sm btn-secondary decreaseQty" data-id="${item.ProductID}">-</button>
+                </div>
+                <button class="btn btn-outline-danger btn-sm removeFromCart mt-2" data-id="${item.ProductID}"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+        `).join('');
 
-            data.Quantity = newQuantity;
-            table.row(row.index()).data(data);
-            table.draw(false);
+        let footerHtml = `
+            <h5 class="d-flex justify-content-between">
+                <span>Total Amount:</span>
+                <span>${totalAmount} BDT</span>
+            </h5>
+            ${cart.length > 0 ? `
+            <div class="d-flex justify-content-between mt-3">
+                <button id="clearCart" class="btn btn-danger btn-sm">Clear Cart</button>
+                <button id="checkoutBtn" class="btn btn-success btn-sm">Checkout</button>
+            </div>` : ''}
+        `;
 
-            saveProductQuantitiesToLocalStorage();
-        }
-    }
+        $('#cartSidebar .cartContent').html(cartHtml);
+        $('#cartSidebar .cartFooter').html(footerHtml);
+    };
 
-    function updateProductTableQuantitiesFromLocalStorage() {
-        var quantities = getProductQuantitiesFromLocalStorage();
-        var table = $('#productTable').DataTable();
-
-        table.rows().every(function (rowIdx, tableLoop, rowLoop) {
-            var data = this.data();
-            if (quantities[data.ProductID] !== undefined) {
-                data.Quantity = quantities[data.ProductID];
-                this.data(data);
-            }
-        });
-
-        table.draw(false);
-    }
-
-    function saveProductQuantitiesToLocalStorage() {
-        var table = $('#productTable').DataTable();
-        var quantities = {};
-
-        table.rows().every(function (rowIdx, tableLoop, rowLoop) {
-            var data = this.data();
-            quantities[data.ProductID] = data.Quantity;
-        });
-
-        localStorage.setItem('productQuantities', JSON.stringify(quantities));
-    }
-
-    function getProductQuantitiesFromLocalStorage() {
-        var quantities = localStorage.getItem('productQuantities');
-        return quantities ? JSON.parse(quantities) : {};
-    }
-
-    function addToCart(productId) {
-        console.log("Adding to cart: ", productId);
-        var cart = getCart();
-        console.log("Current cart: ", cart);
-        var existingItem = cart.find(item => item.ProductID === productId);
-
-        var table = $('#productTable').DataTable();
-        var row = table.row(function (idx, data, node) {
-            return data.ProductID === productId;
-        });
-
-        if (row.length) {
-            var data = row.data();
-            if (data.Quantity > 0) {
-                if (existingItem) {
-                    existingItem.Quantity++;
-                    updateProductTableQuantity(productId, 1);
-                } else {
-                    productService.getProductById(productId, function (product) {
-                        if (product) {
-                            cart.push({
-                                ProductID: productId,
-                                SerialNumber: product.SerialNumber,
-                                Name: product.Name,
-                                WarrantyDays: product.WarrantyDays,
-                                Quantity: 1,
-                                Price: product.Price,
-                                VendorName: product.VendorName
-                            });
-                            updateProductTableQuantity(productId, 1);
-                        } else {
-                            showErrorAlert('Product not found.');
-                        }
-                    });
-                }
-                saveCart(cart);
-                console.log("Cart immediately after saving: ", getCart());
-
-                updateCartView(cart);
-                console.log("Updated cart: ", getCart());
-                showSuccessAlert('Product added to cart.');
-            } else {
-                showOutOfStockAlert(productId);
-            }
-        }
-    }
-
-    function removeFromCart(productId) {
-        var cart = getCart();
-        var item = cart.find(item => item.ProductID === productId);
-
-        if (item) {
-            updateProductTableQuantity(productId, -item.Quantity);
-            cart = cart.filter(item => item.ProductID !== productId);
-            saveCart(cart);
-            updateCartView(cart);
-        }
-    }
-
-    function updateCartQuantity(productId, change) {
-        var cart = getCart();
-        var existingItem = cart.find(item => item.ProductID === productId);
-
-        if (existingItem) {
-            var newQuantity = existingItem.Quantity + change;
-            var table = $('#productTable').DataTable();
-            var row = table.row(function (idx, data, node) {
-                return data.ProductID === productId;
-            });
-
-            if (row.length) {
-                var data = row.data();
-                var availableStock = data.Quantity + existingItem.Quantity;
-
-                if (change > 0 && newQuantity <= availableStock) {
-                    existingItem.Quantity = newQuantity;
-                    updateProductTableQuantity(productId, change);
-                } else if (change < 0) {
-                    if (newQuantity > 0) {
-                        existingItem.Quantity = newQuantity;
-                        updateProductTableQuantity(productId, change);
+    $(document).on('click', '#clearCart', function () {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to clear all items from your cart!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, clear it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cart.forEach(item => {
+                    if (adjustedQuantities[item.ProductID] !== undefined) {
+                        adjustedQuantities[item.ProductID] += item.Quantity;
                     } else {
-                        updateProductTableQuantity(productId, existingItem.Quantity);
-                        cart = cart.filter(item => item.ProductID !== productId);
+                        adjustedQuantities[item.ProductID] = item.Quantity;
                     }
-                }
+                });
 
-                saveCart(cart);
-                updateCartView(cart);
-            }
-        }
-    }
+                cart = []; 
+                saveCartToLocalStorage(); 
+                saveAdjustedQuantitiesToLocalStorage(); 
+                updateCartSidebar();
+                updateCartBadge(); 
+                restoreQuantitiesInDataTable(); 
 
-  
-    function saveCart(cart) {
-        console.log("saveCart: ", cart);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        console.log("Cart after saving: ", localStorage.getItem('cart'));
-    }
-
-    
-
-    $(document).on('click', '#proceed-to-checkout', function () {
-        productService.proceedToCheckout(getCart(), function (success, response) {
-            if (success) {
-                localStorage.removeItem('cart');
-                window.location.href = '/Home/Invoice';
-            } else {
-                showErrorAlert(response.message);
+                Swal.fire('Cleared!', 'Your cart has been cleared.', 'success');
             }
         });
     });
 
+    $(document).on('click', '.increaseQty', function () {
+        const productId = $(this).data('id');
+        let cartItem = cart.find(item => item.ProductID === productId);
+        if (cartItem) {
+            if (adjustedQuantities[productId] > 0) {
+                cartItem.Quantity += 1;
+                adjustedQuantities[productId] -= 1;
+                saveAdjustedQuantitiesToLocalStorage();
+                saveCartToLocalStorage();
+                updateCartSidebar();
+                restoreQuantitiesInDataTable();
+                showNotification('Item added to cart!', 'success');
+                updateCartBadge();
+            } else {
+                Swal.fire('Error', 'No more stock available for this product.', 'error');
+            }
+        }
+    });
 
-    function showOutOfStockAlert(productId) {
-        Swal.fire('Out of Stock', 'Product with ID ' + productId + ' is out of stock.', 'warning');
-    }
+    $(document).on('click', '.decreaseQty', function () {
+        const productId = $(this).data('id');
+        let cartItem = cart.find(item => item.ProductID === productId);
+        if (cartItem && cartItem.Quantity > 1) {
+            cartItem.Quantity -= 1;
+            adjustedQuantities[productId] += 1;
+            saveAdjustedQuantitiesToLocalStorage();
+            saveCartToLocalStorage();
+            updateCartSidebar();
+            restoreQuantitiesInDataTable();
+            showNotification('Item removed from cart!', 'info');
+            updateCartBadge();
+        }
+    });
 
-    function showSuccessAlert(message) {
+    $(document).on('change', '.quantityInput', function () {
+        const productId = $(this).data('id');
+        const newQuantity = parseInt($(this).val());
+        let cartItem = cart.find(item => item.ProductID === productId);
+
+        if (cartItem && newQuantity > 0) {
+            const difference = newQuantity - cartItem.Quantity;
+            if (difference > 0 && adjustedQuantities[productId] >= difference) {
+                cartItem.Quantity = newQuantity;
+                adjustedQuantities[productId] -= difference;
+            } else if (difference < 0) {
+                adjustedQuantities[productId] += Math.abs(difference);
+                cartItem.Quantity = newQuantity;
+            }
+            saveAdjustedQuantitiesToLocalStorage();
+            saveCartToLocalStorage();
+            updateCartSidebar();
+            restoreQuantitiesInDataTable();
+            showNotification('Cart updated!', 'info');
+        } else {
+            Swal.fire('Error', 'Invalid quantity value.', 'error');
+        }
+    });
+
+    $(document).on('click', '.removeFromCart', function () {
+
         Swal.fire({
-            title: 'Success!',
-            text: message,
-            icon: 'success',
-            timer: 1000, 
-            showConfirmButton: false 
-        });
-    }
+            title: 'Are you sure?',
+            text: "You are sure you want to remove the items from your cart!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, clear it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
 
-    function showErrorAlert(message) {
-        Swal.fire('Error!', message, 'error');
+
+                const productId = $(this).data('id');
+                let cartItem = cart.find(item => item.ProductID === productId);
+
+
+                if (cartItem) {
+                    adjustedQuantities[productId] += cartItem.Quantity;
+                    cart = cart.filter(item => item.ProductID !== productId);
+                    saveCartToLocalStorage();
+                    saveAdjustedQuantitiesToLocalStorage();
+                    updateCartSidebar();
+                    updateCartBadge();
+                    restoreQuantitiesInDataTable();
+                    showNotification('Item removed from the cart!', 'info');
+                }
+            }
+
+         });
+    });
+
+    $(document).on('click', '.addToCartBtn', function () {
+        const productId = $(this).data('id');
+        const table = $('#productTable').DataTable();
+        const productData = table.row($(this).closest('tr')).data();
+
+        if (adjustedQuantities[productId] === undefined) {
+            adjustedQuantities[productId] = productData.Quantity;
+        }
+
+        if (adjustedQuantities[productId] > 0) {
+            let existingCartItem = cart.find(item => item.ProductID === productId);
+
+            if (existingCartItem) {
+                existingCartItem.Quantity += 1;
+            } else {
+                cart.push({
+                    ProductID: productId,
+                    Name: productData.Name,
+                    Price: productData.Price,
+                    Quantity: 1
+                });
+            }
+
+            adjustedQuantities[productId] -= 1;
+            saveAdjustedQuantitiesToLocalStorage();
+            saveCartToLocalStorage();
+            updateCartBadge();
+            updateCartSidebar();
+            restoreQuantitiesInDataTable();
+            showNotification('Item added to cart!', 'success');
+        } else {
+            Swal.fire('Error', 'This product is out of stock.', 'error');
+        }
+    });
+
+
+
+    let isCartOpen = false;
+
+    const toggleCart = () => {
+        isCartOpen = !isCartOpen;
+        $(".cartSidebar").toggleClass("active");
+        $(".main-content").toggleClass("with-cart");
+        localStorage.setItem('cartOpen', isCartOpen);
     }
+    const savedCartState = localStorage.getItem('cartOpen');
+    if (savedCartState === 'true') {
+        toggleCart();
+        updateCartSidebar();
+    }
+    $("#btnCartIcon").click(function (e) {
+        e.preventDefault();
+        toggleCart();
+        updateCartSidebar();
+    });
+
+    $("#btnCloseCartSidebar").click(function () {
+        toggleCart();
+
+    });
+
+    updateCartBadge();
+
+   
 });

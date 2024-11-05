@@ -10,8 +10,6 @@
 
     @Scripts.Render("~/bundles/modernizr")
 
-
-
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -33,14 +31,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.all.min.js"></script>
 
-
-
-
     <!--Data table-->
     <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
 
     <!-- Tempus Dominus CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
@@ -57,18 +51,29 @@
     <!--top nav-bar-->
     @Html.Partial("~/Views/Home/_PartialTopNav.cshtml")
 
-    <!-- side nav bar -->
-    @Html.Partial("~/Views/Home/_PartialSideNav.cshtml")
-   
-  
-    <!--Body Content-->
+    <!--Cart-->
+    <div id="cartSidebar" class="cartSidebar">
+        <div class="cartHeader d-flex justify-content-between align-items-center">
+            <button id="btnCloseCartSidebar" class="btn btn-danger btn-sm">Close</button>
+        </div>
+        <div class="cartContent p-3">
+            <!-- Cart items -->
+        </div>
+        <div class="cartFooter">
+            <!-- Total and buttons -->
+        </div>
+    </div>
 
-    <div class="content">
+    <!-- side nav bar -->
+    @Html.Partial("~/Views/Home/_PartialLeftSideNav.cshtml")
+
+
+    <!--Body Content-->
+    <div class="main-content">
         <div class="container body-content">
 
             @RenderBody()
             <hr />
-
         </div>
 
         <!--Footer-->
@@ -87,49 +92,30 @@
     <script>
         $(document).ready(function () {
             let isCollapsed = false;
-
-            function toggleSidebar() {
+            
+            const toggleLeftSidebar =()=> {
                 isCollapsed = !isCollapsed;
-                $(".sidebar").toggleClass("collapsed");
-                $(".content").toggleClass("expanded");
-                $("#sidebarToggle").toggleClass("active");
-                adjustContent();
+                $(".leftSideNavBar").toggleClass("collapsed");
+                $(".main-content").toggleClass("expanded");
+                $("#btnLeftSidebarToggle").toggleClass("active");
+                localStorage.setItem('leftSidebarCollapsed', isCollapsed);
             }
 
-            function adjustContent() {
-                if (isCollapsed) {
-                    $(".content").css("margin-left", "60px");
-                } else {
-                    $(".content").css("margin-left", "250px");
-                }
+            const savedSidebarState = localStorage.getItem('leftSidebarCollapsed');
+            if (savedSidebarState === 'true') {
+                toggleLeftSidebar();
             }
 
-            $("#sidebarToggle").click(function (e) {
+            $("#btnLeftSidebarToggle").click(function (e) {
                 e.preventDefault();
-                toggleSidebar();
+                toggleLeftSidebar();
             });
 
-            $(".sidebar").hover(
-                function () {
-                    if (isCollapsed) {
-                        $(this).css("width", "250px");
-                        $(".sidebar .nav-link span").show();
-                        $(".content").css("margin-left", "250px");
-                    }
-                },
-                function () {
-                    if (isCollapsed) {
-                        $(this).css("width", "60px");
-                        $(".sidebar .nav-link span").hide();
-                        $(".content").css("margin-left", "60px");
-                    }
-                }
-            );
         });
+
     </script>
 
     <!--End of Body Content-->
-
     <!-- DataTables  & Plugins -->
     <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
