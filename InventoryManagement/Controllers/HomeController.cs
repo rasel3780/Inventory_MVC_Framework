@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows.Forms;
 
 namespace InventoryManagement.Controllers
 {
@@ -60,11 +61,7 @@ namespace InventoryManagement.Controllers
             }
         }
 
-        //[HttpPost]
-        //public ActionResult Dashboard(Product product)
-        //{
-         
-        //}
+
 
         [HttpPost]
         public ActionResult AddToCart(int productId)
@@ -113,8 +110,7 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         public ActionResult ProceedToCheckout(List<CartItem> cart)
         {
-            // Process the cart and create an invoice
-            // For simplicity, just return a success response
+
             return Json(new { success = true, message = "Checkout successful!" });
         }
 
@@ -160,21 +156,12 @@ namespace InventoryManagement.Controllers
         [HttpGet]
         public ActionResult Invoice()
         {
-            var cartItems = Session["Cart"] as List<CartItem>;
-            if (cartItems == null)
+            if (Session["User"] == null)
             {
-                cartItems = new List<CartItem>();
+                return RedirectToAction("Login", "Account");
             }
-
             List<Customer> customerList = Customer.GetCustomerList().ToList();
-
-            var model = new InvoiceModel
-            {
-                CartItems = cartItems,
-                Customers = customerList
-            };
-
-            return View(model);
+            return View(); 
         }
 
         [HttpPost]
@@ -189,40 +176,54 @@ namespace InventoryManagement.Controllers
                     RegistrationDate = DateTime.Now
                 };
 
-                int result = newCustomer.AddCustomer();
+                string message;
+                int result = newCustomer.AddCustomer(out message);
 
-                if (result > 0)
+
+                if (result ==1 )
                 {
-                    return Json(new { success = true });
+                    return Json(new { success = true, message = "Customer added successfully!" });
+                }
+                else if (result == -1)
+                {
+                    return Json(new { success = false, message = message });
                 }
                 else
                 {
-                    return Json(new { success = false });
+                    return Json(new { success = false, message = "An unexpected error occurred." });
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "An error occurred while adding a new customer.");
-                return Json(new { success = false, message = ex.Message });
+                return Json(new { success = false, message = "An error occurred. Please try again." });
             }
         }
 
         [HttpPost]
-        public ActionResult ConfirmOrder(int customerId, List<CartItem> cartItems)
+        public JsonResult ConfirmOrder(int customerId, List<CartItem> cartItems)
         {
-            Employee employee = new Employee();
-            string user = Session["User"].ToString();
-            int userId = employee.GetEmployeeByUserName(user);
+            try
+            {
+                Employee employee = new Employee();
+                string user = Session["User"].ToString();
+                int userId = employee.GetEmployeeByUserName(user);
 
-            var success = Order.ConfirmOrder(customerId, cartItems, userId);
-            if (success)
-            {
-                Session["Cart"] = null;
-                return Json(new { success = true });
+                bool isOrderConfirmed = Order.ConfirmOrder(customerId, cartItems, userId);
+                if (isOrderConfirmed)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to place the order. Please try again." });
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return Json(new { success = false, message = "Failed to confirm order." });
+                Log.Information("Order placed fail"+ex.Message);
+                return Json(new { success = false, message = "An error occurred while processing the order." });
+
             }
         }
 

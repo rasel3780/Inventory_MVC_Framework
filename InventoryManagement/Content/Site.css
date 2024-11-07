@@ -301,9 +301,8 @@ footer {
 /* Add new product button */
 #addNewProductButton{
     background:darkblue !important;
+    margin-top:10px;
 }
-
-
 
 /* SweetAlert */
 /* Custom CSS for SweetAlert notifications */

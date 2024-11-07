@@ -22,27 +22,43 @@ namespace InventoryManagement.Models
         [DataMember]
         public DateTime RegistrationDate { get; set; }
 
-        public int AddCustomer()
+        public int AddCustomer(out string message)
         {
             string conString = DbConnection.GetConnectionString();
             SqlConnection _connection = new SqlConnection(conString);
-            _connection.Open();
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = "dbo.InsertCustomer";
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
-            cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
-            cmd.Parameters.Add(new SqlParameter("@RegistrationDate", this.RegistrationDate));
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 0;
+            try
+            {
+                _connection.Open();
 
-            int result = cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            _connection.Close();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+                cmd.CommandText = "dbo.InsertCustomer";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
+                cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
+                cmd.Parameters.Add(new SqlParameter("@RegistrationDate", this.RegistrationDate));
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
 
-            return result;
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int result = reader.GetInt32(0);
+                    message = reader.GetString(1);
+
+                    return result;
+                }
+                cmd.Dispose();
+                _connection.Close();
+            }
+            catch(Exception ex)
+            {
+                message = "An error occurred" + ex.Message;
+                return -1;
+            }
+            message = "Unknown error occurred.";
+            return -1;
         }
 
         public static List<Customer> GetCustomerList()

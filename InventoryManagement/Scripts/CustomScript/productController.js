@@ -46,7 +46,7 @@
                 "dataSrc": ''
             },
             "columns": [
-                { "data": 'ProductID' },
+                
                 { "data": 'SerialNumber' },
                 { "data": 'Name' },
                 { "data": 'Quantity' },
@@ -121,13 +121,17 @@
             ${cart.length > 0 ? `
             <div class="d-flex justify-content-between mt-3">
                 <button id="clearCart" class="btn btn-danger btn-sm">Clear Cart</button>
-                <button id="checkoutBtn" class="btn btn-success btn-sm">Checkout</button>
+                <button id="checkoutBtn" class="btn btn-success btn-sm" >Checkout</button>
             </div>` : ''}
         `;
 
         $('#cartSidebar .cartContent').html(cartHtml);
         $('#cartSidebar .cartFooter').html(footerHtml);
     };
+
+    $(document).on('click', '#checkoutBtn', function () {
+        window.location.href = "/Home/Invoice";
+    });
 
     $(document).on('click', '#clearCart', function () {
         Swal.fire({
@@ -266,8 +270,11 @@
             } else {
                 cart.push({
                     ProductID: productId,
+                    SerialNumber: productData.SerialNumber,
                     Name: productData.Name,
                     Price: productData.Price,
+                    Vendor: productData.VendorName,
+                    WarrantyDays : productData.WarrantyDays,
                     Quantity: 1
                 });
             }
