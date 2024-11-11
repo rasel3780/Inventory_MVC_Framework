@@ -7,30 +7,29 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
-
 namespace InventoryManagement.Models
 {
     public class Account
     {
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
 
-     
+       
         public bool VerifyLogin()
         {
-            DataTable dataTable = new DataTable();
-
+           bool status = false;
             try
             {
-                string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+                string conString = DbConnection.GetConnectionString();
 
                 SqlConnection _connection = new SqlConnection(conString);
                 _connection.Open();
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
-                cmd.CommandText = "dbo.spInventory_GetMembers";
+                cmd.CommandText = "dbo.GetEmployee";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("@UserName", this.UserName));
                 cmd.Parameters.Add(new SqlParameter("@Password", this.Password));
@@ -38,39 +37,34 @@ namespace InventoryManagement.Models
                 cmd.CommandTimeout = 0;
 
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+
                 adapter.Fill(dataTable);
+
+                if(dataTable.Rows.Count > 0)
+                {
+                    string userName = dataTable.Rows[0]["UserName"].ToString();
+                    string password = dataTable.Rows[0]["Password"].ToString();
+                    string role = dataTable.Rows[0]["Role"].ToString();
+                    if (this.UserName==userName && this.Password==password)
+                    {
+                        this.Role = role;
+                        Log.Information("User verifed");
+                        status = true;
+                    }
+                }
+                else
+                {
+                    Log.Warning("User verification failed");
+                }
                 cmd.Dispose();
                 _connection.Close();
-
-                if(dataTable.Rows.Count>0)
-                {
-                    //if(dataTable.Rows[0].ToString() == UserName)
-                    //{
-                        Log.Information("Query in database successful");
-                        return true;
-                   // }
-                    //else
-                    //{
-                       // return false;
-                   // }
-                }
-
-                //var pdata = (from p in dataTable.AsEnumerable()
-                //             where p.Field<string>("UserName") == this.UserName && p.Field<string>("Password") == this.Password
-                //             select new
-                //             {
-                //                 UserName = p.Field<string>("UserName")
-                //             }).SingleOrDefault();
-                //if (this.UserName == "Rasel" && this.Password == "123456")
-                //{
-                //    return true;
-                //}   
             }
             catch(Exception ex) 
             {
-                Log.Error(ex.ToString());
+                Log.Error(ex, "An error occurred while verifying the user.");
             }
-            return false;
+            return status;
         }
     }
 }

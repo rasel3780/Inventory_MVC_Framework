@@ -4,74 +4,53 @@
 }
 
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
-    <!--CSS-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    @Styles.Render("~/Content/custom_css")
-    <link href="~/Content/JqueryUI/jquery-ui.min.css" rel="stylesheet" />
-    <!--Script -->
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/custom_script")
-    <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
-
-    <script>
-        var GlobalMsg = '@ViewBag.LoginMsg';
-          $(document).ready(function () {
-              if (GlobalMsg != "") {
-                  $('#spnGlobalPartialMsg').html(GlobalMsg);
-                  $("#dvGlobalPartialMsg").dialog({
-                      resizable: false,
-                      modal: true
-                  });
-              }
-              if (GlobalMsg == "Login Success") {
-                  setTimeout(function () {
-                      window.location.href = '@Url.Action("Dashboard","Home")';
-                  }, 2000);
-              }
-          })
-    </script>
+    <link href="~/Content/Style/LoginStyleSheet.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login-container">
-                    <h2 class="text-center mb-4">Login</h2>
-                    @using (Html.BeginForm("Login", "Account"))
-                    {
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            @*<input type="text" class="form-control" name="txtUsername" placeholder="Enter your username">*@
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", name = "txtUsername", placeholder = "Enter your username" })
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <div class="input-group">
-                                @*<input type="password" class="form-control" name="txtPassword" placeholder="Enter your password">*@
-                                @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control", name = "txtPassword", placeholder = "Enter your password" })
-                                <div class="input-group-append">
-                                    <span class="input-group-text toggle-password" data-target="#password">
-                                        <i class="fas fa-eye"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-primary btn-block" name="btnSubmit" value="Login">Login</button>
-                            <label>Don't have an account? @Html.ActionLink("Create new account", "Registration", "Account")  </label>
-                        </div>
-                    }
+
+    <div class="login-container">
+        <div class="card form-card">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
+            {
+                <div class="card-body p-5">
+                    <h3 class="mb-4 form-title">Login</h3>
+                    <div class="form-outline mb-4">
+                        <label for="userName" class="form-label">Username</label>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "userName", placeholder = "Enter your username", data_val = "true" })
+                        <span class="error-message" id="usernameError"></span>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "form-control", id = "password", placeholder = "Enter your password", data_val = "true" })
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+                    <div class="form-check d-flex align-items-center mb-4">
+                        <input class="form-check-input custom-checkbox" style="border: 1px solid #212529" type="checkbox" id="showPass" />
+                        <label class="form-check-label ms-2" for="showPass">Show password</label>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="form-btn btn-primary" name="btnSubmit" value="Login">Login</button>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
-    @Html.Partial("~/Views/Common/_PartialGlobalMsg.cshtml")
+
+
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/Scripts/CustomScript/loginValidation.js"></script>
+
+
 </body>
 </html>

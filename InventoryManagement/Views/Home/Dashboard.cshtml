@@ -1,176 +1,200 @@
 ﻿@using InventoryManagement.Models;
-
+@using System.Data;
 
 @{
     ViewBag.Title = "Dashboard";
 }
 
 <script>
-    function showEquipmentEntryPanel() {
-        $("#dvPartialEntryPanel").dialog({
-            resizable: false,
-            height: 500,
-            width: 1000,
-            modal: true
+
+    $(window).on('beforeunload', function () {
+        Swal.fire({
+            icon: 'info',
+            title: 'Loading Dashboard...',
+            text: 'Loading.....Please wait.',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
         });
-        return false;  // to prevent post-back
-    }
+    });
+
+
+    $(window).on('load', function () {
+        Swal.close();
+    });
 </script>
-<!--Card-->
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #5592ed">
-            <div class="card-body">
-                <i class="bi bi-person-vcard-fill"></i>
-                <p>Total Employee</p>
-                <h3>10</h3>
-            </div>
-        </div>
+
+
+
+<link href="~/Content/Style/cartStyle.css" rel="stylesheet"/>
+<script src="~/Scripts/CustomScript/productService.js"></script>
+<script src="~/Scripts/CustomScript/productController.js"></script>
+
+
+<!--Report Card for dashboard-->
+@Html.Partial("~/Views/Home/_PartialCard.cshtml")
+
+
+<button id="addNewProductButton" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"></i>&nbsp;Add New Product</button>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $('#addNewProductButton').on('click', function () {
+            Swal.fire({
+                icon: 'info',
+                title: 'Loading......',
+                text: 'Please wait while the form loads',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/Home/AddProduct',
+                type: 'GET',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Add New Product',
+                        html: response,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        width: '600px'
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('submit', '#productEntryForm', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Home/AddProduct',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Added',
+                            text: 'Product added successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.'
+                        });
+                    }
+                }
+            });
+        });
+
+
+        $(document).on('click', '#cancelProductEntry', function () {
+            Swal.close();
+        });
+
+        
+    });
+
+</script>
+
+
+
+<!--Product Table-->
+<div class="card mb-4" id="productCard">
+    <div class="card-header">
+        <h3 class="card-title">Products table</h3>
     </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#3ece9c">
-            <div class="card-body">
-                <i class="bi bi-diagram-3"></i>
-                <p>Categories</p>
-                <h3>30</h3>
-            </div>
-        </div>
-    </div>
+    <div class="card-body">
+        <form id="productForm" action="/Home/Dashboard" method="post">
+            <input type="hidden" id="productId" name="productId" value="" />
+            <input type="hidden" id="btnSubmit" name="btnSubmit" value="" />
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #57f646">
-            <div class="card-body">
-                <i class="bi bi-box-seam"></i>
-                <p>Total Product</p>
-                <h3>1350</h3>
-            </div>
-        </div>
-    </div>
+            <div class="table-responsive">
 
-    <div class="col-md-3">
-        <div class="card" style="background-color: #f84848">
-            <div class="card-body">
-                <i class="bi bi-cart-x"></i>
-                <p>Out of Stock</p>
-                <h3>30</h3>
+                <table id="productTable" class="table table-bordered table-striped border">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">S/N</th> 
+                            <th style="width: 25%;">Name</th> 
+                            <th style="width: 7%;">Quantity</th> 
+                            <th style="width: 15%;">Entry Date</th> 
+                            <th style="width: 10%;">Price</th> 
+                            <th style="width: 8%;">Warranty</th> 
+                            <th style="width: 10%;">Category</th> 
+                            <th style="width: 10%;">Vendor</th> 
+                            <th style="width: 10%;">Add to Cart</th> 
+                        </tr>
+                    </thead>
+                </table>
             </div>
-        </div>
-    </div>
 
+        </form>
+    </div>
 </div>
-
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card" style="background-color: #cb8bf8">
-            <div class="card-body">
-                <i class="bi bi-person-video2"></i>
-                <p>Total Customer</p>
-                <h3>378</h3>
-            </div>
-        </div>
+<!--End of Product table-->
+<!--Order History Table-->
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Sells History Table</h3>
     </div>
 
-    <div class="col-md-3">
-        <div class="card" style="background-color:#f79696">
-            <div class="card-body">
-                <i class="bi bi-calendar3-event"></i>
-                <p>Today's Sale</p>
-                <h3>৳5500</h3>
-            </div>
+    <div class="card-body">
+        <div class="table-responsive">
+                <table id="orderHistoryTable" class="table table-striped table-bordered border">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Customer Mobile</th>
+                            <th>Product S/N</th>
+                            <th>Product Name</th>
+                            <th>Vendor Name</th>
+                            <th>Order Date</th>
+                            <th>Amount</th>
+                            <th>Sold by</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+
+                </table>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card" style="background-color: #e944f5">
-            <div class="card-body">
-                <i class="bi bi-calendar3"></i>
-                <p>Monthly Sales</p>
-                <h3>৳155000</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card" style="background-color: #90c3f3">
-            <div class="card-body">
-                <i class="bi bi-receipt"></i>
-                <p>Yearly Sales</p>
-                <h3>৳125000</h3>
-            </div>
-        </div>
-    </div>
-
 </div>
-@*End of Card*@
+<!--End of Order History Table-->
 
-
-
-
-@*Equipment Table*@
-
-<form action="/Home/Dashboard" method="post">
-   
-    @{
-        List<Equipment> equipmentListData = (List<Equipment>)ViewBag.equipmentDataList;
-
-        <div class="table-top">
-            <span class="table-title">Equipment Table</span>
-            <div class="btn-group mt-2 mt-md-0 ml-md-auto">
-                <input type="submit" class="btn btn-warning" name="btnAddNewEquipment" id="btnAddNewEquipment" onclick="return showEquipmentEntryPanel()" value="Add New Equipment" />
-            </div>
-            <div class="search-container">
-                <input type="text" class="form-control" id="search-input" name="equipmentTxt" placeholder="Search...">
-                <button id="search-btn" value="search" name="btnSubmit">Search</button>
-                <button id="clear-btn" value="clear" name="btnSubmit">Clear</button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Entry Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            @foreach (Equipment obj in equipmentListData)
-                            {
-                                if (ViewBag.equipmentTxt != "")
-                                {
-                                    if (obj.Name == ViewBag.equipmentTxt)
-                                    {
-                                        <tr>
-                                            <td>@obj.Name</td>
-                                            <td>@obj.EqCount</td>
-                                            <td>@obj.EntryDate</td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td>@obj.Name</td>
-                                        <td>@obj.EqCount</td>
-                                        <td>@obj.EntryDate</td>
-                                    </tr>
-                                }
-
-                            }
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-        </div>
-    }
-</form>
-@Html.Partial("~/Views/Home/_PartiaEquipmentEntry.cshtml")
-@*End of Equipment Table*@
+<script>
+    $(document).ready(function () {
+        $('#orderHistoryTable').DataTable({
+            "ajax": {
+                "url": '/Home/GetOrderHistory',
+                "dataSrc": ''
+            },
+            "columns": [
+                { "data": 'OrderID' },
+                { "data": 'CustomerName' },
+                { "data": 'CustomerMobile' },
+                { "data": 'SerialNumber' },
+                { "data": 'ProductName' },
+                { "data": 'VendorName' },
+                { "data": 'OrderDate' },
+                { "data": 'Amount', "render": $.fn.dataTable.render.number(',', '.', 2) },
+                { "data": 'SoldBy' }
+            ]
+        });
+    });
+</script>
