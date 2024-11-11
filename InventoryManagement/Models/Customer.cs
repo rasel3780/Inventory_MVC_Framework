@@ -5,50 +5,73 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using Serilog;
+using System.Runtime.Serialization;
 
 namespace InventoryManagement.Models
 {
+    [Serializable]
     public class Customer
     {
+        [DataMember]
         public int CustomerID { get; set; }
+        [DataMember]
         public string CustomerName { get; set; }
+        [DataMember]
         public string CustomerMobile { get; set; }
+        [DataMember]
+        public DateTime RegistrationDate { get; set; }
 
-
-        public int AddCustomer()
+        public int AddCustomer(out string message)
         {
-            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
-
+            string conString = DbConnection.GetConnectionString();
             SqlConnection _connection = new SqlConnection(conString);
-            _connection.Open();
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_InsertCustomer]";
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
-            cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 0;
+            try
+            {
+                _connection.Open();
 
-            int result = cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            _connection.Close();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+                cmd.CommandText = "dbo.InsertCustomer";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("@CustomerName", this.CustomerName));
+                cmd.Parameters.Add(new SqlParameter("@CustomerMobile", this.CustomerMobile));
+                cmd.Parameters.Add(new SqlParameter("@RegistrationDate", this.RegistrationDate));
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
 
-            return result;
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int result = reader.GetInt32(0);
+                    message = reader.GetString(1);
+
+                    return result;
+                }
+                cmd.Dispose();
+                _connection.Close();
+            }
+            catch(Exception ex)
+            {
+                message = "An error occurred" + ex.Message;
+                return -1;
+            }
+            message = "Unknown error occurred.";
+            return -1;
         }
 
-        public static List<Customer> GetCustomerData()
+        public static List<Customer> GetCustomerList()
         {
             List<Customer> customerList = new List<Customer>();
-            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+            string conString = DbConnection.GetConnectionString();
 
             SqlConnection _connection = new SqlConnection(conString);
             _connection.Open();
 
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_GetCustomers]";
+            cmd.CommandText = "[dbo].[GetCustomerList]";
             cmd.Parameters.Clear();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 0;
@@ -71,53 +94,50 @@ namespace InventoryManagement.Models
             return customerList;
         }
 
-        public static DataTable GetCustomerProductAssignmentData()
+        public static Customer GetCustomerById(int customerId)
         {
- 
-            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
+            Customer customer = new Customer();
+            try
+            {
+                string conString = DbConnection.GetConnectionString();
 
-            SqlConnection _connection = new SqlConnection(conString);
-            _connection.Open();
+                SqlConnection _connection = new SqlConnection(conString);
+                _connection.Open();
 
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_LstCustomerEquiAssignment]";
-            cmd.Parameters.Clear();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 0;
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+                cmd.CommandText = "dbo.GetCustomerById";
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add(new SqlParameter("@@CustomerID", customerId));
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
 
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
 
-            DataTable dataTable = new DataTable();    
-            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            adapter.Fill(dataTable);
+                adapter.Fill(dataTable);
 
+                if (dataTable.Rows.Count > 0)
+                {
+                    customer.CustomerID = Convert.ToInt32(dataTable.Rows[0]["CustomerID"]);
+                    
+                    customer.CustomerName = dataTable.Rows[0]["CustomerName"].ToString();
+                    customer.CustomerMobile = dataTable.Rows[0]["CustomerMobile"].ToString();
 
-            cmd.Dispose();
-            _connection.Close();
-            return dataTable;
+                }
+                else
+                {
+                    Log.Warning("Customer not found");
+                }
+                cmd.Dispose();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred while tried to get the customer.");
+            }
+            return customer;
         }
 
-        public static int SaveAssignment(int CustomerID, int PorductID, int EqQuantity)
-        {
-            string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
-
-            SqlConnection _connection = new SqlConnection(conString);
-            _connection.Open();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _connection;
-            cmd.CommandText = "[dbo].[spInventory_InsEquipmentAssignment]";
-            cmd.Parameters.Clear();
-            cmd.Parameters.Add(new SqlParameter("@CustomerID", CustomerID));
-            cmd.Parameters.Add(new SqlParameter("@EquipmentID", PorductID));
-            cmd.Parameters.Add(new SqlParameter("@EqCount", EqQuantity));
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 0;
-
-            int result = cmd.ExecuteNonQuery();
-            cmd.Dispose();
-            _connection.Close();
-
-            return result;
-        }
     }
 }

@@ -1,0 +1,395 @@
+﻿@using InventoryManagement.Models
+
+
+<!--invoice table-->
+<div class="container my-5" style="border:1px solid #000000">
+    <h2 style="text-align:center">Invoice</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped border">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Warranty (Days)</th>
+                    <th class="quantity-col">Quantity</th>
+                    <th>Price (BDT)</th>
+                    <th>Discount</th>
+                    <th>Vendor</th>
+                    <th>Subtotal (BDT)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="cartItems">
+                <!-- Cart items -->
+            </tbody>
+        </table>
+    </div>
+
+    <div id="invoiceFooter" class="border-top row">
+        <div class="col-6">
+            <p id="selectedCustomer" style="text-align:left; color:darkblue">Customer:</p>
+        </div>
+
+        <div class="col-6">
+            <p style="text-align:right; color:darkblue">
+                Total Amount: <span id="totalAmount" style="font-weight:bold">0</span> BDT
+            </p>
+        </div>
+    </div>
+
+
+</div>
+
+<!--Confirm and Cancle Order Button-->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="d-flex justify-content-center">
+                <button id="btnConfirmOrder" class="btn btn-sm btn-primary me-4">Confirm Order</button>
+                <button id="btnCancleOrder" class="btn btn-sm btn-danger ">Cancle Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add New Customer Button-->
+<div class="container my-5">
+    <p>
+        <strong>Please select a customer from below or</strong>
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+            <i class="fas fa-plus-square"></i> Add New Customer
+        </button>
+    </p>
+</div>
+
+<!-- Modal for Adding New Customer -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    <div class="mb-3">
+                        <label for="CustomerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="CustomerName" name="CustomerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CustomerMobile" class="form-label">Customer Mobile</label>
+                        <input type="tel" class="form-control" id="CustomerMobile" name="CustomerMobile" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Customer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Customer Table-->
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Customer Table</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="customerTable" class="table table-bordered table-striped border">
+                <thead>
+                    <tr>
+                        <th style="width:10%">Customer ID</th>
+                        <th style="width:40%">Name</th>
+                        <th style="width:35%">Mobile</th>
+                        <th style="width:15%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // invoice table
+        const displayCartItems = () => {
+            let totalAmount = 0;
+            let cartHtml = cart.map((item, index) => {
+                const discount = item.Discount || 0;
+                const discountedPrice = item.Price - discount;
+                const itemSubtotal = item.Quantity * discountedPrice;
+                totalAmount += itemSubtotal;
+
+                return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.SerialNumber}</td>
+                    <td>${item.Name}</td>
+                    <td>${item.WarrantyDays}</td>
+                    <td class="quantity-col">
+
+                            <div class="d-flex mb-2 align-items-center">
+                                <button class="btn btn-sm btn-secondary increaseQty" data-id="${item.ProductID}">+</button>
+                                <input type="number" min="1" class="quantityInput mx-1" data-id="${item.ProductID}" value="${item.Quantity}" style="width: 50px; text-align: center;">
+                                <button class="btn btn-sm btn-secondary decreaseQty" data-id="${item.ProductID}">-</button>
+                            </div>
+                    </td>
+                    <td>${item.Price.toFixed(2)}</td>
+                    <td>
+                        <input type="number" class="discount-input mx-1" data-id="${item.ProductID}" value="${discount}" min="0" max="100">
+                    </td>
+
+                    <td>${item.Vendor}</td>
+                    <td>${itemSubtotal.toFixed(2)} BDT</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger removeFromCart" data-id="${item.ProductID}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            $('#cartItems').html(cartHtml);
+            $('#totalAmount').text(totalAmount.toFixed(2));
+        };
+
+        displayCartItems();
+
+        // Quantity + Button
+        $(document).on('click', '.increaseQty', function () {
+            const productId = $(this).data('id');
+            let cartItem = cart.find(item => item.ProductID === productId);
+            if (cartItem) {
+                cartItem.Quantity += 1;
+                updateCartData();
+            }
+        });
+
+        // Quantity - Button
+        $(document).on('click', '.decreaseQty', function () {
+            const productId = $(this).data('id');
+            let cartItem = cart.find(item => item.ProductID === productId);
+            if (cartItem && cartItem.Quantity > 1) {
+                cartItem.Quantity -= 1;
+                updateCartData();
+            }
+        });
+
+        // Manual Entry of Quantity
+        $(document).on('change', '.quantity-input', function () {
+            const productId = $(this).data('id');
+            const newQuantity = parseInt($(this).val());
+            let cartItem = cart.find(item => item.ProductID === productId);
+            if (cartItem && newQuantity > 0) {
+                cartItem.Quantity = newQuantity;
+                updateCartData();
+            }
+        });
+
+        // Discount
+        $(document).on('change', '.discount-input', function () {
+            const productId = $(this).data('id');
+            const newDiscount = parseFloat($(this).val());
+            let cartItem = cart.find(item => item.ProductID === productId);
+            if (cartItem && newDiscount >= 0 && newDiscount <= 100) {
+                cartItem.Discount = newDiscount;
+                updateCartData();
+            }
+        });
+
+        // Remove Item
+        $(document).on('click', '.removeFromCart', function () {
+            const productId = $(this).data('id');
+            cart = cart.filter(item => item.ProductID !== productId);
+            updateCartData();
+        });
+
+        const updateCartData = () => {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
+        };
+
+        // Cancle Order Button
+        $('#btnCancleOrder').on('click', function () {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to cancel the order and clear the cart?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, cancel it!',
+                cancelButtonText: 'No, keep it',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('selectedCustomer');
+                    window.location.href = '/Home/Dashboard';
+                }
+            });
+        });
+
+
+        var selectedCustomer;
+
+        let savedCustomer = JSON.parse(localStorage.getItem('selectedCustomer'));
+
+        if (savedCustomer) {
+            selectedCustomer = savedCustomer;
+            $('#selectedCustomer').text('Customer: ' + savedCustomer.CustomerName + ' (' + savedCustomer.CustomerMobile + ')');
+        }
+
+        // Confirm Order Button
+        const calculateTotalAmount = () => {
+            return cart.reduce((total, item) => total + (item.Quantity * item.Price), 0).toFixed(2);
+        };
+
+        $('#btnConfirmOrder').on('click', function () {
+            if (!selectedCustomer) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No Customer Selected',
+                    text: 'Please add or select a customer before confirming the order'
+                });
+                return;
+            }
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Confirm Order',
+                html: `<p>Customer: <strong>${selectedCustomer.CustomerName}</strong> (${selectedCustomer.CustomerMobile})</p>
+                       <p>Total Amount: <strong>${calculateTotalAmount()} BDT</strong></p>`,
+                showCancelButton: true,
+                confirmButtonText: 'Yes, place order',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ConfirmOrder", "Home")',
+                            data: JSON.stringify({
+                                customerId: selectedCustomer.CustomerID,
+                                cartItems: cart
+                            }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Order Confirmed!',
+                                        text: 'The order has been placed successfully.'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText); 
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'An error occurred while placing the order. Please try again.'
+                                });
+                            }
+                    });
+                }
+            });
+        });
+
+        // Customer Data-table
+        var table = $('#customerTable').DataTable({
+            ordering: false,
+            ajax: {
+                 url: '@Url.Action("LstCustomer", "Home")',
+                 dataSrc: ''
+             },
+             columns: [
+                 { data: 'CustomerID' },
+                 { data: 'CustomerName' },
+                 { data: 'CustomerMobile' },
+                 {
+                     data: null,
+                     className: "center",
+                     defaultContent: '<button id="btnAssignCustomer" class="btn btn-primary btn-sm ">Assign</button>'
+                 }
+             ]
+        });
+
+
+        // Add new customer form
+        $('#customerForm').on('submit', function (event) {
+            event.preventDefault();
+
+            if (!$('#CustomerName').val() || !$('#CustomerMobile').val()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill out all required fields.'
+                });
+                return;
+            }
+
+            var formData = {
+                CustomerName: $('#CustomerName').val(),
+                CustomerMobile: $('#CustomerMobile').val()
+            };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCustomer", "Home")',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'success!',
+                            text: 'Customer added successfully',
+                            showConfirmButton: true
+                        }).then(() => {
+                            console.log()
+                            $('#addCustomerModal').modal('hide');
+                            $('#customerForm')[0].reset();
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while adding the customer. Please try again.'
+                    });
+                }
+            });
+        });
+
+        // Assign Customer Button
+        $('#customerTable tbody').on('click', '#btnAssignCustomer', function () {
+            var data = table.row($(this).parents('tr')).data();
+            selectedCustomer = data;
+            $('#selectedCustomer').text('Customer: ' + data.CustomerName + ' (' + data.CustomerMobile + ')');
+            localStorage.setItem('selectedCustomer', JSON.stringify(selectedCustomer));
+            Swal.fire({
+                icon: 'success',
+                title: 'success!',
+                text: 'Customer assign successfully',
+                showConfirmButton: false,
+                timer: 1500,
+
+            })
+        });
+
+    });
+</script>

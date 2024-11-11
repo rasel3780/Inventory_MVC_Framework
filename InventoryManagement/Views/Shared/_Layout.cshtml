@@ -1,111 +1,134 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using InventoryManagement.Models
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - @System.Configuration.ConfigurationManager.AppSettings["ApplicationName"].ToString()</title>
     @Styles.Render("~/Content/css")
 
-    <link href="~/Content/JqueryUI/jquery-ui.min.css" rel="stylesheet" />
+
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
 
-    @*@Scripts.Render("~/bundles/bootstrap")*@
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script src="~/Scripts/JqueryUI/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--jQuery UI-->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
 
+    <!-- Bootstrap CSS and JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.14/dist/sweetalert2.all.min.js"></script>
 
-    <script>
-        var GlobalMsg = "@ViewBag.OperationResult";
-        $(document).ready(function () {
-            if (GlobalMsg != "") {
-                $('#spnGlobalPartialMsg').html(GlobalMsg);
-                $("#dvGlobalPartialMsg").dialog({
-                    resizable: false,
-                    modal: true
-                });
-            }
-        })
-    </script>
+    <!--Data table-->
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
+    <!-- Tempus Dominus CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
+
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary">
-        <div class="container">
-            @Html.ActionLink("Inventory Management", "Dashboard", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    @{
-                        if (Session["Role"].ToString() == "Admin")
-                        {
-                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        }
-                        else
-                        {
-                            <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        }
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!--Side Navbar-->
-    <div class="side-navbar">
-        <div class="user-profile">
-            <img src="~/Content/img/userProfile.png" alt="User Profile Picture">
-            @{
-                if (Session["User"] != null)
-                {
-                    <p>@Session["User"]</p>
-                }
-            }
 
-        </div>
-        <ul>
-            <li><a href="#"><i class="bi bi-database"></i>Inventory</a></li>
-            <li><a href="#vendorTable"><i class="bi bi-airplane"></i>Vendor </a></li>
-            <li><a href="#"><i class="bi bi-people"></i>Customer </a></li>
-            <li><a href="#orderTable"><i class="bi bi-box-seam"></i>Orders</a></li>
-            <li><a href="#report"><i class="bi bi-file-earmark-spreadsheet"></i>Report</a></li>
-            <li><a href="#"><i class="bi bi-info-square"></i>Support</a></li>
-            <li><a href="#"><i class="bi bi-question-diamond"></i>FAQs</a></li>
-            <li><a href="@Url.Action("Logout", "Account")"><i class="bi bi-box-arrow-left"></i>Logout</a></li>
+    <!--top nav-bar-->
+    @Html.Partial("~/Views/Home/_PartialTopNav.cshtml")
 
-        </ul>
+    <!--Cart-->
+    <div id="cartSidebar" class="cartSidebar">
+        <div class="cartHeader d-flex justify-content-between align-items-center">
+            <button id="btnCloseCartSidebar" class="btn btn-danger btn-sm">Close</button>
+        </div>
+        <div class="cartContent p-3">
+            <!-- Cart items -->
+        </div>
+        <div class="cartFooter">
+            <!-- Total and buttons -->
+        </div>
     </div>
 
-    <!--End of Side Navbar-->
+    <!-- side nav bar -->
+    @Html.Partial("~/Views/Home/_PartialLeftSideNav.cshtml")
+
+
     <!--Body Content-->
     <div class="main-content">
         <div class="container body-content">
+
             @RenderBody()
             <hr />
-
         </div>
+
+        <!--Footer-->
         <footer>
             <p>
                 &copy; @DateTime.Now.Year - Inventory Management System Version 1.0 develop by Rasel
                 Kibria
             </p>
         </footer>
+        <!--End of Footer-->
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let isCollapsed = false;
+            
+            const toggleLeftSidebar =()=> {
+                isCollapsed = !isCollapsed;
+                $(".leftSideNavBar").toggleClass("collapsed");
+                $(".main-content").toggleClass("expanded");
+                $("#btnLeftSidebarToggle").toggleClass("active");
+                localStorage.setItem('leftSidebarCollapsed', isCollapsed);
+            }
+
+            const savedSidebarState = localStorage.getItem('leftSidebarCollapsed');
+            if (savedSidebarState === 'true') {
+                toggleLeftSidebar();
+            }
+
+            $("#btnLeftSidebarToggle").click(function (e) {
+                e.preventDefault();
+                toggleLeftSidebar();
+            });
+
+        });
+
+    </script>
 
     <!--End of Body Content-->
-
-    @Html.Partial("~/Views/Common/_PartialGlobalMsg.cshtml")
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>

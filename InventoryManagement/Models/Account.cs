@@ -29,7 +29,7 @@ namespace InventoryManagement.Models
 
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
-                cmd.CommandText = "dbo.spInventory_GetMember";
+                cmd.CommandText = "dbo.GetEmployee";
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(new SqlParameter("@UserName", this.UserName));
                 cmd.Parameters.Add(new SqlParameter("@Password", this.Password));

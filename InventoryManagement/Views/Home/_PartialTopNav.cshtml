@@ -1,0 +1,32 @@
+﻿<nav class="navbar navbar-expand-lg fixed-top bg-primary">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+
+        <!-- Navbar links section -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    @Html.ActionLink("Home", "Dashboard", "Home", new { area = "" }, new { @class = "nav-link text-light" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link text-light" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link text-light" })
+                </li>
+            </ul>
+        </div>
+
+        <!-- Cart Icon -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <button id="btnCartIcon" class="btn btn-outline-light position-relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartBadge" class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">0</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>

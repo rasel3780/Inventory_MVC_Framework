@@ -19,30 +19,27 @@ namespace InventoryManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(string btnSubmit, Account account)
+        public ActionResult Login(Account account)
         {
-            string LoginMsg = "";
             bool verifyStatus = account.VerifyLogin();
-            
-            if (btnSubmit == "Login")
-            {
-                if (verifyStatus)
-                {
 
-                    Session["User"] = account.UserName;
-                    Session["Role"] = account.Role;
-                    LoginMsg = "Login Success";
-                    //FormsAuthentication.Authenticate(account.UserName,account.Password);
-                    Log.Information("Login success, redirecting to dashbord");
-                    return RedirectToAction("Dashboard","Home");
-                }
-                else
-                {
-                    LoginMsg = "Faild, Username/Password not match";
-                }
+            if (verifyStatus)
+            {
+
+                Session["User"] = account.UserName;
+                Session["Role"] = account.Role;
+                
+                Log.Information("Login success, redirecting to dashbord");
+
+                return Json(new { success = true, redirectUrl = Url.Action("Dashboard", "Home") });
             }
-            ViewBag.LoginMsg = LoginMsg;
-            return View();
+            else
+            {
+                return Json(new { success = false } );
+                
+            }
+
+           
         }
 
         public ActionResult Registration()
@@ -54,6 +51,7 @@ namespace InventoryManagement.Controllers
         {
             Log.Information("Logout");
             Session["User"] = null;
+
             return RedirectToAction("Login", "Account");
         }
     }
