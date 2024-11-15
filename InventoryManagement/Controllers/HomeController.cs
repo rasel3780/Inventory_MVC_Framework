@@ -56,7 +56,8 @@ namespace InventoryManagement.Controllers
                 Report report = new Report
                 {
                     DailySales = Report.GetDailySales(),
-                    MonthlySales = Report.GetMonthlySales()
+                    MonthlySales = Report.GetMonthlySales(),
+                    YearlySales = Report.GetYearlySales()
                 };
                 return View(report);
             }
