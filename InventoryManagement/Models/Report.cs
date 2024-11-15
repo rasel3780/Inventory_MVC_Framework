@@ -12,12 +12,15 @@ namespace InventoryManagement.Models
     public class Report
     {
         public decimal DailySales { get; set; }
+        public decimal MonthlySales { get; set; }
+
+
         public static decimal GetDailySales()
         {
             string conString = DbConnection.GetConnectionString();
             using (SqlConnection connection = new SqlConnection(conString))
             {
-                SqlCommand cmd = new SqlCommand("[dbo].[GetTodaysSale]", connection)
+                SqlCommand cmd = new SqlCommand("[dbo].[GetDailySales]", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -25,6 +28,23 @@ namespace InventoryManagement.Models
                 var result = cmd.ExecuteScalar();
                 return result != DBNull.Value ? Convert.ToDecimal(result) : 0;
             }
+        }
+
+        public static decimal GetMonthlySales()
+        {
+            string conString = DbConnection.GetConnectionString();
+            using(SqlConnection connection = new SqlConnection(conString))
+            {
+                SqlCommand cmd = new SqlCommand("[dbo].[GetMonthlySales]", connection)
+                {
+                    CommandType= CommandType.StoredProcedure
+                };
+                connection.Open ();
+                var result = cmd.ExecuteScalar();
+                return result != DBNull.Value?Convert.ToDecimal(result) : 0;
+
+            }
+            
         }
     }
 }
