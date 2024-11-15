@@ -53,13 +53,19 @@ namespace InventoryManagement.Controllers
             if (Session["User"] != null)
             {
                 List<Product> productList = Product.GetProductList();
-                return View();
+                Report report = new Report
+                {
+                    DailySales = Report.GetDailySales()
+                };
+                return View(report);
             }
             else
             {
                 return RedirectToAction("Login", "Account");
             }
         }
+
+     
 
 
 

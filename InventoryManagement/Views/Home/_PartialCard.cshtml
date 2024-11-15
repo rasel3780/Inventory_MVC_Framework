@@ -1,4 +1,5 @@
-﻿<!--Card-->
+﻿@model InventoryManagement.Models.Report
+<!--Card-->
 <div class="card-section">
     <div class="row mt-4">
         <div class="col-md-3">
@@ -59,7 +60,7 @@
                 <div class="card-body">
                     <i class="bi bi-calendar3-event"></i>
                     <p>Today's Sale</p>
-                    <h3>৳5500</h3>
+                    <h3>@Model.DailySales</h3>
                 </div>
             </div>
         </div>
