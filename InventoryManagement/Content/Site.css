@@ -3,13 +3,16 @@
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    padding-top: 56px;
+    padding-top:20px;
 }
-
 
 /* Top Navbar */
 .navbar {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1090;
+    position:fixed;
+    width:100%;
+   
 }
 .nav-link {
     font-weight: 500;
@@ -21,7 +24,9 @@
         border-radius: 5px;
  
     }
-
+.navbar-toggler {
+    margin-left: auto;
+}
 
 /* Side Navbar */
 .leftSideNavBar {
@@ -32,7 +37,7 @@
     left: 0;
     background-color: #d0e4eb;
     transition: all 0.3s ease-in-out;
-    z-index: 1040;
+    z-index: 1010;
     padding-top: 20px;
     border-right: 1px solid #d0e4eb;
     transform: translateX(0);
@@ -142,7 +147,6 @@
         margin-right: 350px;
     }
 
-
 /* Card Body Styles */
 .card-body {
     padding: 0;
@@ -162,6 +166,7 @@
 /* Footer Styles */
 footer {
     text-align: center;
+   
 }
 
 /* Cart Sidebar */
@@ -202,7 +207,6 @@ footer {
 }
 
 /*Cart Content*/
-
 .cart-item {
     padding: 10px;
     display: flex;
@@ -217,7 +221,6 @@ footer {
     flex-grow: 1;
     overflow-y: auto;
 }
-
 
     .cart-item .cart-item-controls {
         display: flex;
@@ -249,8 +252,6 @@ footer {
         justify-content: space-between;
     }
 
-
-
 #cartIcon {
     font-size: 1.2rem;
     position: relative;
@@ -260,8 +261,6 @@ footer {
     font-size: 0.75rem;
     padding: 3px 6px;
 }
-
-
 
 /* Cart Footer */
 .cartFooter {
@@ -359,36 +358,35 @@ footer {
 /* Media Queries */
 @media (max-width: 768px) {
 
-    .cartSidebar {
-        width: 100%;
-    }
-
     .leftSideNavBar {
-        transform: translateX(-200px);
-        width: 200px;
+        width: 60px;
+        transform: translateX(0); 
     }
-
-        .leftSideNavBar.collapsed {
-            transform: translateX(-200px);
-            width: 200px;
+        .leftSideNavBar .nav-link span {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        .leftSideNavBar.active {
-            transform: translateX(0);
+        .leftSideNavBar .nav-link i {
+            margin-right: 0; 
         }
 
     .main-content {
-        margin-left: 0;
-        width: 100%;
+        margin-left: 60px; 
     }
 
-        .main-content.expanded {
-            margin-left: 0;
+    .leftSideNavBar.active {
+        width: 200px;
+    }
+
+        .leftSideNavBar.active .nav-link span {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .main-content.with-cart {
-            margin-right: 0;
-        }
+    .main-content.expanded {
+        margin-left: 200px;
+    }
 
     .cartSidebar {
         width: 100%;
@@ -398,7 +396,6 @@ footer {
         .cartSidebar.active {
             right: 0;
         }
-
 
     .navbar-collapse {
         position: absolute;
@@ -414,4 +411,3 @@ footer {
             padding: 10px 15px;
         }
 }
-
