@@ -56,8 +56,13 @@ namespace InventoryManagement.Controllers
                 Report report = new Report
                 {
                     DailySales = Report.GetDailySales(),
+                    WeeklySales = Report.GetWeeklySales(),
                     MonthlySales = Report.GetMonthlySales(),
-                    YearlySales = Report.GetYearlySales()
+                    YearlySales = Report.GetYearlySales(),
+                    TotalProduct = Report.GetTotalProducts(),
+                    OutOfStock = Report.GetOutOfStockProducts(),
+                    TotalCustomer = Report.GetTotalCustomers(),
+                    TotalEmployee = Report.GetTotalEmployees()
                 };
                 return View(report);
             }
@@ -66,10 +71,6 @@ namespace InventoryManagement.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
-
-     
-
-
 
         [HttpPost]
         public ActionResult AddToCart(int productId)
@@ -101,6 +102,7 @@ namespace InventoryManagement.Controllers
 
             return Json(new { success = true });
         }
+
 
         [HttpPost]
         public ActionResult RemoveFromCart(int productId)

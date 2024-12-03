@@ -7,17 +7,17 @@
                 <div class="card-body">
                     <i class="bi bi-person-vcard-fill"></i>
                     <p>Total Employee</p>
-                    <h3>10</h3>
+                    <h3>@Model.TotalEmployee</h3>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="card" style="background-color:#3ece9c">
+            <div class="card" style="background-color: #cb8bf8">
                 <div class="card-body">
-                    <i class="bi bi-diagram-3"></i>
-                    <p>Categories</p>
-                    <h3>30</h3>
+                    <i class="bi bi-person-video2"></i>
+                    <p>Total Customer</p>
+                    <h3>@Model.TotalCustomer</h3>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <i class="bi bi-box-seam"></i>
                     <p>Total Product</p>
-                    <h3>1350</h3>
+                    <h3>@Model.TotalProduct</h3>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <div class="card-body">
                     <i class="bi bi-cart-x"></i>
                     <p>Out of Stock</p>
-                    <h3>30</h3>
+                    <h3>@Model.OutOfStock</h3>
                 </div>
             </div>
         </div>
@@ -45,15 +45,7 @@
     </div>
 
     <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card" style="background-color: #cb8bf8">
-                <div class="card-body">
-                    <i class="bi bi-person-video2"></i>
-                    <p>Total Customer</p>
-                    <h3>378</h3>
-                </div>
-            </div>
-        </div>
+       
 
         <div class="col-md-3">
             <div class="card" style="background-color:#f79696">
@@ -61,6 +53,16 @@
                     <i class="bi bi-calendar3-event"></i>
                     <p>Today's Sale</p>
                     <h3>@Model.DailySales</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card" style="background-color:#3ece9c">
+                <div class="card-body">
+                    <i class="bi bi-calendar2-week"></i>
+                    <p>WeeklySales </p>
+                    <h3>@Model.WeeklySales</h3>
                 </div>
             </div>
         </div>
