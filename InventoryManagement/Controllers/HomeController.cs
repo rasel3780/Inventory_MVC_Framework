@@ -53,15 +53,24 @@ namespace InventoryManagement.Controllers
             if (Session["User"] != null)
             {
                 List<Product> productList = Product.GetProductList();
-                return View();
+                Report report = new Report
+                {
+                    DailySales = Report.GetDailySales(),
+                    WeeklySales = Report.GetWeeklySales(),
+                    MonthlySales = Report.GetMonthlySales(),
+                    YearlySales = Report.GetYearlySales(),
+                    TotalProduct = Report.GetTotalProducts(),
+                    OutOfStock = Report.GetOutOfStockProducts(),
+                    TotalCustomer = Report.GetTotalCustomers(),
+                    TotalEmployee = Report.GetTotalEmployees()
+                };
+                return View(report);
             }
             else
             {
                 return RedirectToAction("Login", "Account");
             }
         }
-
-
 
         [HttpPost]
         public ActionResult AddToCart(int productId)
@@ -93,6 +102,7 @@ namespace InventoryManagement.Controllers
 
             return Json(new { success = true });
         }
+
 
         [HttpPost]
         public ActionResult RemoveFromCart(int productId)
