@@ -16,38 +16,6 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public ActionResult AddProduct()
-        //{
-        //    return PartialView("_PartialProductEntryPanel");
-        //}
-
-        //[HttpPost]
-        //public ActionResult AddProduct(Product product)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            int result = product.AddProduct();
-        //            if (result > 0)
-        //            {
-        //                return Json(new { success = true, message = "Product added successfully." });
-        //            }
-        //            else
-        //            {
-        //                return Json(new { success = false, message = "Failed to add product." });
-        //            }
-        //        }
-        //        return Json(new { success = false, message = "Please fill all required fields." });
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { success = false, message = "An error occurred: " + ex.Message });
-        //    }
-        //}
-
         public ActionResult Dashboard()
         {
             if (Session["User"] != null)
@@ -136,25 +104,6 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult LstProduct()
-        {
-            List<Product> productList = Product.GetProductList();
-            var pdtList = (from product in productList
-                           select new
-                           {
-                               ProductID = product.ProductID,
-                               SerialNumber = product.SerialNumber,
-                               Name = product.Name,
-                               Quantity = product.Quantity,
-                               EntryDate = product.EntryDate.ToString("dd/MM/yyyy"),
-                               Price = product.Price,
-                               WarrantyDays = product.WarrantyDays,
-                               Category = product.Category,
-                               VendorName = product.VendorName
-                           }).ToList();
-            return Json(pdtList, JsonRequestBehavior.AllowGet);
-        }
 
         [HttpGet]
         public ActionResult LstCustomer()

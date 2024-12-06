@@ -42,7 +42,7 @@
     const loadDataTable = () => {
         $('#productTable').DataTable({
             "ajax": {
-                "url": '/Home/LstProduct',
+                "url": '/Product/LstProduct',
                 "dataSrc": ''
             },
             "columns": [
