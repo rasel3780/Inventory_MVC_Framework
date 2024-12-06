@@ -37,44 +37,44 @@ namespace InventoryManagement.Models
 
       
 
-        public int AddProduct()
-        {
-            int result=0;
-            try
-            {
-                string conString = DbConnection.GetConnectionString();
+        //public int AddProduct()
+        //{
+        //    int result=0;
+        //    try
+        //    {
+        //        string conString = DbConnection.GetConnectionString();
 
-                SqlConnection _connection = new SqlConnection(conString);
-                _connection.Open();
+        //        SqlConnection _connection = new SqlConnection(conString);
+        //        _connection.Open();
 
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
-                cmd.CommandText = "[dbo].[InsertProduct]";
-                cmd.Parameters.Clear();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandTimeout = 0;
+        //        SqlCommand cmd = new SqlCommand();
+        //        cmd.Connection = _connection;
+        //        cmd.CommandText = "[dbo].[InsertProduct]";
+        //        cmd.Parameters.Clear();
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.CommandTimeout = 0;
 
 
-                cmd.Parameters.Add(new SqlParameter("@SerialNumber", this.SerialNumber));
-                cmd.Parameters.Add(new SqlParameter("@Name", this.Name));
-                cmd.Parameters.Add(new SqlParameter("@Quantity", this.Quantity));
-                cmd.Parameters.Add(new SqlParameter("@VendorID", this.VendorID));
-                cmd.Parameters.Add(new SqlParameter("@EntryDate", this.EntryDate));
-                cmd.Parameters.Add(new SqlParameter("@Price", this.Price));
-                cmd.Parameters.Add(new SqlParameter("@WarrantyDays", this.WarrantyDays));
-                cmd.Parameters.Add(new SqlParameter("@Category", this.Category));
+        //        cmd.Parameters.Add(new SqlParameter("@SerialNumber", this.SerialNumber));
+        //        cmd.Parameters.Add(new SqlParameter("@Name", this.Name));
+        //        cmd.Parameters.Add(new SqlParameter("@Quantity", this.Quantity));
+        //        cmd.Parameters.Add(new SqlParameter("@VendorID", this.VendorID));
+        //        cmd.Parameters.Add(new SqlParameter("@EntryDate", this.EntryDate));
+        //        cmd.Parameters.Add(new SqlParameter("@Price", this.Price));
+        //        cmd.Parameters.Add(new SqlParameter("@WarrantyDays", this.WarrantyDays));
+        //        cmd.Parameters.Add(new SqlParameter("@Category", this.Category));
 
-                result = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                _connection.Close();
-            }
-            catch (Exception ex)
-            {
-                Log.Error("There was a problem while inserting product"+ex.Message);
-            }
+        //        result = cmd.ExecuteNonQuery();
+        //        cmd.Dispose();
+        //        _connection.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error("There was a problem while inserting product"+ex.Message);
+        //    }
             
-            return result;
-        }
+        //    return result;
+        //}
 
         public static Product GetProductById(int productId)
         {

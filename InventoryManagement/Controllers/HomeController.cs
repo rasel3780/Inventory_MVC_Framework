@@ -16,37 +16,37 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult AddProduct()
-        {
-            return PartialView("_PartialProductEntryPanel");
-        }
+        //[HttpGet]
+        //public ActionResult AddProduct()
+        //{
+        //    return PartialView("_PartialProductEntryPanel");
+        //}
 
-        [HttpPost]
-        public ActionResult AddProduct(Product product)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    int result = product.AddProduct();
-                    if (result > 0)
-                    {
-                        return Json(new { success = true, message = "Product added successfully." });
-                    }
-                    else
-                    {
-                        return Json(new { success = false, message = "Failed to add product." });
-                    }
-                }
-                return Json(new { success = false, message = "Please fill all required fields." });
+        //[HttpPost]
+        //public ActionResult AddProduct(Product product)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            int result = product.AddProduct();
+        //            if (result > 0)
+        //            {
+        //                return Json(new { success = true, message = "Product added successfully." });
+        //            }
+        //            else
+        //            {
+        //                return Json(new { success = false, message = "Failed to add product." });
+        //            }
+        //        }
+        //        return Json(new { success = false, message = "Please fill all required fields." });
 
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "An error occurred: " + ex.Message });
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = "An error occurred: " + ex.Message });
+        //    }
+        //}
 
         public ActionResult Dashboard()
         {

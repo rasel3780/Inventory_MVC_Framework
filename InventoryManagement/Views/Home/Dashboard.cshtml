@@ -54,7 +54,7 @@
             });
 
             $.ajax({
-                url: '/Home/AddProduct',
+                url: '/Product/AddProduct',
                 type: 'GET',
                 success: function (response) {
                     Swal.fire({
@@ -74,7 +74,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: '/Home/AddProduct',
+                url: '/Product/AddProduct',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function (response) {
