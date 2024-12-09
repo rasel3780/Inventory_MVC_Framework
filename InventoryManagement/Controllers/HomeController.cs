@@ -159,32 +159,7 @@ namespace InventoryManagement.Controllers
             }
         }
 
-        [HttpPost]
-        public JsonResult ConfirmOrder(int customerId, List<CartItem> cartItems)
-        {
-            try
-            {
-                Employee employee = new Employee();
-                string user = Session["User"].ToString();
-                int userId = employee.GetEmployeeByUserName(user);
-
-                bool isOrderConfirmed = Order.ConfirmOrder(customerId, cartItems, userId);
-                if (isOrderConfirmed)
-                {
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Failed to place the order. Please try again." });
-                }
-            }
-            catch(Exception ex)
-            {
-                Log.Information("Order placed fail"+ex.Message);
-                return Json(new { success = false, message = "An error occurred while processing the order." });
-
-            }
-        }
+       
 
         [HttpPost]
         public ActionResult ClearCart()
@@ -193,25 +168,6 @@ namespace InventoryManagement.Controllers
             return Json(new { success = true });
         }
 
-        [HttpGet]
-        public ActionResult GetOrderHistory()
-        {
-            List<Order> orderList = Order.GetOrderHistory();
-            var orderDataList = (from order in orderList
-                                 select new
-                                 {
-                                     OrderID = order.OrderID,
-                                     CustomerName = order.CustomerName,
-                                     CustomerMobile = order.CustomerMobile,
-                                     SerialNumber = order.SerialNumber,
-                                     ProductName = order.ProductName,
-                                     VendorName = order.VendorName,
-                                     OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
-                                     Amount = order.Amount,
-                                     SoldBy = order.SoldBy
-                                 }).ToList();
-            return Json(orderDataList, JsonRequestBehavior.AllowGet);
-        }
 
         [HttpGet]
         public ActionResult GetProductById(int productId)

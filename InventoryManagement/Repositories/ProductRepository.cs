@@ -56,13 +56,12 @@ namespace InventoryManagement.Repositories
         {
             try
             {
-                using (var command = new SqlCommand("dbo.GetProductBySerialNumber", _dbContext.Connection))
+                using (var command = CreateCommand("dbo.GetProductBySerialNumber"))
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@SerialNumber", serialNumber));
 
-                    if (_dbContext.Connection.State != ConnectionState.Open)
-                        _dbContext.Connection.Open();
+                    await CheckConnectionOpenAsync();
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {

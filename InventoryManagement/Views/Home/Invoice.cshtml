@@ -273,7 +273,7 @@
 
                     $.ajax({
                             type: 'POST',
-                            url: '@Url.Action("ConfirmOrder", "Home")',
+                            url: '@Url.Action("ConfirmOrder", "Order")',
                             data: JSON.stringify({
                                 customerId: selectedCustomer.CustomerID,
                                 cartItems: cart

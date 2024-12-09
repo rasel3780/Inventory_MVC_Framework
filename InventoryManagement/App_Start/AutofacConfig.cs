@@ -39,6 +39,10 @@ namespace InventoryManagement.App_Start
                 .AsSelf()
                 .InstancePerRequest();
 
+            builder.RegisterType<OrderRepository>()
+                .AsSelf()
+                .InstancePerRequest();
+
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }

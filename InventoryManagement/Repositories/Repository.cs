@@ -25,7 +25,7 @@ namespace InventoryManagement.Repositories
         }
         protected string EntityName => typeof(TEntity).Name; 
 
-        private async Task CheckConnectionOpenAsync()
+        protected async Task CheckConnectionOpenAsync()
         {
             if(_dbContext.Connection.State!=ConnectionState.Open)
             {
