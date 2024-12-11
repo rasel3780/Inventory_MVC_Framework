@@ -306,7 +306,7 @@
         var table = $('#customerTable').DataTable({
             ordering: false,
             ajax: {
-                 url: '@Url.Action("LstCustomer", "Home")',
+                 url: '@Url.Action("LstCustomer", "Customer")',
                  dataSrc: ''
              },
              columns: [
@@ -341,7 +341,7 @@
             };
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("AddCustomer", "Home")',
+                url: '@Url.Action("AddCustomer", "Customer")',
                 data: formData,
                 success: function (response) {
                     if (response.success) {

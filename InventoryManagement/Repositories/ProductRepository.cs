@@ -1,27 +1,19 @@
 ﻿using InventoryManagement.DbContexts;
 using InventoryManagement.Models;
 using Serilog;
-using Serilog.Core;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace InventoryManagement.Repositories
 {
-    public class ProductRepository: Repository<Product>
+    public class ProductRepository : Repository<Product>
     {
-        private readonly ApplicationDbContext _dbContext;
+
         private readonly ILogger _logger;
-        public ProductRepository(ApplicationDbContext dbContext, ILogger logger):base(dbContext,logger)
+        public ProductRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
         {
-            _dbContext = dbContext;
             _logger = logger;
-          
         }
 
         protected override Product MapToEntity(SqlDataReader reader)
@@ -58,7 +50,6 @@ namespace InventoryManagement.Repositories
             {
                 using (var command = CreateCommand("dbo.GetProductBySerialNumber"))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@SerialNumber", serialNumber));
 
                     await CheckConnectionOpenAsync();
@@ -75,7 +66,7 @@ namespace InventoryManagement.Repositories
             }
             catch (Exception ex)
             {
-                Log.Error("Error retrieving product by serial number", ex);
+                _logger.Error("Error retrieving product by serial number", ex);
                 throw;
             }
         }

@@ -1,21 +1,20 @@
 ﻿using InventoryManagement.Models;
-using InventoryManagement.Repositories;
+using InventoryManagement.Services;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace InventoryManagement.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ProductRepository _productRepository;
-        public ProductController(ProductRepository productRepository)
+        private readonly ProductService _productService;
+        private readonly ILogger _logger;
+        public ProductController(ProductService productService, ILogger logger)
         {
-            _productRepository = productRepository;
+            _productService = productService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -31,7 +30,7 @@ namespace InventoryManagement.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _productRepository.AddAsync(product);
+                    await _productService.AddProductAsync(product);
                     return Json(new { success = true, message = "Product added successfully." });
                 }
                 return Json(new { success = false, message = "Please fill all the required filed" });
@@ -48,31 +47,84 @@ namespace InventoryManagement.Controllers
         {
             try
             {
-                var productList = await _productRepository.GetAllAsync();
-
-                var pdtList = productList.Select(product => new
-
-                {
-                    ProductID = product.ProductID,
-                    SerialNumber = product.SerialNumber,
-                    Name = product.Name,
-                    Quantity = product.Quantity,
-                    EntryDate = product.EntryDate.ToString("dd/MM/yyyy"),
-                    Price = product.Price,
-                    WarrantyDays = product.WarrantyDays,
-                    Category = product.Category,
-                    VendorName = product.VendorName
-                }).ToList();
-                return Json(pdtList, JsonRequestBehavior.AllowGet);
+                var productList = await _productService.GetAllProductsAsync();
+                return Json(productList, JsonRequestBehavior.AllowGet);
             }
 
             catch (Exception ex)
             {
 
-                Log.Error(ex.Message);
+                _logger.Error(ex.Message);
                 return Json(new { success = false, message = "An error occurred" });
             }
 
         }
+
+        [HttpPost]
+        public async Task<ActionResult> AddToCart(int productId)
+        {
+            var product = await _productService.GetProductByIdAsync(productId);
+
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Product not found." });
+            }
+
+            return Json(new
+            {
+                success = true,
+                message = $"{product.Name} has been added to your cart.",
+                product
+            });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateCartQuantity(int productId, int change)
+        {
+            var product = await _productService.GetProductByIdAsync(productId);
+
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Product not found." });
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveFromCart(int productId)
+        {
+            var product = await _productService.GetProductByIdAsync(productId);
+
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Product not found." });
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult ClearCart()
+        {
+            Session["Cart"] = null;
+            return Json(new { success = true });
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> GetProductById(int productId)
+        {
+            var product = await _productService.GetProductByIdAsync(productId);
+            if (product != null)
+            {
+                return Json(product, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
     }
-    }
+
+}

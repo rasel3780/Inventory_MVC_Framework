@@ -31,7 +31,7 @@ namespace InventoryManagement.Controllers
         {
             try
             {
-                var orderList = await _orderRepository.GetOrderHistoryAsync();
+                var orderList = await _orderRepository.GetAllAsync();
                 var orderDataList = orderList.Select(order => new
 
                 {
@@ -75,10 +75,17 @@ namespace InventoryManagement.Controllers
             }
             catch (Exception ex)
             {
-                Log.Information("Order placed fail" + ex.Message);
+                _logger.Information("Order placed fail" + ex.Message);
                 return Json(new { success = false, message = "An error occurred while processing the order." });
 
             }
+        }
+
+        [HttpPost]
+        public ActionResult ProceedToCheckout(List<CartItem> cart)
+        {
+
+            return Json(new { success = true, message = "Checkout successful!" });
         }
     }
 }

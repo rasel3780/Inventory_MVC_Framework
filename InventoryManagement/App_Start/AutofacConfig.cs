@@ -3,6 +3,7 @@ using Autofac.Integration.Mvc;
 using InventoryManagement.DbContexts;
 using InventoryManagement.Models;
 using InventoryManagement.Repositories;
+using InventoryManagement.Services;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Compilation;
 using System.Web.Mvc;
 
 namespace InventoryManagement.App_Start
@@ -42,6 +44,16 @@ namespace InventoryManagement.App_Start
             builder.RegisterType<OrderRepository>()
                 .AsSelf()
                 .InstancePerRequest();
+
+            builder.RegisterType<CustomerRepository>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            //Services
+            builder.RegisterType<ProductService>()
+                .AsSelf()
+                .InstancePerRequest();
+
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

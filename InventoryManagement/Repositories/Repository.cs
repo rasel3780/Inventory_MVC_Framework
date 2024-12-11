@@ -1,14 +1,10 @@
 ﻿using InventoryManagement.DbContexts;
-using InventoryManagement.Models;
-using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace InventoryManagement.Repositories
 {
@@ -23,11 +19,11 @@ namespace InventoryManagement.Repositories
             _dbContext = dbContext;
             _logger = logger;
         }
-        protected string EntityName => typeof(TEntity).Name; 
+        protected string EntityName => typeof(TEntity).Name;
 
         protected async Task CheckConnectionOpenAsync()
         {
-            if(_dbContext.Connection.State!=ConnectionState.Open)
+            if (_dbContext.Connection.State != ConnectionState.Open)
             {
                 await _dbContext.Connection.OpenAsync();
             }
@@ -48,13 +44,13 @@ namespace InventoryManagement.Repositories
             {
                 using (var cmd = CreateCommand($"dbo.Get{EntityName}ById"))
                 {
-               
+
                     cmd.Parameters.Add(new SqlParameter($"@{EntityName}ID", id));
                     await CheckConnectionOpenAsync();
-                    
-                    using(var reader = await cmd.ExecuteReaderAsync())
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        if(await reader.ReadAsync())
+                        if (await reader.ReadAsync())
                         {
                             return MapToEntity(reader);
                         }
@@ -93,7 +89,7 @@ namespace InventoryManagement.Repositories
                 _logger.Error($"Error retrieving {EntityName} list", ex);
                 throw;
             }
-            
+
         }
         public async Task AddAsync(TEntity entity)
         {
@@ -118,7 +114,7 @@ namespace InventoryManagement.Repositories
             {
                 using (var cmd = CreateCommand($"dbo.Update{EntityName}"))
                 {
-                   
+
                     AddParameters(cmd, entity);
                     await CheckConnectionOpenAsync();
                     await cmd.ExecuteNonQueryAsync();
@@ -136,7 +132,7 @@ namespace InventoryManagement.Repositories
             {
                 using (var cmd = CreateCommand($"dbo.Delete{EntityName}"))
                 {
-           
+
                     cmd.Parameters.Add(new SqlParameter($"@{EntityName}ID", id));
 
                     if (_dbContext.Connection.State != ConnectionState.Open)

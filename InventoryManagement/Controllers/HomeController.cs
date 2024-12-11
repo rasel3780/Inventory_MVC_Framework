@@ -1,8 +1,10 @@
 ﻿using InventoryManagement.Models;
+using InventoryManagement.Repositories;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
 using System.Windows.Forms;
@@ -11,6 +13,14 @@ namespace InventoryManagement.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILogger _logger;
+        private readonly ProductRepository _productRepository;
+
+        public HomeController(ProductRepository productRepository, ILogger logger)
+        {
+            _productRepository = productRepository;
+            _logger = logger;
+        }
         public ActionResult Index()
         {
             return View();
@@ -20,7 +30,6 @@ namespace InventoryManagement.Controllers
         {
             if (Session["User"] != null)
             {
-                List<Product> productList = Product.GetProductList();
                 Report report = new Report
                 {
                     DailySales = Report.GetDailySales(),
@@ -40,58 +49,6 @@ namespace InventoryManagement.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult AddToCart(int productId)
-        {
-            Product product = Product.GetProductById(productId);
-
-            if (product == null)
-            {
-                return Json(new { success = false, message = "Product not found." });
-            }
-
-            return Json(new
-            {
-                success = true,
-                message = $"{product.Name} has been added to your cart.",
-                product = product
-            });
-        }
-
-        [HttpPost]
-        public ActionResult UpdateCartQuantity(int productId, int change)
-        {
-            Product product = Product.GetProductById(productId);
-
-            if (product == null)
-            {
-                return Json(new { success = false, message = "Product not found." });
-            }
-
-            return Json(new { success = true });
-        }
-
-
-        [HttpPost]
-        public ActionResult RemoveFromCart(int productId)
-        {
-            Product product = Product.GetProductById(productId);
-
-            if (product == null)
-            {
-                return Json(new { success = false, message = "Product not found." });
-            }
-
-            return Json(new { success = true });
-        }
-
-        [HttpPost]
-        public ActionResult ProceedToCheckout(List<CartItem> cart)
-        {
-
-            return Json(new { success = true, message = "Checkout successful!" });
-        }
-
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -104,14 +61,6 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
-
-        [HttpGet]
-        public ActionResult LstCustomer()
-        {
-            List<Customer> customerList = Customer.GetCustomerList();
-            return Json(customerList, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpGet]
         public ActionResult Invoice()
         {
@@ -121,66 +70,6 @@ namespace InventoryManagement.Controllers
             }
             List<Customer> customerList = Customer.GetCustomerList().ToList();
             return View(); 
-        }
-
-        [HttpPost]
-        public ActionResult AddCustomer(string CustomerName, string CustomerMobile)
-        {
-            try
-            {
-                Customer newCustomer = new Customer
-                {
-                    CustomerName = CustomerName,
-                    CustomerMobile = CustomerMobile,
-                    RegistrationDate = DateTime.Now
-                };
-
-                string message;
-                int result = newCustomer.AddCustomer(out message);
-
-
-                if (result ==1 )
-                {
-                    return Json(new { success = true, message = "Customer added successfully!" });
-                }
-                else if (result == -1)
-                {
-                    return Json(new { success = false, message = message });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "An unexpected error occurred." });
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "An error occurred while adding a new customer.");
-                return Json(new { success = false, message = "An error occurred. Please try again." });
-            }
-        }
-
-       
-
-        [HttpPost]
-        public ActionResult ClearCart()
-        {
-            Session["Cart"] = null;
-            return Json(new { success = true });
-        }
-
-
-        [HttpGet]
-        public ActionResult GetProductById(int productId)
-        {
-            Product product = Product.GetProductById(productId);
-            if (product != null)
-            {
-                return Json(product, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return HttpNotFound();
-            }
         }
     }
 }
