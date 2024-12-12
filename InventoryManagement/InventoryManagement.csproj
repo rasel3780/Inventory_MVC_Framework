@@ -433,7 +433,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Scripts\CustomScript\customer.js" />
+    <Content Include="Scripts\CustomScript\customerController.js" />
     <Content Include="Scripts\CustomScript\loginValidation.js" />
     <Content Include="Scripts\CustomScript\myScript.js" />
     <Content Include="Content\plugins\pdfmake\pdfmake.js.map" />
@@ -457,6 +457,7 @@
     <Content Include="Content\plugins\fontawesome-free\webfonts\fa-solid-900.woff" />
     <Content Include="Content\plugins\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\CustomScript\orderController.js" />
     <Content Include="Scripts\CustomScript\productController.js" />
     <Content Include="Scripts\CustomScript\productService.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

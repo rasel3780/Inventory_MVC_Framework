@@ -27,11 +27,11 @@
 </script>
 
 
-
 <link href="~/Content/Style/cartStyle.css" rel="stylesheet"/>
-<script src="~/Scripts/CustomScript/productService.js"></script>
-<script src="~/Scripts/CustomScript/productController.js"></script>
 
+<!--Custom Scripts-->
+<script src="~/Scripts/CustomScript/orderController.js"></script>
+<script src="~/Scripts/CustomScript/productController.js"></script>
 
 <!--Report Card for dashboard-->
 @Html.Partial("~/Views/Home/_PartialCard.cshtml")
@@ -39,77 +39,6 @@
 
 <button id="addNewProductButton" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"></i>&nbsp;Add New Product</button>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    $(document).ready(function () {
-        $('#addNewProductButton').on('click', function () {
-            Swal.fire({
-                icon: 'info',
-                title: 'Loading......',
-                text: 'Please wait while the form loads',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            $.ajax({
-                url: '/Product/AddProduct',
-                type: 'GET',
-                success: function (response) {
-                    Swal.fire({
-                        title: 'Add New Product',
-                        html: response,
-                        showCancelButton: false,
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                        width: '600px'
-                    });
-                }
-            });
-        });
-
-
-        $(document).on('submit', '#productEntryForm', function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: '/Product/AddProduct',
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Product Added',
-                            text: 'Product added successfully!',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function () {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'An error occurred. Please try again.'
-                        });
-                    }
-                }
-            });
-        });
-
-
-        $(document).on('click', '#cancelProductEntry', function () {
-            Swal.close();
-        });
-
-        
-    });
-
-</script>
-
-
 
 <!--Product Table-->
 <div class="card mb-4" id="productCard">
@@ -145,6 +74,7 @@
     </div>
 </div>
 <!--End of Product table-->
+
 <!--Order History Table-->
 <div class="card">
     <div class="card-header">
@@ -170,31 +100,8 @@
                     <tbody>
 
                     </tbody>
-
                 </table>
         </div>
     </div>
 </div>
 <!--End of Order History Table-->
-
-<script>
-    $(document).ready(function () {
-        $('#orderHistoryTable').DataTable({
-            "ajax": {
-                "url": '/Order/GetOrderHistory',
-                "dataSrc": ''
-            },
-            "columns": [
-                { "data": 'OrderID' },
-                { "data": 'CustomerName' },
-                { "data": 'CustomerMobile' },
-                { "data": 'SerialNumber' },
-                { "data": 'ProductName' },
-                { "data": 'VendorName' },
-                { "data": 'OrderDate' },
-                { "data": 'Amount', "render": $.fn.dataTable.render.number(',', '.', 2) },
-                { "data": 'SoldBy' }
-            ]
-        });
-    });
-</script>
