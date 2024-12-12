@@ -1,19 +1,15 @@
-﻿using Serilog;
+﻿using InventoryManagement.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Web;
-namespace InventoryManagement.Models
+
+namespace InventoryManagement.DTOs
 {
-    public class Account
+    public class AccountDto
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public UserRole Role { get; set; }
-
     }
 }

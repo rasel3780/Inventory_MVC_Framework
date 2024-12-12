@@ -42,7 +42,7 @@
     const loadDataTable = () => {
         $('#productTable').DataTable({
             "ajax": {
-                "url": '/Home/LstProduct',
+                "url": '/Product/LstProduct',
                 "dataSrc": ''
             },
             "columns": [
@@ -318,6 +318,69 @@
     });
 
     updateCartBadge();
+
+
+    $('#addNewProductButton').on('click', function () {
+        Swal.fire({
+            icon: 'info',
+            title: 'Loading......',
+            text: 'Please wait while the form loads',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '/Product/AddProduct',
+            type: 'GET',
+            success: function (response) {
+                Swal.fire({
+                    title: 'Add New Product',
+                    html: response,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    width: '600px'
+                });
+            }
+        });
+    });
+
+
+    $(document).on('submit', '#productEntryForm', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: '/Product/AddProduct',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product Added',
+                        text: 'Product added successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function () {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.'
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#cancelProductEntry', function () {
+        Swal.close();
+    });
 
    
 });
