@@ -12,12 +12,11 @@ namespace InventoryManagement.Services
     public class ProductService
     {
         private readonly ProductRepository _productRepository;
-        private readonly ILogger _logger;
 
-        public ProductService(ProductRepository productRepository, ILogger logger)
+        public ProductService(ProductRepository productRepository)
         {
             _productRepository = productRepository;
-            _logger = logger;
+           
         }
 
         public async Task AddProductAsync(Product product)

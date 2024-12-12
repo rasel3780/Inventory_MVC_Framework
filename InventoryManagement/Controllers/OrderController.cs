@@ -1,5 +1,6 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
+using InventoryManagement.Services;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,12 @@ namespace InventoryManagement.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly OrderRepository _orderRepository;
+        private readonly OrderService _orderService;
         private readonly ILogger _logger;
-
-        public OrderController(OrderRepository orderRepository, ILogger logger)
+        public OrderController(OrderService orderService, ILogger logger)
         {
-            _orderRepository = orderRepository;
+            _orderService = orderService;
             _logger = logger;
-        }
-        // GET: Order
-        public ActionResult Index()
-        {
-            return View();
         }
 
         [HttpGet]   
@@ -31,21 +26,9 @@ namespace InventoryManagement.Controllers
         {
             try
             {
-                var orderList = await _orderRepository.GetAllAsync();
-                var orderDataList = orderList.Select(order => new
-
-                {
-                    OrderID = order.OrderID,
-                    CustomerName = order.CustomerName,
-                    CustomerMobile = order.CustomerMobile,
-                    SerialNumber = order.SerialNumber,
-                    ProductName = order.ProductName,
-                    VendorName = order.VendorName,
-                    OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
-                    Amount = order.Amount,
-                    SoldBy = order.SoldBy
-                }).ToList();
-                return Json(orderDataList, JsonRequestBehavior.AllowGet);
+                var orderList = await _orderService.GetOrderHistoryAsync();
+                
+                return Json(orderList, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -63,7 +46,7 @@ namespace InventoryManagement.Controllers
                 string user = Session["User"].ToString();
                 int userId = employee.GetEmployeeByUserName(user);
 
-                bool isOrderConfirmed = await _orderRepository.ConfirmOrderAsync(customerId, cartItems, userId);
+                bool isOrderConfirmed = await _orderService.ConfirmOrderAsync(customerId, cartItems, userId);
                 if (isOrderConfirmed)
                 {
                     return Json(new { success = true });

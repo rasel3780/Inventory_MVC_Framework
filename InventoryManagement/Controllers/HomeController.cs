@@ -1,24 +1,20 @@
 ﻿using InventoryManagement.Models;
-using InventoryManagement.Repositories;
+using InventoryManagement.Services;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web;
 using System.Web.Mvc;
-using System.Windows.Forms;
 
 namespace InventoryManagement.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly ProductRepository _productRepository;
+        private readonly ReportService _reportService;
 
-        public HomeController(ProductRepository productRepository, ILogger logger)
+        public HomeController(ReportService reportService, ILogger logger)
         {
-            _productRepository = productRepository;
+            _reportService = reportService;
             _logger = logger;
         }
         public ActionResult Index()
@@ -30,17 +26,7 @@ namespace InventoryManagement.Controllers
         {
             if (Session["User"] != null)
             {
-                Report report = new Report
-                {
-                    DailySales = Report.GetDailySales(),
-                    WeeklySales = Report.GetWeeklySales(),
-                    MonthlySales = Report.GetMonthlySales(),
-                    YearlySales = Report.GetYearlySales(),
-                    TotalProduct = Report.GetTotalProducts(),
-                    OutOfStock = Report.GetOutOfStockProducts(),
-                    TotalCustomer = Report.GetTotalCustomers(),
-                    TotalEmployee = Report.GetTotalEmployees()
-                };
+                var report = _reportService.GetDashboardReport();
                 return View(report);
             }
             else
@@ -69,7 +55,7 @@ namespace InventoryManagement.Controllers
                 return RedirectToAction("Login", "Account");
             }
             List<Customer> customerList = Customer.GetCustomerList().ToList();
-            return View(); 
+            return View();
         }
     }
 }

@@ -1,29 +1,23 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using InventoryManagement.DbContexts;
-using InventoryManagement.Models;
 using InventoryManagement.Repositories;
 using InventoryManagement.Services;
 using Serilog;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using System.Web;
-using System.Web.Compilation;
 using System.Web.Mvc;
 
 namespace InventoryManagement.App_Start
 {
     public class AutofacConfig
     {
-        public static void RegisterDependencies ()
+        public static void RegisterDependencies()
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
-            builder.Register(c=>
+            builder.Register(c =>
             {
                 string connectionString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;
                 return new ApplicationDbContext(connectionString);
@@ -35,6 +29,14 @@ namespace InventoryManagement.App_Start
             //Repositories
             builder.RegisterGeneric(typeof(Repository<>))
                 .As(typeof(IRepository<>))
+                .InstancePerRequest();
+
+            builder.RegisterType<AccountRepository>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            builder.RegisterType<ReportRepository>()
+                .As<IReportRrepository>()
                 .InstancePerRequest();
 
             builder.RegisterType<ProductRepository>()
@@ -50,10 +52,21 @@ namespace InventoryManagement.App_Start
                 .InstancePerRequest();
 
             //Services
+            builder.RegisterType<AccountService>()
+                .AsSelf()
+                .InstancePerRequest();
+
             builder.RegisterType<ProductService>()
                 .AsSelf()
                 .InstancePerRequest();
 
+            builder.RegisterType<OrderService>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            builder.RegisterType<ReportService>()
+                .AsSelf()
+                .InstancePerRequest();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
