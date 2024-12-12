@@ -284,12 +284,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="DbContexts\ApplicationDbContext.cs" />
     <Compile Include="DTOs\AccountDto.cs" />
     <Compile Include="DTOs\CustomerDto.cs" />
     <Compile Include="DTOs\OrderDto.cs" />
     <Compile Include="DTOs\ProductDto.cs" />
     <Compile Include="DTOs\ReportDto.cs" />
+    <Compile Include="DTOs\VendorDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -313,10 +315,12 @@
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\ReportRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\VendorRepository.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ReportService.cs" />
+    <Compile Include="Services\VendorService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -460,6 +464,7 @@
     <Content Include="Scripts\CustomScript\orderController.js" />
     <Content Include="Scripts\CustomScript\productController.js" />
     <Content Include="Scripts\CustomScript\productService.js" />
+    <Content Include="Scripts\CustomScript\vendorController.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -493,6 +498,7 @@
     <Content Include="Views\Home\Invoice.cshtml" />
     <Content Include="Views\Home\_PartialLeftSideNav.cshtml" />
     <Content Include="Views\Home\_PartialTopNav.cshtml" />
+    <Content Include="Views\Vendor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
