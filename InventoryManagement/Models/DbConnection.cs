@@ -10,7 +10,7 @@ namespace InventoryManagement.Models
     public class DbConnection
     {
         protected readonly SqlConnection _connection;
-        
+
         public static string GetConnectionString()
         {
             string conString = ConfigurationManager.ConnectionStrings["InventoryConString"].ConnectionString;

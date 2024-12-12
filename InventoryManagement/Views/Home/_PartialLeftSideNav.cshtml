@@ -1,4 +1,5 @@
-﻿<nav class="leftSideNavBar">
+﻿
+<nav class="leftSideNavBar">
     <div class="leftSideNavHeader">
         <button id="btnLeftSidebarToggle" class="btn btn-outline-primary" title="Toggle Left Sidebar">
             <i class="fas fa-bars"></i>
@@ -12,7 +13,7 @@
             <a class="nav-link" href="/Home/Dashboard"><i class="fas fa-home"></i> <span>Home</span></a>
         </li>
 
-        @if (Session["Role"] as string == "admin")
+        @if (Session["Role"] as string == InventoryManagement.Models.UserRole.Admin.ToString())
         {
         <li class="nav-item">
             <a class="nav-link" href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a>
@@ -32,7 +33,6 @@
 
 <script>
     const clearLocalStorageOnLogout = () => {
-        console.log("Clicked");
         localStorage.removeItem("cart");
         localStorage.removeItem("cartOpen");
         localStorage.removeItem("leftSidebarCollapsed");
