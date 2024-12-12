@@ -51,6 +51,10 @@ namespace InventoryManagement.App_Start
                 .AsSelf()
                 .InstancePerRequest();
 
+            builder.RegisterType<VendorRepository>()
+                .AsSelf()
+                .InstancePerRequest();
+
             //Services
             builder.RegisterType<AccountService>()
                 .AsSelf()
@@ -65,6 +69,10 @@ namespace InventoryManagement.App_Start
                 .InstancePerRequest();
 
             builder.RegisterType<ReportService>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            builder.RegisterType<VendorService>()
                 .AsSelf()
                 .InstancePerRequest();
 
